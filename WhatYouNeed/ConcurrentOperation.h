@@ -1,6 +1,6 @@
-
-// NSOperation-WebFetches-MadeEasy (TM)
-// Copyright (C) 2012 by David Hoerl
+//
+// FastEasyConcurrentWebFetches (TM)
+// Copyright (C) 2012-2013 by David Hoerl
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -21,20 +21,26 @@
 // THE SOFTWARE.
 //
 
-@interface ConcurrentOperation : NSOperation
-@property (nonatomic, strong, readonly) NSThread *thread;	// maybe you want to message it
-@property (nonatomic, copy) NSString *runMessage;			// debugging
+@interface ConcurrentOperation : NSObject
+@property (nonatomic, copy) NSString *runMessage;		// debugging
+@property (atomic, strong, readonly) NSThread *thread;	// maybe you want to message it
+@property(atomic, assign, readonly) BOOL isCancelled;
+@property(atomic, assign, readonly) BOOL isExecuting;
+@property(atomic, assign, readonly) BOOL isFinished;
+
+- (void)main;
+- (void)cancel;											// for subclasses, called on operation's thread
 
 @end
 
 // These are here for subclassers and not intended for general use
 @interface ConcurrentOperation (ForSubClassesInternalUse)
 
-- (id)setup;		// get the app started, YES->continue, NO->failed so return
-- (void)completed;	// subclasses to override, call super
-- (void)finish;		// subclasses to override for cleanup, call super
-
-- (void)failed;		// subclasses to override then finally call super
+- (id)setup;					// get the app started, object->continue, nil->failed so return
+- (BOOL)start:(id)setupObject;	// called after setup has succeeded with the setup's returned value
+- (void)completed;				// subclasses to override, call super
+- (void)finish;					// subclasses to override for cleanup, call super
+- (void)failed;					// subclasses to override then finally call super
 
 @end
 

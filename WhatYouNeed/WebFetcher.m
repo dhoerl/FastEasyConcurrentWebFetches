@@ -1,5 +1,5 @@
-
-// NSOperation-WebFetches-MadeEasy (TM)
+//
+// FastEasyConcurrentWebFetches (TM)
 // Copyright (C) 2012-2013 by David Hoerl
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -110,6 +110,12 @@
 	return request;
 }
 
+- (BOOL)start:(NSMutableURLRequest *)request
+{
+	BOOL allOK = [self connect:request];
+	return allOK;
+}
+
 - (BOOL)connect:(NSURLRequest *)request
 {
 #ifndef NDEBUG
@@ -124,12 +130,9 @@
 
 - (void)cancel
 {
-	[super cancel];
-	
-	if([self isExecuting]) {
-		[_connection performSelector:@selector(cancel) onThread:self.thread withObject:nil waitUntilDone:NO];	// may be overkill but want to be 100% sure to stop all messages
-		[self performSelector:@selector(finish) onThread:self.thread withObject:nil waitUntilDone:NO];
-	}
+	[_connection cancel];
+
+	[super cancel];	// last
 }
 
 - (void)completed // subclasses to override then finally call super
@@ -140,7 +143,8 @@
 	if([[self class] printDebugging]) LOG(@"WF: completed");
 #endif
 	// we need a tad delay to let the completed return before the KVO message kicks in
-	[self performSelector:@selector(finish) onThread:self.thread withObject:nil waitUntilDone:NO];
+	
+	[self finish];
 }
 
 - (void)failed // subclasses to override then finally call super
@@ -148,7 +152,8 @@
 #ifndef NDEBUG
 	if([[self class] printDebugging]) LOG(@"WF: failed");
 #endif
-	[self performSelector:@selector(finish) onThread:self.thread withObject:nil waitUntilDone:NO];
+	
+	[self finish];
 }
 
 - (void)dealloc

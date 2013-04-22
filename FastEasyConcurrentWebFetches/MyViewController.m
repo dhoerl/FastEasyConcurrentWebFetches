@@ -1,5 +1,5 @@
 
-// NSOperation-WebFetches-MadeEasy (TM)
+// FastEasyConcurrentWebFetches (TM)
 // Copyright (C) 2012 by David Hoerl
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -96,12 +96,14 @@ static NSUInteger lastPriority;
 	operationCount.value = lastOperationsCount;
 	operationsToRun.text = [NSString stringWithFormat:@"%u", lastOperationsCount];
 	operationsLeft.text = @"0";
-	
+
 	maxConcurrent.value = lastMaxConcurrent;
 	maxConcurrentText.text = [NSString stringWithFormat:@"%u", lastMaxConcurrent];
-	[self concurrentAction:maxConcurrent];
 
 	priority.selectedSegmentIndex = lastPriority;
+	
+	[self operationsAction:operationCount];
+	[self concurrentAction:maxConcurrent];
 	[self priorityAction:priority];
 }
 
@@ -151,7 +153,7 @@ static NSUInteger lastPriority;
 {
 	lastMaxConcurrent = (NSUInteger)lrintf([(UISlider *)sender value]);
 	maxConcurrentText.text = [NSString stringWithFormat:@"%u", lastMaxConcurrent];
-	operationsRunner.maxOps = lastMaxConcurrent == 100 ? NSOperationQueueDefaultMaxConcurrentOperationCount : lastMaxConcurrent;
+	operationsRunner.maxOps = lastMaxConcurrent;
 }
 
 - (IBAction)priorityAction:(id)sender
@@ -161,13 +163,14 @@ static NSUInteger lastPriority;
 	long val;
 	switch(lastPriority) {
 	case 0:	val = DISPATCH_QUEUE_PRIORITY_HIGH;			break;
+	
 	default:
 	case 1:	val = DISPATCH_QUEUE_PRIORITY_DEFAULT;		break;
+	
 	case 2:	val = DISPATCH_QUEUE_PRIORITY_LOW;			break;
 	case 3:	val = DISPATCH_QUEUE_PRIORITY_BACKGROUND;	break;
 	}
 	operationsRunner.priority = val;
-	NSLog(@"priority=%ld", val);
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -203,11 +206,14 @@ static NSUInteger lastPriority;
 		sel == @selector(runOperation:withMsg:)	|| 
 		sel == @selector(runOperations:)		||
 		sel == @selector(operationsCount)		||
+		sel == @selector(cancelOperations)		||
 		sel == @selector(enumerateOperations:)
 	) {
 		if(!operationsRunner) {
 			// Object only created if needed
 			operationsRunner = [[OperationsRunner alloc] initWithDelegate:self];
+			operationsRunner.maxOps = lastMaxConcurrent;
+			[self priorityAction:priority];	// sets priority
 		}
 		return operationsRunner;
 	} else {

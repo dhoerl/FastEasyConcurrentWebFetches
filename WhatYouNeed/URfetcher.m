@@ -1,4 +1,3 @@
-
 //
 // URfetcher.m
 // FastEasyConcurrentWebFetches
@@ -45,9 +44,14 @@
 		break;
 	}
 #endif
-	
-	BOOL allOK = [self connect:request];
-	return allOK ? request : nil;
+	return request;
+}
+
+// Not really needed, maybe to just monitor what's happening
+- (BOOL)start:(NSMutableURLRequest *)request
+{
+	BOOL ok = [super start:request];
+	return ok;
 }
 
 @end

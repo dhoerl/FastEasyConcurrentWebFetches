@@ -1,6 +1,6 @@
-
-// NSOperation-WebFetches-MadeEasy (TM)
-// Copyright (C) 2012 by David Hoerl
+//
+// FastEasyConcurrentWebFetches (TM)
+// Copyright (C) 2012-2013 by David Hoerl
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -23,115 +23,123 @@
 
 #import "ConcurrentOperation.h"
 
-@interface ConcurrentOperation ()
-@property(atomic, assign) BOOL executing;
-@property(atomic, assign) BOOL finished;
-@property(nonatomic, strong) NSTimer *timer;
-@property(nonatomic, strong, readwrite) NSThread *thread;
+#if 0	// 1 == no debug, 0 == lots of mesages
+#define LOG(...) 
+#else
+#define LOG(...) NSLog(__VA_ARGS__)
+#endif
 
-- (void)timer:(NSTimer *)t; // kch
+@interface ConcurrentOperation (DoesNotExist)
+
+- (void)timer:(NSTimer *)t; // keep the compiler happy with an unfullfilled promise
+
+@end
+
+@interface ConcurrentOperation ()
+@property(nonatomic, strong) NSTimer *timer;
+@property(atomic, strong, readwrite) NSThread *thread;
+//@property(atomic, assign) BOOL done;
+@property(atomic, assign, readwrite) BOOL isCancelled;
+@property(atomic, assign, readwrite) BOOL isExecuting;
+@property(atomic, assign, readwrite) BOOL isFinished;
 
 @end
 
 @implementation ConcurrentOperation
-@synthesize executing;
-@synthesize finished;
-@synthesize timer;
-@synthesize thread;
 
-- (BOOL)isExecuting { return executing; }
-- (BOOL)isFinished { return finished; }
-- (BOOL)isConcurrent { return YES; }
-
-- (void)start
+- (void)main
 {
-	BOOL isCancelled = [self isCancelled];
-	if(isCancelled) {
-		// NSLog(@"OPERATION CANCELLED: isCancelled=%d isHostUp=%d", isCancelled, isHostUDown);
-		[self willChangeValueForKey:@"isFinished"];
-		finished = YES;
-		[self didChangeValueForKey:@"isFinished"];
+	if(self.isCancelled) {
+		// LOG(@"OPERATION CANCELLED: isCancelled=%d isHostUp=%d", isCancelled, isHostUDown);
 		return;
 	}
+	self.isExecuting = YES;
+	self.thread	= [NSThread currentThread];
 
-	// do this first, to enable future messaging - 
-	[self willChangeValueForKey:@"isExecuting"];
-	executing = YES;	// KVO
-	[self didChangeValueForKey:@"isExecuting"];
-
-	BOOL allOK = [self setup] ? YES : NO;
+	id obj;
+	BOOL allOK = NO;
+	if((obj = [self setup])) {
+		allOK = [self start:obj];
+	}
 
 	if(allOK) {
-		while(![self isFinished]) {
+		while(!self.isFinished) {
+NSLog(@"ENTER RUN LOOP");
 #ifndef NDEBUG
 			BOOL ret = 
 #endif
 				[[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]];
 			assert(ret && "first assert");
+			LOG(@"%@ RUN_LOOP: isFinished=%d", self.runMessage, self.isFinished);
 		}
 	} else {
 		[self finish];
 	}
+
 	[self cleanup];
+
+	self.isExecuting = NO;
+	
+	NSLog(@"%@ LEAVE MAIN", _runMessage);
+}
+
+- (void)_cancel
+{
+	LOG(@"%@ _cancel: isFinished=%d", self.runMessage, self.isFinished);
+	if(!self.isFinished) {
+		self.isCancelled = YES;
+		[self performSelector:@selector(cancel) onThread:self.thread withObject:nil waitUntilDone:NO];
+	}
+}
+- (void)cancel
+{
+	LOG(@"%@ cancel: isExecuting=%d", self.runMessage, self.isExecuting);
+	if(self.isExecuting) {
+		[self finish];
+	}
 }
 
 - (id)setup
 {
-	thread	= [NSThread currentThread];	
-
 	// makes runloop functional
-	timer	= [NSTimer scheduledTimerWithTimeInterval:60*60 target:self selector:@selector(timer:) userInfo:nil repeats:NO];	
+	self.timer = [NSTimer scheduledTimerWithTimeInterval:60*60 target:self selector:@selector(timer:) userInfo:nil repeats:NO];
 
 	return @"";
 }
 
+- (BOOL)start:(id)setupObject
+{
+	LOG(@"%@ start: isExecuting=%d", self.runMessage, self.isExecuting);
+
+	return YES;
+}
+
 - (void)cleanup
 {
-	[timer invalidate], timer = nil;
+	[_timer invalidate], _timer = nil;
 	
 	return;
 }
 
-- (void)cancel
-{
-	[super cancel];
-	
-	if([self isExecuting]) {
-		[self performSelector:@selector(finish) onThread:thread withObject:nil waitUntilDone:NO];
-	}
-}
-
-- (void)finish
-{
-	[self willChangeValueForKey:@"isFinished"];
-	[self willChangeValueForKey:@"isExecuting"];
-
-    executing = NO;
-    finished = YES;
-
-    [self didChangeValueForKey:@"isFinished"];
-    [self didChangeValueForKey:@"isExecuting"];
-}
-
-- (void)timer:(NSTimer *)t
-{
-	// Keep Compiler Happy - this never gets called
-}
-
 - (void)completed // subclasses to override then finally call super
 {
-	// we need a tad delay to let the completed return before the KVO message kicks in
 	[self performSelector:@selector(finish) onThread:self.thread withObject:nil waitUntilDone:NO];
 }
 
 - (void)failed // subclasses to override then finally call super
 {
-	[self finish];
+	[self performSelector:@selector(finish) onThread:self.thread withObject:nil waitUntilDone:NO];
+}
+
+- (void)finish // subclasses to override then finally call super, for cleanup
+{
+	LOG(@"%@ finish: isFinished=%d", self.runMessage, self.isFinished);
+	self.isFinished = YES;
 }
 
 - (void)dealloc
 {
-	//NSLog(@"Concurrent Operation Dealloc");
+	LOG(@"%@ Dealloc: isExecuting=%d isFinished=%d isCancelled=%d", _runMessage, _isExecuting, _isFinished, _isCancelled);
 }
 
 @end

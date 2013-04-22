@@ -1,5 +1,5 @@
-
-// NSOperation-WebFetches-MadeEasy (TM)
+//
+// FastEasyConcurrentWebFetches (TM)
 // Copyright (C) 2012-2013 by David Hoerl
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -36,12 +36,8 @@ typedef enum { msgDelOnMainThread=0, msgDelOnAnyThread, msgOnSpecificThread, msg
 @property (nonatomic, assign) long priority;					// targets the internal GCD queue doleing out the operations
 @property (nonatomic, assign) NSUInteger maxOps;				// set the NSOperationQueue's maxConcurrentOperationCount
 
+// These methods are for direct messaging
 - (id)initWithDelegate:(id <OperationsRunnerProtocol>)del;
-
-- (void)runOperation:(ConcurrentOperation *)op withMsg:(NSString *)msg;	// to submit an operation
-
-- (NSUInteger)operationsCount;	// now returns immediately
-
 - (void)cancelOperations;		// stop all work, will not get any more delegate calls after it returns
 - (void)enumerateOperations:(void(^)(ConcurrentOperation *op))b;	// in some very special cases you may need this (I did)
 
@@ -64,12 +60,13 @@ OperationsRunner *operationsRunner;
 	if(
 		sel == @selector(runOperation:withMsg:)	|| 
 		sel == @selector(runOperations:)		||
-		sel == @selector(operationsCount)		||
-		sel == @selector(enumerateOperations:)
+		sel == @selector(operationsCount)
 	) {
 		if(!operationsRunner) {
 			// Object only created if needed
 			operationsRunner = [[OperationsRunner alloc] initWithDelegate:self];
+			// operationsRunner.priority = DISPATCH_QUEUE_PRIORITY_BACKGROUND; // initial value, default is DISPATCH_QUEUE_PRIORITY_DEFAULT
+			// operationsRunner.maxOps = 4; // initial value if desired, default is infinite
 		}
 		return operationsRunner;
 	} else {
@@ -84,12 +81,13 @@ OperationsRunner *operationsRunner;
 }
 
 // 6) Declare a category with these methods in the interface or implementation file (change MyClass to your class)
+//    Put in your interface file if you want these to be used by other classes, or in the implementation to make them private
 @interface MyClass (OperationsRunner)
 
 - (void)runOperation:(ConcurrentOperation *)op withMsg:(NSString *)msg;	// to submit an operation
 - (BOOL)runOperations:(NSSet *)operations;	// Set of ConcurrentOperation objects with their runMessage set (or not)
 
-- (NSUInteger)operationsCount;	// uses dispatch_sync, so prefer to get the count in the delegate method
+- (NSUInteger)operationsCount;				// returns the total number of outstanding operations
 
 - (void)enumerateOperations:(void(^)(ConcurrentOperation *op))b;	// in some very special cases you may need this (I did)
 

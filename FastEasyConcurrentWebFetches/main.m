@@ -1,6 +1,6 @@
 //
 //  main.m
-//  NSOperation-WebFetches-MadeEasy
+//  FastEasyConcurrentWebFetches
 //
 //  Created by David Hoerl on 7/3/12.
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.

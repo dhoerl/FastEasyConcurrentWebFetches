@@ -25,11 +25,12 @@
 		DEE915CF1722DE520085F570 /* FastEasyConcurrentWebFetchesTests.m in Sources */ = {isa = PBXBuildFile; fileRef = DEE915CE1722DE520085F570 /* FastEasyConcurrentWebFetchesTests.m */; };
 		DEE915DD1722DEB20085F570 /* MyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DEE915DA1722DEB20085F570 /* MyViewController.m */; };
 		DEE915DE1722DEB20085F570 /* MyViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DEE915DB1722DEB20085F570 /* MyViewController.xib */; };
-		DEE915E81722DECC0085F570 /* README.txt in Resources */ = {isa = PBXBuildFile; fileRef = DEE915DF1722DECC0085F570 /* README.txt */; };
 		DEE915E91722DECC0085F570 /* ConcurrentOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = DEE915E21722DECC0085F570 /* ConcurrentOperation.m */; };
 		DEE915EA1722DECC0085F570 /* OperationsRunner.m in Sources */ = {isa = PBXBuildFile; fileRef = DEE915E41722DECC0085F570 /* OperationsRunner.m */; };
 		DEE915EB1722DECC0085F570 /* WebFetcher.m in Sources */ = {isa = PBXBuildFile; fileRef = DEE915E71722DECC0085F570 /* WebFetcher.m */; };
 		DEE915F31722EB380085F570 /* URfetcher.m in Sources */ = {isa = PBXBuildFile; fileRef = DEE915F21722EB370085F570 /* URfetcher.m */; };
+		DEE915F61722EF380085F570 /* LICENSE.md in Resources */ = {isa = PBXBuildFile; fileRef = DEE915F41722EF380085F570 /* LICENSE.md */; };
+		DEE915F71722EF380085F570 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = DEE915F51722EF380085F570 /* README.md */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -68,7 +69,6 @@
 		DEE915D91722DEB20085F570 /* MyViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyViewController.h; sourceTree = "<group>"; };
 		DEE915DA1722DEB20085F570 /* MyViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyViewController.m; sourceTree = "<group>"; };
 		DEE915DB1722DEB20085F570 /* MyViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MyViewController.xib; sourceTree = "<group>"; };
-		DEE915DF1722DECC0085F570 /* README.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.txt; sourceTree = SOURCE_ROOT; };
 		DEE915E11722DECC0085F570 /* ConcurrentOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConcurrentOperation.h; sourceTree = "<group>"; };
 		DEE915E21722DECC0085F570 /* ConcurrentOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConcurrentOperation.m; sourceTree = "<group>"; };
 		DEE915E31722DECC0085F570 /* OperationsRunner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OperationsRunner.h; sourceTree = "<group>"; };
@@ -78,6 +78,8 @@
 		DEE915E71722DECC0085F570 /* WebFetcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebFetcher.m; sourceTree = "<group>"; };
 		DEE915F11722EB370085F570 /* URfetcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = URfetcher.h; sourceTree = "<group>"; };
 		DEE915F21722EB370085F570 /* URfetcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = URfetcher.m; sourceTree = "<group>"; };
+		DEE915F41722EF380085F570 /* LICENSE.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE.md; sourceTree = SOURCE_ROOT; };
+		DEE915F51722EF380085F570 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -137,7 +139,8 @@
 		DEE915A31722DE520085F570 /* FastEasyConcurrentWebFetches */ = {
 			isa = PBXGroup;
 			children = (
-				DEE915DF1722DECC0085F570 /* README.txt */,
+				DEE915F51722EF380085F570 /* README.md */,
+				DEE915F41722EF380085F570 /* LICENSE.md */,
 				DEE915E01722DECC0085F570 /* WhatYouNeed */,
 				DEE915D91722DEB20085F570 /* MyViewController.h */,
 				DEE915DA1722DEB20085F570 /* MyViewController.m */,
@@ -278,7 +281,8 @@
 				DEE915B41722DE520085F570 /* Default-568h@2x.png in Resources */,
 				DEE915BA1722DE520085F570 /* ViewController.xib in Resources */,
 				DEE915DE1722DEB20085F570 /* MyViewController.xib in Resources */,
-				DEE915E81722DECC0085F570 /* README.txt in Resources */,
+				DEE915F61722EF380085F570 /* LICENSE.md in Resources */,
+				DEE915F71722EF380085F570 /* README.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

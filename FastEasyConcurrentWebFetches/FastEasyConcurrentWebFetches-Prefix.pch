@@ -1,5 +1,5 @@
 //
-// Prefix header for all source files of the 'NSOperation-WebFetches-MadeEasy' target in the 'NSOperation-WebFetches-MadeEasy' project
+// Prefix header for all source files of the 'FastEasyConcurrentWebFetches' target in the 'FastEasyConcurrentWebFetches' project
 //
 
 #import <Availability.h>

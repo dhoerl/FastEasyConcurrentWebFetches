@@ -1,5 +1,5 @@
 
-// NSOperation-WebFetches-MadeEasy (TM)
+// FastEasyConcurrentWebFetches (TM)
 // Copyright (C) 2012 by David Hoerl
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -22,12 +22,13 @@
 //
 
 @interface MyViewController : UIViewController
-
 @end
+
+@class ConcurrentOperation;
 
 // 5) Declare a category with these methods in the interface file (ie public) (change MyClass to your class)
 @interface MyViewController (OperationsRunner)
-- (void)runOperation:(NSOperation *)op withMsg:(NSString *)msg;
+- (void)runOperation:(ConcurrentOperation *)op withMsg:(NSString *)msg;
 
 - (NSSet *)operationsSet;
 - (NSUInteger)operationsCount;
