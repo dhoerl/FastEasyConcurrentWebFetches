@@ -21,12 +21,18 @@
 // THE SOFTWARE.
 //
 
+#define VERIFY_DEALLOC	1	// define as "1" to verify all operations do in fact get dealloc'ed
+
 @interface ConcurrentOperation : NSObject
 @property (nonatomic, copy) NSString *runMessage;		// debugging
 @property (atomic, strong, readonly) NSThread *thread;	// maybe you want to message it
 @property(atomic, assign, readonly) BOOL isCancelled;
 @property(atomic, assign, readonly) BOOL isExecuting;
 @property(atomic, assign, readonly) BOOL isFinished;
+
+#if VERIFY_DEALLOC	== 1
+@property (nonatomic, strong) dispatch_block_t finishBlock;
+#endif
 
 - (void)main;
 - (void)cancel;											// for subclasses, called on operation's thread

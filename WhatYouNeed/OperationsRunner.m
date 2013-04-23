@@ -24,7 +24,12 @@
 #include <libkern/OSAtomic.h>
 
 //extern void STLog(NSString *x, ...);
-#define LOG NSLog
+
+#if 0	// 1 == no debug, 0 == lots of mesages
+#define LOG(...) 
+#else
+#define LOG(...) NSLog(__VA_ARGS__)
+#endif
 
 #import "OperationsRunner.h"
 
@@ -42,8 +47,10 @@
 @property (nonatomic, assign) dispatch_group_t			operationsGroup;
 @property (atomic, weak) id <OperationsRunnerProtocol>	delegate;
 @property (atomic, weak) id <OperationsRunnerProtocol>	savedDelegate;
-
 @property (atomic, assign) BOOL							cancelled;
+#if VERIFY_DEALLOC == 1
+@property (nonatomic, assign) dispatch_semaphore_t		deallocs;
+#endif
 
 @end
 
@@ -51,6 +58,11 @@
 {
 	long		_priority;							// the XXXX
 	int32_t		_DO_NOT_ACCESS_operationsCount;		// named so as to discourage direct access
+
+#if VERIFY_DEALLOC == 1
+	int32_t		_DO_NOT_ACCESS_operationsTotal;		// named so as to discourage direct access
+#endif
+
 }
 @dynamic priority;
 
@@ -67,6 +79,10 @@
 		
 		_priority			= DISPATCH_QUEUE_PRIORITY_DEFAULT;
 		_maxOps				= 1000000;	// some absurdly large number
+
+#if VERIFY_DEALLOC == 1
+		_deallocs			= dispatch_semaphore_create(1);
+#endif
 	}
 	return self;
 }
@@ -77,13 +93,24 @@
 	dispatch_release(_opRunnerQueue);
 	dispatch_release(_operationsQueue);
 	dispatch_release(_operationsGroup);
+#if VERIFY_DEALLOC == 1
+	dispatch_release(_deallocs);
+#endif
 }
 
 - (int32_t)adjustOperationsCount:(int32_t)val
 {
-	int32_t nVal = OSAtomicAdd32Barrier(val, &_DO_NOT_ACCESS_operationsCount);
+	int32_t nVal = OSAtomicAdd32(val, &_DO_NOT_ACCESS_operationsCount);
 	return nVal;
 }
+
+#if VERIFY_DEALLOC == 1
+- (int32_t)adjustOperationsTotal:(int32_t)val
+{
+	int32_t nVal = OSAtomicAdd32(val, &_DO_NOT_ACCESS_operationsTotal);
+	return nVal;
+}
+#endif
 
 - (void)setDelegateThread:(NSThread *)delegateThread
 {
@@ -126,15 +153,27 @@
 
 - (void)runOperation:(ConcurrentOperation *)op withMsg:(NSString *)msg
 {
-NSLog(@"PRIORITY=%ld max=%u", _priority, _maxOps);
-
 #ifndef NDEBUG
 	if(self.cancelled) {
 		assert([self adjustOperationsCount:0] == 0);
 	}
 #endif
 	self.cancelled = NO;
+	
 	[self adjustOperationsCount:1];	// peg immediately
+#if VERIFY_DEALLOC == 1
+	{
+		[self adjustOperationsTotal:1];	// peg immediately
+		__weak __typeof__(self) weakSelf = self;
+		op.finishBlock = ^	{
+								__typeof__(self) strongSelf = weakSelf;
+								if(strongSelf) {
+									dispatch_semaphore_signal(strongSelf.deallocs);
+								}
+							};
+			
+	}
+#endif
 
 	// Programming With ARC Release Notes pg 10 - non-trivial weak cases
 
@@ -161,7 +200,24 @@ NSLog(@"PRIORITY=%ld max=%u", _priority, _maxOps);
 	}
 #endif
 	self.cancelled = NO;
-	[self adjustOperationsCount:count];	// peg it even before its seen in the XXXX
+	[self adjustOperationsCount:count];	// peg immediately
+
+#if VERIFY_DEALLOC == 1
+	{
+		[self adjustOperationsTotal:count];	// peg immediately
+		__weak __typeof__(self) weakSelf = self;
+		[ops enumerateObjectsUsingBlock:^(ConcurrentOperation *op, BOOL *stop)
+			{
+				op.finishBlock = ^	{
+										__typeof__(self) strongSelf = weakSelf;
+										if(strongSelf) {
+											dispatch_semaphore_signal(strongSelf.deallocs);
+										}
+									};
+			} ];
+			
+	}
+#endif
 	
 	// Programming With ARC Release Notes pg 10 - non-trivial weak cases
 	__weak __typeof__(self) weakSelf = self;
@@ -238,11 +294,33 @@ NSLog(@"%@ _operationFinished", strongOp.runMessage);
 		} );
 	
 	dispatch_group_wait(_operationsGroup, DISPATCH_TIME_FOREVER);
-NSLog(@"CANCEL OPERATIONS NOW COMPLETE");
 
 	int32_t curval = [self adjustOperationsCount:0];
 	[self adjustOperationsCount:-curval];
+	
+#if VERIFY_DEALLOC == 1
+	[self testIfAllDealloced];
+#endif
 }
+
+#if VERIFY_DEALLOC == 1
+- (void)testIfAllDealloced
+{
+	int32_t count = [self adjustOperationsTotal:0];
+	[self adjustOperationsTotal:-count];
+
+	BOOL completed = YES;
+	for(int32_t i=0; i<count; ++i) {
+		long ret = dispatch_semaphore_wait(_deallocs, dispatch_time(DISPATCH_TIME_NOW, 1*NSEC_PER_SEC));	// 1 second
+		if(ret) {
+			NSLog(@"+++++++++++++++++++WARNING: %d OPERATIONS DID NOT DEALLOC", count-i);
+			completed = NO;
+			break;
+		}
+	}
+	if(completed) NSLog(@"OPERATIONS ALL DEALLOCED");
+}
+#endif
 
 - (void)enumerateOperations:(void(^)(ConcurrentOperation *op))b
 {
@@ -287,6 +365,13 @@ NSLog(@"CANCEL OPERATIONS NOW COMPLETE");
 	if(_msgDelOn !=  msgOnSpecificQueue) {
 		dict = @{ @"op" : op, @"count" : @(count) };
 	}
+
+#if VERIFY_DEALLOC == 1
+	dispatch_block_t b;
+	if(!count) b = ^{
+						[self testIfAllDealloced];
+					};
+#endif
 
 	switch(_msgDelOn) {
 	case msgDelOnMainThread:

@@ -1,14 +1,19 @@
 FastEasyConcurrentWebFetches (TM)
 ============================
 
-Infrastructure to manage pools of web interface operations, elegant, simple, and quickly cancelable. Based on an earlier project that predated GCD, NSOperation-WebFetches-MadeEasy, it provides a lightweight framework for running multiple NSURLConnections, while providing the ability to rapidly cancel and cleanup for say, when the user taps the Back button.
+An infrastructure of three classes to manage pools of web operations; elegant, simple, and quickly cancelable. Based on an earlier project that predated GCD (NSOperation-WebFetches-MadeEasy), it provides a lightweight framework for running multiple NSURLConnections (or other operations that require a delegate), while providing the ability to cancel and cleanup when, for say, a user taps the Back button.
 
-This project demonstrates the OperationsRunner capability to easily handle asynchronous web fetches (and really any application where you need the ability to message background task). The core files are found in the WhatYouNeed folder, and the OperationsRunner.h file lists the handful of instructions to adopt it into any class you wish to use it in.
+This project includes a GUI test harness that uses hard wired web fetchers, which use HTTP GET to download an image from a public DropBox folder. The three core classes are found in the WhatYouNeed folder, and the OperationsRunner.h header file lists the handful of instructions required to adopt them into a project.
 
-The demo app offers a few controls so that you can see for yourself that running operations can be cancelled and/or monitored.
+The demo app offers controls that vary the number of concurrent operations, the priority (target queue), and total number. Once these are active you can cancel them, or tap a 'Back' button, to see how quickly you can cancel and cleanup. A new compile time flag adds a verification step that all operations have in fact been deallocated.
 
+This code, migrated from NSOperation-WebFetches-MadeEasy, was the basis of the Lot18 App (5 star rating), which often had hundreds of outstanding fetchers running getting product info, images, and posting user updates.
 
 UPDATES:
+
+  1.1 (4/23/2013): Improved diagnostics
+    - new compile time flag VERIFY_DEALLOC does a final test to verify all operations have been dealloced
+	- new 'start' method removes the need to send a 'connect:' message in the 'setup' method
 
   1.0 (4/21/2013): First release
     - converted NSOperation-WebFetches-MadeEasy code from NSOperationQueues to GCD, leaving 90% of the old API intact
@@ -16,17 +21,9 @@ UPDATES:
 
 INTRO
 
-Most of the complexity involved in managing a pool of concurrent NSURLConnections is moved to a helper class, OperationsRunner. By adding two methods to one of your classes, using a few of its methods, and implementing one protocol method, you can get all the benefits of background web fetches with just a small amount of effort. When each finishes, it messages your calling class in a single method, and returns the number of outstanding operations. When that value goes to zero, everything is done and you can then stop any spinner or other indicator you may be using.
+Most of the complexity involved in managing a pool of concurrent NSURLConnections is moved to a helper class, OperationsRunner. By adding two methods to one of your classes, using a few of its methods, and implementing one protocol method, you can get all the benefits of background web fetches with just a small amount of effort. When each finishes, it messages your calling class in the sole protocol method, and supplies the number of remianing operations. When that value goes to zero, everything is done and you can then stop any spinner or other indicator you may be using. The reply message defaults to the main thread, but you can specify that a specific thread should be use, any thread, or supply a dispatch serial queue.
 
-This project also supplies the ConcurrentOperation base class, which deals with all the complexities of a concurrent operation. WebFetcher, a subclass of that, is provided to download web content. The final subclass of that, URfetcher, is similar to what you would write - it contains the critical call to connect::
-
-	- (NSURLRequest *)setup
-	{
-		NSMutableURLRequest *request = [super setup];
-
-		BOOL allOK = [self connect:request];
-		return allOK ? request : nil;
-	}
+This project also supplies the ConcurrentOperation base class, which deals with all the complexities of a concurrent operation. WebFetcher, a subclass of that, is provided to download web content. The final subclass of that, URfetcher, is similar to what you would write.
 
 You can also build on ConcurrentOperation to do other features like sequencers that need to run in their own thread.
 

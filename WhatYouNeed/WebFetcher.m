@@ -35,7 +35,6 @@
 
 @end
 
-// Semi-Abstract Class, Must be subclassed if only for "connect"
 @implementation WebFetcher
 {
 	NSUInteger responseLength;
@@ -64,7 +63,7 @@
 	switch(_force) {
 	case forceSuccess:
 	{
-		__weak __typeof__(self) weakSelf = self;	// kch
+		__weak __typeof__(self) weakSelf = self;
 		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 250 * NSEC_PER_MSEC), dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^
 			{
 				weakSelf.htmlStatus = 200;
@@ -75,7 +74,7 @@
 
 	case forceFailure:
 	{
-		__weak __typeof__(self) weakSelf = self;	// kch
+		__weak __typeof__(self) weakSelf = self;
 		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 250 * NSEC_PER_MSEC), dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^
 			{
 				weakSelf.htmlStatus = 400;
@@ -85,7 +84,7 @@
 	
 	case forceRetry:
 	{
-		__weak __typeof__(self) weakSelf = self;	// kch
+		__weak __typeof__(self) weakSelf = self;
 		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 250 * NSEC_PER_MSEC), dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^
 			{
 				weakSelf.error = [NSError errorWithDomain:@"NSURLErrorDomain" code:-1001 userInfo:@{ NSLocalizedDescriptionKey : @"timed out" }];	// Timeout
@@ -99,7 +98,6 @@
 		break;
 	}
 #endif
-
 
 	NSURL *url = [NSURL URLWithString:_urlStr];
 	NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:[class timeout]];
@@ -144,7 +142,7 @@
 #endif
 	// we need a tad delay to let the completed return before the KVO message kicks in
 	
-	[self finish];
+	[super completed];
 }
 
 - (void)failed // subclasses to override then finally call super
@@ -153,7 +151,7 @@
 	if([[self class] printDebugging]) LOG(@"WF: failed");
 #endif
 	
-	[self finish];
+	[super failed];
 }
 
 - (void)dealloc
@@ -228,7 +226,6 @@
 	LOG(@"Connection: %@ didFailWithError: %@", _urlStr, [err description]);
 #endif
 	_error = err;
-	[_connection cancel];
 
 	[self failed];
 }

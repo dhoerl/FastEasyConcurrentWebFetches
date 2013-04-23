@@ -64,13 +64,12 @@
 
 	if(allOK) {
 		while(!self.isFinished) {
-NSLog(@"ENTER RUN LOOP");
 #ifndef NDEBUG
 			BOOL ret = 
 #endif
 				[[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]];
 			assert(ret && "first assert");
-			LOG(@"%@ RUN_LOOP: isFinished=%d", self.runMessage, self.isFinished);
+			//LOG(@"%@ RUN_LOOP: isFinished=%d", self.runMessage, self.isFinished);
 		}
 	} else {
 		[self finish];
@@ -80,12 +79,12 @@ NSLog(@"ENTER RUN LOOP");
 
 	self.isExecuting = NO;
 	
-	NSLog(@"%@ LEAVE MAIN", _runMessage);
+	//Log(@"%@ LEAVE MAIN", _runMessage);
 }
 
 - (void)_cancel
 {
-	LOG(@"%@ _cancel: isFinished=%d", self.runMessage, self.isFinished);
+	//LOG(@"%@ _cancel: isFinished=%d", self.runMessage, self.isFinished);
 	if(!self.isFinished) {
 		self.isCancelled = YES;
 		[self performSelector:@selector(cancel) onThread:self.thread withObject:nil waitUntilDone:NO];
@@ -93,7 +92,7 @@ NSLog(@"ENTER RUN LOOP");
 }
 - (void)cancel
 {
-	LOG(@"%@ cancel: isExecuting=%d", self.runMessage, self.isExecuting);
+	//LOG(@"%@ cancel: isExecuting=%d", self.runMessage, self.isExecuting);
 	if(self.isExecuting) {
 		[self finish];
 	}
@@ -109,7 +108,7 @@ NSLog(@"ENTER RUN LOOP");
 
 - (BOOL)start:(id)setupObject
 {
-	LOG(@"%@ start: isExecuting=%d", self.runMessage, self.isExecuting);
+	//LOG(@"%@ start: isExecuting=%d", self.runMessage, self.isExecuting);
 
 	return YES;
 }
@@ -123,12 +122,12 @@ NSLog(@"ENTER RUN LOOP");
 
 - (void)completed // subclasses to override then finally call super
 {
-	[self performSelector:@selector(finish) onThread:self.thread withObject:nil waitUntilDone:NO];
+	[self finish];
 }
 
 - (void)failed // subclasses to override then finally call super
 {
-	[self performSelector:@selector(finish) onThread:self.thread withObject:nil waitUntilDone:NO];
+	[self finish];
 }
 
 - (void)finish // subclasses to override then finally call super, for cleanup
@@ -140,6 +139,11 @@ NSLog(@"ENTER RUN LOOP");
 - (void)dealloc
 {
 	LOG(@"%@ Dealloc: isExecuting=%d isFinished=%d isCancelled=%d", _runMessage, _isExecuting, _isFinished, _isCancelled);
+#if VERIFY_DEALLOC	== 1
+	if(_finishBlock) {
+		_finishBlock();
+	}
+#endif
 }
 
 @end
