@@ -23,10 +23,10 @@
 
 #import "ConcurrentOperation.h"
 
-#if 0	// 1 == no debug, 0 == lots of mesages
-#define LOG(...) 
-#else
+#if 0	// 0 == no debug, 1 == lots of mesages
 #define LOG(...) NSLog(__VA_ARGS__)
+#else
+#define LOG(...)
 #endif
 
 @interface ConcurrentOperation (DoesNotExist)
@@ -36,9 +36,7 @@
 @end
 
 @interface ConcurrentOperation ()
-@property(nonatomic, strong) NSTimer *timer;
 @property(atomic, strong, readwrite) NSThread *thread;
-//@property(atomic, assign) BOOL done;
 @property(atomic, assign, readwrite) BOOL isCancelled;
 @property(atomic, assign, readwrite) BOOL isExecuting;
 @property(atomic, assign, readwrite) BOOL isFinished;
@@ -46,15 +44,17 @@
 @end
 
 @implementation ConcurrentOperation
-
+{
+	//NSTimer *__co_timer;		// so does not conflict with subclass
+}
 - (void)main
 {
+
 	if(self.isCancelled) {
-		// LOG(@"OPERATION CANCELLED: isCancelled=%d isHostUp=%d", isCancelled, isHostUDown);
+		LOG(@"OPERATION %@ CANCELLED", _runMessage);
 		return;
 	}
 	self.isExecuting = YES;
-	self.thread	= [NSThread currentThread];
 
 	id obj;
 	BOOL allOK = NO;
@@ -63,7 +63,11 @@
 	}
 
 	if(allOK) {
+		// makes runloop functional
+		NSTimer *__co_timer = [NSTimer scheduledTimerWithTimeInterval:60*60 target:self selector:@selector(timer:) userInfo:nil repeats:NO];
+
 		while(!self.isFinished) {
+			self.thread	= [NSThread currentThread];	// race condition
 #ifndef NDEBUG
 			BOOL ret = 
 #endif
@@ -71,26 +75,31 @@
 			assert(ret && "first assert");
 			//LOG(@"%@ RUN_LOOP: isFinished=%d", self.runMessage, self.isFinished);
 		}
+
+		[__co_timer invalidate], __co_timer = nil;
 	} else {
 		[self finish];
 	}
 
-	[self cleanup];
-
 	self.isExecuting = NO;
 	
-	//Log(@"%@ LEAVE MAIN", _runMessage);
+	LOG(@"%@ LEAVE MAIN", _runMessage);
 }
 
-- (void)_cancel
+- (void)_OR_cancel
 {
 	//LOG(@"%@ _cancel: isFinished=%d", self.runMessage, self.isFinished);
 	if(!self.isFinished) {
 		self.isCancelled = YES;
-		[self performSelector:@selector(cancel) onThread:self.thread withObject:nil waitUntilDone:NO];
+		
+		// can get cancelled while still in the queue, main not run yet so no thread
+		[self performBlock:^(ConcurrentOperation *op)
+			{
+				[op cancel];
+			}];
 	}
 }
-- (void)cancel
+- (void)cancel	// on thread
 {
 	//LOG(@"%@ cancel: isExecuting=%d", self.runMessage, self.isExecuting);
 	if(self.isExecuting) {
@@ -98,39 +107,28 @@
 	}
 }
 
-- (id)setup
+- (id)setup	// on thread
 {
-	// makes runloop functional
-	self.timer = [NSTimer scheduledTimerWithTimeInterval:60*60 target:self selector:@selector(timer:) userInfo:nil repeats:NO];
-
 	return @"";
 }
 
-- (BOOL)start:(id)setupObject
+- (BOOL)start:(id)setupObject	// on thread
 {
-	//LOG(@"%@ start: isExecuting=%d", self.runMessage, self.isExecuting);
-
+	LOG(@"%@ start: isExecuting=%d", self.runMessage, self.isExecuting);
 	return YES;
 }
 
-- (void)cleanup
-{
-	[_timer invalidate], _timer = nil;
-	
-	return;
-}
-
-- (void)completed // subclasses to override then finally call super
+- (void)completed				// on thread, subclasses to override then finally call super
 {
 	[self finish];
 }
 
-- (void)failed // subclasses to override then finally call super
+- (void)failed					// on thread, subclasses to override then finally call super
 {
 	[self finish];
 }
 
-- (void)finish // subclasses to override then finally call super, for cleanup
+- (void)finish					// on thread, subclasses to override then finally call super, for cleanup
 {
 	LOG(@"%@ finish: isFinished=%d", self.runMessage, self.isFinished);
 	self.isFinished = YES;
@@ -144,6 +142,26 @@
 		_finishBlock();
 	}
 #endif
+}
+
+- (void)performBlock:(concurrentBlock)b
+{
+	NSThread *thread = self.thread;
+	if(thread) {
+		[self performSelector:@selector(runBlock:) onThread:thread withObject:b waitUntilDone:NO];
+	} else {
+		b(self);
+	}
+
+}
+- (void)runBlock:(concurrentBlock)b
+{
+	b(self);
+}
+
+- (NSString *)description
+{
+	return [NSString stringWithFormat:@"OP[\"%@\"]", _runMessage];
 }
 
 @end

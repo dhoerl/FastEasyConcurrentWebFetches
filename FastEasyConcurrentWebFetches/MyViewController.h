@@ -28,12 +28,11 @@
 
 // 5) Declare a category with these methods in the interface file (ie public) (change MyClass to your class)
 @interface MyViewController (OperationsRunner)
-- (void)runOperation:(ConcurrentOperation *)op withMsg:(NSString *)msg;
 
-- (NSSet *)operationsSet;
-- (NSUInteger)operationsCount;
+- (void)runOperation:(ConcurrentOperation *)op withMsg:(NSString *)msg;	// to submit an operation
+- (BOOL)runOperations:(NSSet *)operations;	// Set of ConcurrentOperation objects with their runMessage set (or not)
 
-- (void)cancelOperations;
-- (void)enumerateOperations:(void(^)(NSOperation *op))b;
+- (void)enumerateOperations:(void(^)(ConcurrentOperation *op))b;		// in some very special cases you may need this (I did)
+- (NSUInteger)operationsCount;				// returns the total number of outstanding operations
 
 @end

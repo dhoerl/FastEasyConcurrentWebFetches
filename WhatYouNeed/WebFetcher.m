@@ -68,7 +68,8 @@
 			{
 				weakSelf.htmlStatus = 200;
 				weakSelf.webData = [NSMutableData dataWithCapacity:256];
-				[weakSelf performSelector:@selector(completed) onThread:self.thread withObject:nil waitUntilDone:NO];
+				//[weakSelf performSelector:@selector(completed) onThread:self.thread withObject:nil waitUntilDone:NO];
+				[weakSelf performBlock:^(ConcurrentOperation *op) { [op completed]; }];
 			} );
 	}	break;
 
@@ -78,7 +79,8 @@
 		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 250 * NSEC_PER_MSEC), dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^
 			{
 				weakSelf.htmlStatus = 400;
-				[weakSelf performSelector:@selector(failed) onThread:weakSelf.thread withObject:nil waitUntilDone:NO];
+				//[weakSelf performSelector:@selector(failed) onThread:weakSelf.thread withObject:nil waitUntilDone:NO];
+				[weakSelf performBlock:^(ConcurrentOperation *op) { [op failed]; }];
 			} );
 	} break;
 	
@@ -89,12 +91,13 @@
 			{
 				weakSelf.error = [NSError errorWithDomain:@"NSURLErrorDomain" code:-1001 userInfo:@{ NSLocalizedDescriptionKey : @"timed out" }];	// Timeout
 				weakSelf.errorMessage = @"Forced Failure";
-				[weakSelf performSelector:@selector(failed) onThread:weakSelf.thread withObject:nil waitUntilDone:NO];
+				//[weakSelf performSelector:@selector(failed) onThread:weakSelf.thread withObject:nil waitUntilDone:NO];
+				[weakSelf performBlock:^(ConcurrentOperation *op) { [op failed]; }];
 			} );
 	} break;
-	
-	
+
 	default:
+		assert(!"should never get here");
 		break;
 	}
 #endif
@@ -120,6 +123,10 @@
 	if([[self class] printDebugging]) LOG(@"URLSTRING1=%@", [request URL]);
 #endif
 
+#if defined(UNIT_TESTING)	// lets us force errors in code
+	return YES;
+#endif
+
 	assert(request);
 
 	_connection = [[NSURLConnection alloc] initWithRequest:request delegate:self startImmediately:YES];
@@ -135,8 +142,6 @@
 
 - (void)completed // subclasses to override then finally call super
 {
-	assert(self.thread == [NSThread currentThread]);
-
 #ifndef NDEBUG
 	if([[self class] printDebugging]) LOG(@"WF: completed");
 #endif

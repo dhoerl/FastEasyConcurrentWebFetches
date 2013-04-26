@@ -73,8 +73,7 @@ static NSUInteger lastPriority;
 }
 - (void)dealloc
 {
-	[self cancelOperations];	// good idea but not required
-	
+	[operationsRunner cancelOperations];
 	// NSLog(@"Dealloc done!");
 }
 
@@ -131,14 +130,14 @@ static NSUInteger lastPriority;
 }
 - (IBAction)cancelAction:(id)sender
 {
-	[self cancelOperations];
+	[operationsRunner cancelOperations];
 	
 	[self defaultButtons];
 }
 
 - (IBAction)backAction:(id)sender
 {
-	[self cancelOperations];	// good idea to do as soon as possible
+	[operationsRunner cancelOperations];	// good idea to do as soon as possible
 
 	[self dismissViewControllerAnimated:YES completion:^{ ; }];
 }
@@ -206,7 +205,6 @@ static NSUInteger lastPriority;
 		sel == @selector(runOperation:withMsg:)	|| 
 		sel == @selector(runOperations:)		||
 		sel == @selector(operationsCount)		||
-		sel == @selector(cancelOperations)		||
 		sel == @selector(enumerateOperations:)
 	) {
 		if(!operationsRunner) {

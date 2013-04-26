@@ -23,12 +23,10 @@
 
 #include <libkern/OSAtomic.h>
 
-//extern void STLog(NSString *x, ...);
-
-#if 0	// 1 == no debug, 0 == lots of mesages
-#define LOG(...) 
-#else
+#if 0	// 0 == no debug, 1 == lots of mesages
 #define LOG(...) NSLog(__VA_ARGS__)
+#else
+#define LOG(...)
 #endif
 
 #import "OperationsRunner.h"
@@ -36,7 +34,8 @@
 #import "ConcurrentOperation.h"
 
 @interface ConcurrentOperation (OperationsRunner)
-- (void)_cancel;										// for use by OperationsRunner
+- (void)_OR_cancel;										// for use by OperationsRunner
+- (void)performBlock:(concurrentBlock)b;
 @end
 
 @interface OperationsRunner ()
@@ -56,7 +55,7 @@
 
 @implementation OperationsRunner
 {
-	long		_priority;							// the XXXX
+	long		_priority;							// the queue priority
 	int32_t		_DO_NOT_ACCESS_operationsCount;		// named so as to discourage direct access
 
 #if VERIFY_DEALLOC == 1
@@ -81,7 +80,7 @@
 		_maxOps				= 1000000;	// some absurdly large number
 
 #if VERIFY_DEALLOC == 1
-		_deallocs			= dispatch_semaphore_create(1);
+		_deallocs			= dispatch_semaphore_create(0);
 #endif
 	}
 	return self;
@@ -165,13 +164,12 @@
 	{
 		[self adjustOperationsTotal:1];	// peg immediately
 		__weak __typeof__(self) weakSelf = self;
-		op.finishBlock = ^	{
+		op.finishBlock =   ^{
 								__typeof__(self) strongSelf = weakSelf;
 								if(strongSelf) {
 									dispatch_semaphore_signal(strongSelf.deallocs);
 								}
 							};
-			
 	}
 #endif
 
@@ -234,9 +232,13 @@
 
 - (void)_runOperation:(ConcurrentOperation *)op	// on queue
 {
-	if(self.cancelled) return;
+	if(self.cancelled) {
+		LOG(@"Cancel Before Running: %@", op);
+		return;
+	}
 	
 	if([_operations count] >= self.maxOps) {
+		LOG(@"Hold %@", op);
 		[self.operationsOnHold addObject:op];
 		return;
 	}
@@ -245,25 +247,26 @@
 	if(!self.noDebugMsgs) LOG(@"Run Operation: %@", op.runMessage);
 #endif
 	self.delegate = self.savedDelegate;
-	
+
 	[_operations addObject:op];	// Second we retain and save a reference to the operation
-	
+
 	__weak __typeof__(self) weakSelf = self;
-	__weak __typeof__(op) weakOp = op;
 	dispatch_group_async(_operationsGroup, _operationsQueue, ^
 		{
-			__typeof__(op) strongOp = weakOp;
 			__typeof__(self) strongSelf = weakSelf;
 
 			// Run the operation
-			[strongOp main];
-NSLog(@"STRONGOP.%@ leave main", strongOp.runMessage);
+			[op main];
+
 			// Completion block
-			if(strongSelf && strongOp && !strongSelf.cancelled) {
+			if(strongSelf) { //  && !strongSelf.cancelled
+				__weak __typeof__(op) weakOp = op;
 				dispatch_group_async(strongSelf.operationsGroup, strongSelf.opRunnerQueue, ^
 					{
-NSLog(@"%@ _operationFinished", strongOp.runMessage);
-						[weakSelf _operationFinished:strongOp];
+						__typeof__(op) strongOp = weakOp;
+						if(strongOp) {
+							[strongSelf _operationFinished:strongOp];
+						}
 					} );
 			}
 		} );
@@ -275,61 +278,67 @@ NSLog(@"%@ _operationFinished", strongOp.runMessage);
 		return;
 	}
 	
-	LOG(@"OP cancelOperations");
+	LOG(@"OR cancelOperations");
 	
 	self.delegate = nil;
 	self.cancelled = YES;
 
+	// Cancel all active apps
 	[self enumerateOperations:^(ConcurrentOperation *op)
 		{
-			[op _cancel];
-			NSLog(@"SEND CANCEL TO %@", op.runMessage);
+			[op _OR_cancel];
+			LOG(@"SEND CANCEL TO %@", op.runMessage);
 		}];
+	
+	// insure that the all operations and dispatches they make have cleared out
+	dispatch_group_wait(_operationsGroup, DISPATCH_TIME_FOREVER);
 
+	// now that all ops have completed, we can wipe the array out
 	dispatch_group_async(_operationsGroup, _opRunnerQueue, ^	// has to be SYNC or you get crashes
 		{
 			[_operations removeAllObjects];
 			[_operationsOnHold removeAllObjects];
-			NSLog(@"EMPTY");
 		} );
-	
+	// wait for the removeAllObjects
 	dispatch_group_wait(_operationsGroup, DISPATCH_TIME_FOREVER);
+	assert(![_operations count]);
 
-	int32_t curval = [self adjustOperationsCount:0];
-	[self adjustOperationsCount:-curval];
-	
 #if VERIFY_DEALLOC == 1
 	[self testIfAllDealloced];
 #endif
+
+	int32_t curval = [self adjustOperationsCount:0];
+	[self adjustOperationsCount:-curval];
 }
 
 #if VERIFY_DEALLOC == 1
 - (void)testIfAllDealloced
 {
+	// local counter for this test
 	int32_t count = [self adjustOperationsTotal:0];
 	[self adjustOperationsTotal:-count];
 
 	BOOL completed = YES;
-	for(int32_t i=0; i<count; ++i) {
+	for(int32_t i=1; i<=count; ++i) {
 		long ret = dispatch_semaphore_wait(_deallocs, dispatch_time(DISPATCH_TIME_NOW, 1*NSEC_PER_SEC));	// 1 second
 		if(ret) {
-			NSLog(@"+++++++++++++++++++WARNING: %d OPERATIONS DID NOT DEALLOC", count-i);
+			NSLog(@"+++++++++++++++++++WARNING[%d]: %d OPERATIONS DID NOT DEALLOC", count, count-i+1);
 			completed = NO;
 			break;
 		}
 	}
-	if(completed) NSLog(@"OPERATIONS ALL DEALLOCED");
 }
 #endif
 
-- (void)enumerateOperations:(void(^)(ConcurrentOperation *op))b
+- (void)enumerateOperations:(concurrentBlock)b
 {
 	//LOG(@"OP enumerateOperations");
 	dispatch_group_async(_operationsGroup, _opRunnerQueue, ^
 		{
-			[_operations enumerateObjectsUsingBlock:^(ConcurrentOperation *operation, BOOL *stop)
+			[_operations enumerateObjectsUsingBlock:^(ConcurrentOperation *op, BOOL *stop)
 				{
-					b(operation);
+					[op performBlock:b];
+					//b(op);
 				}];   
 		} );
 }
@@ -349,7 +358,7 @@ NSLog(@"%@ _operationFinished", strongOp.runMessage);
 
 	// if you cancel the operation when its in the set, will hit this case
 	if(op.isCancelled || self.cancelled) {
-		// LOG(@"observeValueForKeyPath fired, but one of op.isCancelled=%d or self.isCancelled=%d", op.isCancelled, self.isCancelled);
+		LOG(@"one of op.isCancelled=%d or self.isCancelled=%d", op.isCancelled, self.cancelled);
 		return;
 	}
 
@@ -389,10 +398,14 @@ NSLog(@"%@ _operationFinished", strongOp.runMessage);
 	case msgOnSpecificQueue:
 	{
 		__weak id <OperationsRunnerProtocol> del = self.delegate;
-		dispatch_async(_delegateQueue, ^
-			{
-				[del operationFinished:op count:count];
-			} );
+		dispatch_block_t b =   ^{
+									[del operationFinished:op count:count];
+								};
+		if(_delegateGroup) {
+			dispatch_group_async(_delegateGroup, _delegateQueue, b);
+		} else {
+			dispatch_async(_delegateQueue, b);
+		}
 	}	break;
 	}
 }

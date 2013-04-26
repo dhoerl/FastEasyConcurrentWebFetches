@@ -21,7 +21,10 @@
 // THE SOFTWARE.
 //
 
-typedef NSRange (*htmlProcessor)(NSData *arg, const char *classMatch);
+// Unit Testing
+#if defined(UNIT_TESTING)
+typedef enum {forcingOff=0, forceSuccess, forceFailure, forceRetry } forceMode;
+#endif
 
 #import "ConcurrentOperation.h"
 

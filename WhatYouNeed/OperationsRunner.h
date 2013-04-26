@@ -22,9 +22,9 @@
 //
 
 #import "OperationsRunnerProtocol.h"
+#import "ConcurrentOperation.h"
 
 @protocol OperationsRunnerProtocol;
-@class ConcurrentOperation;
 
 typedef enum { msgDelOnMainThread=0, msgDelOnAnyThread, msgOnSpecificThread, msgOnSpecificQueue } msgType;
 
@@ -32,14 +32,14 @@ typedef enum { msgDelOnMainThread=0, msgDelOnAnyThread, msgOnSpecificThread, msg
 @property (nonatomic, assign) msgType msgDelOn;					// how to message delegate, defaults to MainThread
 @property (nonatomic, weak) NSThread *delegateThread;			// where to message delegate, sets msgDelOn->msgOnSpecificThread
 @property (nonatomic, assign) dispatch_queue_t delegateQueue;	// where to message delegate, sets msgDelOn->msgOnSpecificQueue
+@property (nonatomic, assign) dispatch_group_t delegateGroup;	// if set, use dispatch_group_async()
 @property (nonatomic, assign) BOOL noDebugMsgs;					// suppress debug messages
 @property (nonatomic, assign) long priority;					// targets the internal GCD queue doleing out the operations
 @property (nonatomic, assign) NSUInteger maxOps;				// set the NSOperationQueue's maxConcurrentOperationCount
 
-// These methods are for direct messaging
+// These methods are for direct messaging. The reason cancelOperations is here is to prevent the creattion of an object, just to cancel it.
 - (id)initWithDelegate:(id <OperationsRunnerProtocol>)del;
 - (void)cancelOperations;		// stop all work, will not get any more delegate calls after it returns
-- (void)enumerateOperations:(void(^)(ConcurrentOperation *op))b;	// in some very special cases you may need this (I did)
 
 @end
 
@@ -60,7 +60,8 @@ OperationsRunner *operationsRunner;
 	if(
 		sel == @selector(runOperation:withMsg:)	|| 
 		sel == @selector(runOperations:)		||
-		sel == @selector(operationsCount)
+		sel == @selector(operationsCount)		||
+		sel == @selector(enumerateOperations:)
 	) {
 		if(!operationsRunner) {
 			// Object only created if needed
@@ -85,11 +86,10 @@ OperationsRunner *operationsRunner;
 @interface MyClass (OperationsRunner)
 
 - (void)runOperation:(ConcurrentOperation *)op withMsg:(NSString *)msg;	// to submit an operation
-- (BOOL)runOperations:(NSSet *)operations;	// Set of ConcurrentOperation objects with their runMessage set (or not)
+- (BOOL)runOperations:(NSSet *)operations;			// Set of ConcurrentOperation objects with their runMessage set (or not)
 
-- (NSUInteger)operationsCount;				// returns the total number of outstanding operations
-
-- (void)enumerateOperations:(void(^)(ConcurrentOperation *op))b;	// in some very special cases you may need this (I did)
+- (void)enumerateOperations:(concurrentBlock)b;		// in some very special cases you may need this (I did)
+- (NSUInteger)operationsCount;						// returns the total number of outstanding operations
 
 @end
 
