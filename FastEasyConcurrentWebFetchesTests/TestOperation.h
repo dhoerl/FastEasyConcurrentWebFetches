@@ -8,15 +8,18 @@
 
 #import "ConcurrentOperation.h"
 
-@protocol FastEasyConcurrentWebFetchesProtocol;
+#define TIMER_DELAY 0.1
 
-typedef enum { nofailure, failAtSetup, failAtStartup, failAfterFirstMsg, failWithFailureMsg } forceFailure;
+@protocol TestOperationProtocol;
+
+typedef enum { noAction, failAtSetup, failAtStartup, forceSuccess, forceFailure } forceMode;
 
 @interface TestOperation : ConcurrentOperation
-@property (nonatomic, weak) id <FastEasyConcurrentWebFetchesProtocol> delegate;
-@property (atomic, assign) forceFailure forceFailure;
+@property (nonatomic, weak) id <TestOperationProtocol> delegate;
+@property (atomic, assign) forceMode forceAction;
 @property (atomic, assign) int succeeded;	// -1 == init, 0 == FAIL, 1 -- SUCCESS
 @property (atomic, assign) NSUInteger finishedMsg;
-@property (atomic, assign) BOOL delayInMain;
+@property (atomic, assign) BOOL fireTimer;
+@property (atomic, assign) double delayInMain;
 
 @end

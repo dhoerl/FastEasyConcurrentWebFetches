@@ -34,8 +34,7 @@
 @property (nonatomic, strong) dispatch_block_t finishBlock;
 #endif
 
-- (void)main;
-- (void)cancel;											// for subclasses, called on operation's thread
+- (void)main;								// starting point
 
 @end
 
@@ -48,8 +47,11 @@ typedef void(^concurrentBlock)(ConcurrentOperation *op);
 - (BOOL)start:(id)setupObject;				// called after setup has succeeded with the setup's returned value
 - (void)completed;							// subclasses to override, call super
 - (void)failed;								// subclasses to override then finally call super
-- (void)finish;								// subclasses to override for cleanup, call super
-- (void)performBlock:(concurrentBlock)b;	// subclass, to run it on the appropriate thread
+- (void)finish;								// subclasses to override for cleanup, call super, only called if the operation successfully starts
+- (void)cancel;								// for subclasses, called on operation's thread
+
+#if defined(UNIT_TESTING)
+- (void)performBlock:(concurrentBlock)b;	// if in the runloop, causes this block to run, then the operation terminates (here for unit testing)
+#endif
 
 @end
-

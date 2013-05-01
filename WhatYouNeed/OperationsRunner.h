@@ -26,6 +26,13 @@
 
 @protocol OperationsRunnerProtocol;
 
+// DEFAULTS
+#define DEFAULT_MAX_OPS					10
+#define DEFAULT_PRIORITY				DISPATCH_QUEUE_PRIORITY_DEFAULT
+#define DEFAULT_MILLI_SEC_CANCEL_DELAY	100
+
+
+
 typedef enum { msgDelOnMainThread=0, msgDelOnAnyThread, msgOnSpecificThread, msgOnSpecificQueue } msgType;
 
 @interface OperationsRunner : NSObject
@@ -36,10 +43,12 @@ typedef enum { msgDelOnMainThread=0, msgDelOnAnyThread, msgOnSpecificThread, msg
 @property (nonatomic, assign) BOOL noDebugMsgs;					// suppress debug messages
 @property (nonatomic, assign) long priority;					// targets the internal GCD queue doleing out the operations
 @property (nonatomic, assign) NSUInteger maxOps;				// set the NSOperationQueue's maxConcurrentOperationCount
+@property (nonatomic, assign) NSUInteger mSecCancelDelay;		// set the NSOperationQueue's maxConcurrentOperationCount
 
 // These methods are for direct messaging. The reason cancelOperations is here is to prevent the creattion of an object, just to cancel it.
-- (id)initWithDelegate:(id <OperationsRunnerProtocol>)del;
-- (void)cancelOperations;		// stop all work, will not get any more delegate calls after it returns
+- (id)initWithDelegate:(id <OperationsRunnerProtocol>)del;		// designated initializer
+- (BOOL)cancelOperations;										// stop all work, will not get any more delegate calls after it returns
+- (void)restartOperations;										// restart things
 
 @end
 
@@ -60,8 +69,7 @@ OperationsRunner *operationsRunner;
 	if(
 		sel == @selector(runOperation:withMsg:)	|| 
 		sel == @selector(runOperations:)		||
-		sel == @selector(operationsCount)		||
-		sel == @selector(enumerateOperations:)
+		sel == @selector(operationsCount)
 	) {
 		if(!operationsRunner) {
 			// Object only created if needed
@@ -87,8 +95,6 @@ OperationsRunner *operationsRunner;
 
 - (void)runOperation:(ConcurrentOperation *)op withMsg:(NSString *)msg;	// to submit an operation
 - (BOOL)runOperations:(NSSet *)operations;			// Set of ConcurrentOperation objects with their runMessage set (or not)
-
-- (void)enumerateOperations:(concurrentBlock)b;		// in some very special cases you may need this (I did)
 - (NSUInteger)operationsCount;						// returns the total number of outstanding operations
 
 @end

@@ -6,7 +6,9 @@
 //  Copyright (c) 2013 dhoerl. All rights reserved.
 //
 
-#import "FastEasyConcurrentWebFetchesProtocol.h"
+//#include <signal.h>
+
+#import "TestOperationProtocol.h"
 
 #import "TestOperation.h"
 
@@ -14,65 +16,108 @@
 
 @end
 
+static void myAlrm(int sig)
+{
+	NSLog(@"myAlrm!!!!");
+}
+
 @implementation TestOperation
 {
 	NSTimer *t;
+	NSUInteger timerMax;
 }
 
 - (void)main
 {
-	if(self.delayInMain) usleep(100000);	// 100ms
+	// Idea is to artificially create some startup delay
+	for(int i=0; i<100 && !self.isCancelled && self.delayInMain; ++i) {
+		usleep(self.delayInMain/100.0);
+	}
+	if(self.isCancelled) return;
+
+	[self.delegate register:self atStage:atMain];
 
 	[super main];
+
+	[self.delegate register:self atStage:atExit];
 }
 
 - (id)setup
 {
+	[self.delegate register:self atStage:atSetup];
+	
 	id foo = [super setup];
 
-	[self.delegate register:self];
-
-	t = [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(myTimer:) userInfo:nil repeats:YES];
-//NSLog(@"FUCK A DUCK %@", self);
-	return self.forceFailure == failAtSetup ? nil : foo;
+	return self.forceAction == failAtSetup ? nil : foo;
 }
 
 - (BOOL)start:(id)setupObject
 {
+	[self.delegate register:self atStage:atStart];
+	
 	BOOL ret = [super start:setupObject];
 
-	return self.forceFailure == failAtSetup ? NO : ret;
+	ret = self.forceAction == failAtStartup ? NO : ret;
+	
+	if(ret) {
+		t = [NSTimer scheduledTimerWithTimeInterval:TIMER_DELAY target:self selector:@selector(myTimer:) userInfo:nil repeats:YES];
+	}
+	return ret;
 }
 
 - (void)completed
 {
-	self.succeeded = 1;
-
 	[super completed];
+	
+	self.succeeded = 1;
 }
 
 - (void)finish
 {
-//NSLog(@"CLEAR FUCK A DUCK %@", self);
+	[super finish];
+
 	[t invalidate], t = nil;
 
 	++self.finishedMsg;
-	
-	[super finish];
+
+	[self.delegate register:self atStage:atFinish];
 }
 
 - (void)failed
 {
-	self.succeeded = 0;
-	
 	[super failed];
+
+	self.succeeded = -1;
+}
+
+- (void)cancel
+{
+	[super cancel];
+	
+	// Really important to do this if you use a timer in a super class. Ask me how I know this.
+	[t invalidate], t = nil;
+	NSLog(@"cancel timer");
 }
 
 - (void)myTimer:(NSTimer *)timer
 {
-	if(self.forceFailure == failAfterFirstMsg) {
-		[self performBlock:^(ConcurrentOperation *op) { [op failed]; }];
-		//[self performSelector:@selector(failed) onThread:self.thread withObject:nil waitUntilDone:NO];
+	switch(self.forceAction) {
+	case forceSuccess:
+		[self completed];
+		[timer invalidate];
+		break;
+
+	case forceFailure:
+		[self failed];
+		[timer invalidate];
+		break;
+		
+	default:
+		if(++timerMax == 100) {
+			[self completed];
+			[timer invalidate];
+		}
+		break;
 	}
 }
 

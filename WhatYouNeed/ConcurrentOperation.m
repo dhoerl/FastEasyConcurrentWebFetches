@@ -36,75 +36,98 @@
 @end
 
 @interface ConcurrentOperation ()
-@property(atomic, strong, readwrite) NSThread *thread;
+@property(atomic, weak, readwrite) NSThread *thread;
 @property(atomic, assign, readwrite) BOOL isCancelled;
 @property(atomic, assign, readwrite) BOOL isExecuting;
 @property(atomic, assign, readwrite) BOOL isFinished;
+@property(atomic, strong, readwrite) NSTimer *co_timer;
+#if defined(UNIT_TESTING)
+@property(atomic, strong, readwrite) concurrentBlock block;
+#endif
 
 @end
 
 @implementation ConcurrentOperation
 {
-	//NSTimer *__co_timer;		// so does not conflict with subclass
+	   dispatch_semaphore_t semaphore;
 }
+
+- (instancetype)init
+{
+	if((self = [super init])) {
+		semaphore = dispatch_semaphore_create(1);
+	}
+	return self;
+}
+
 - (void)main
 {
-
+	dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
 	if(self.isCancelled) {
-		LOG(@"OPERATION %@ CANCELLED", _runMessage);
-		return;
-	}
-	self.isExecuting = YES;
-
-	id obj;
-	BOOL allOK = NO;
-	if((obj = [self setup])) {
-		allOK = [self start:obj];
-	}
-
-	if(allOK) {
-		// makes runloop functional
-		NSTimer *__co_timer = [NSTimer scheduledTimerWithTimeInterval:60*60 target:self selector:@selector(timer:) userInfo:nil repeats:NO];
-
-		while(!self.isFinished) {
-			self.thread	= [NSThread currentThread];	// race condition
-#ifndef NDEBUG
-			BOOL ret = 
-#endif
-				[[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]];
-			assert(ret && "first assert");
-			//LOG(@"%@ RUN_LOOP: isFinished=%d", self.runMessage, self.isFinished);
-		}
-
-		[__co_timer invalidate], __co_timer = nil;
+		LOG(@"OP %@ CANCELLED AT MAIN", _runMessage);
 	} else {
-		[self finish];
-	}
+		id obj;
+		if((obj = [self setup]) && [self start:obj]) {
+			// makes runloop functional
+			self.thread	= [NSThread currentThread];
+self.thread.name = _runMessage;
+			self.isExecuting = YES;
+			self.co_timer = [NSTimer scheduledTimerWithTimeInterval:60*60 target:self selector:@selector(timer:) userInfo:nil repeats:NO];
 
-	self.isExecuting = NO;
-	
-	LOG(@"%@ LEAVE MAIN", _runMessage);
+			//NSLog(@"%@ enter loop: isFinished=%d isCancelled=%d", self.runMessage, self.isFinished, self.isCancelled);
+			BOOL ret = YES;
+			while(ret && !self.isFinished) {
+				dispatch_semaphore_signal(semaphore);
+				ret = [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]];
+				dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+				LOG(@"%@ RUN_LOOP: isFinished=%d isCancelled=%d", self.runMessage, self.isFinished, self.isCancelled);
+			}
+#if defined(UNIT_TESTING)
+			if(self.block) {
+				self.block(self);
+			}
+#endif
+			[self cancelTimer];
+			self.isExecuting = NO;
+			self.thread = nil;
+
+		}
+		if(self.isCancelled) {
+			[self cancel];
+		}
+	}
 }
 
-- (void)_OR_cancel
+- (void)cancelTimer
 {
-	//LOG(@"%@ _cancel: isFinished=%d", self.runMessage, self.isFinished);
-	if(!self.isFinished) {
+	[self.co_timer invalidate], self.co_timer = nil;
+}
+
+- (BOOL)_OR_cancel:(NSUInteger)millisecondDelay
+{
+//NSLog(@"%@ _cancel: isFinished=%d", self.runMessage, self.isFinished);
+	BOOL ret = dispatch_semaphore_wait(semaphore, dispatch_time(DISPATCH_TIME_NOW, millisecondDelay*NSEC_PER_MSEC)) ? NO : YES;
+	if(ret) {
+//NSLog(@"%@ SEND CANCEL ON THREAD %@", _runMessage, self.thread);
 		self.isCancelled = YES;
-		
-		// can get cancelled while still in the queue, main not run yet so no thread
-		[self performBlock:^(ConcurrentOperation *op)
-			{
-				[op cancel];
-			}];
+		if(self.isExecuting && !self.isFinished) {
+NSLog(@"%@ SEND CANCEL ON THREAD %@", _runMessage, self.thread);
+			[self performSelector:@selector(cancel) onThread:self.thread withObject:nil waitUntilDone:NO];
+			ret = YES;
+		}
+		dispatch_semaphore_signal(semaphore);
+	} else {
+		NSLog(@"FUCKED - NO CAN GET SEMA");
 	}
+	return ret;
 }
-- (void)cancel	// on thread
+
+- (void)cancel
 {
-	//LOG(@"%@ cancel: isExecuting=%d", self.runMessage, self.isExecuting);
-	if(self.isExecuting) {
-		[self finish];
-	}
+	NSLog(@"OP: got CANCEL");
+	[self cancelTimer];
+	
+	self.isFinished = YES;
 }
 
 - (id)setup	// on thread
@@ -128,10 +151,53 @@
 	[self finish];
 }
 
-- (void)finish					// on thread, subclasses to override then finally call super, for cleanup
+#if 0
+- (void)sendFinish				// on thread, subclasses to override then finally call super, for cleanup
 {
-	LOG(@"%@ finish: isFinished=%d", self.runMessage, self.isFinished);
-	self.isFinished = YES;
+	long ret = dispatch_semaphore_wait(semaphore, dispatch_time(DISPATCH_TIME_NOW, 10*NSEC_PER_MSEC));
+	if(!ret) {
+		if(self.isExecuting) {
+			self.isFinished = YES;
+			[self performSelector:@selector(finish) onThread:self.thread withObject:nil waitUntilDone:NO];
+		}
+		dispatch_semaphore_signal(semaphore);
+	}
+	// Subclasses can look at isFinished and isCancelled to determine appropriate action
+	LOG(@"%@ finish: isFinished=%d isCancelled=%d", self.runMessage, self.isCancelled);
+}
+#endif
+
+- (void)finish
+{
+	[self cancelTimer];
+}
+
+#if defined(UNIT_TESTING)
+- (void)performBlock:(concurrentBlock)b
+{
+	BOOL ret = dispatch_semaphore_wait(semaphore, dispatch_time(DISPATCH_TIME_NOW, 100*NSEC_PER_MSEC)) ? NO : YES;
+	if(ret) {
+//NSLog(@"%@ SEND CANCEL ON THREAD %@", _runMessage, self.thread);
+		self.isCancelled = YES;
+		if(self.isExecuting && !self.isFinished) {
+NSLog(@"%@ SEND CANCEL ON THREAD %@", _runMessage, self.thread);
+			[self performSelector:@selector(cancel) onThread:self.thread withObject:nil waitUntilDone:NO];
+			ret = YES;
+		}
+		dispatch_semaphore_signal(semaphore);
+	} else {
+		NSLog(@"FUCKED - NO CAN GET SEMA");
+	}
+}
+- (void)executeBlock:(concurrentBlock)b
+{
+	b(self);
+}
+#endif
+
+- (NSString *)description
+{
+	return [NSString stringWithFormat:@"OP[\"%@\"]", _runMessage];
 }
 
 - (void)dealloc
@@ -144,25 +210,4 @@
 #endif
 }
 
-- (void)performBlock:(concurrentBlock)b
-{
-	NSThread *thread = self.thread;
-	if(thread) {
-		[self performSelector:@selector(runBlock:) onThread:thread withObject:b waitUntilDone:NO];
-	} else {
-		b(self);
-	}
-
-}
-- (void)runBlock:(concurrentBlock)b
-{
-	b(self);
-}
-
-- (NSString *)description
-{
-	return [NSString stringWithFormat:@"OP[\"%@\"]", _runMessage];
-}
-
 @end
-

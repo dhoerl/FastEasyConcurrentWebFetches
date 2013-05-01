@@ -47,7 +47,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		DE956F4E1729E1E70026179D /* FastEasyConcurrentWebFetchesProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FastEasyConcurrentWebFetchesProtocol.h; sourceTree = "<group>"; };
+		DE956F4E1729E1E70026179D /* TestOperationProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TestOperationProtocol.h; sourceTree = "<group>"; };
 		DE956F4F1729E2700026179D /* TestOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestOperation.m; sourceTree = "<group>"; };
 		DE956F501729E2700026179D /* TestOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestOperation.h; sourceTree = "<group>"; };
 		DEE9159A1722DE520085F570 /* FastEasyConcurrentWebFetches.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FastEasyConcurrentWebFetches.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -178,9 +178,9 @@
 		DEE915C71722DE520085F570 /* FastEasyConcurrentWebFetchesTests */ = {
 			isa = PBXGroup;
 			children = (
-				DE956F4E1729E1E70026179D /* FastEasyConcurrentWebFetchesProtocol.h */,
 				DEE915CD1722DE520085F570 /* FastEasyConcurrentWebFetchesTests.h */,
 				DEE915CE1722DE520085F570 /* FastEasyConcurrentWebFetchesTests.m */,
+				DE956F4E1729E1E70026179D /* TestOperationProtocol.h */,
 				DE956F501729E2700026179D /* TestOperation.h */,
 				DE956F4F1729E2700026179D /* TestOperation.m */,
 				DEE915C81722DE520085F570 /* Supporting Files */,

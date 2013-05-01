@@ -10,49 +10,54 @@
 #include <libkern/OSAtomic.h>
 
 #import "FastEasyConcurrentWebFetchesTests.h"
-#import "FastEasyConcurrentWebFetchesProtocol.h"
 
 #import "OperationsRunner.h"
+#import "TestOperationProtocol.h"
 #import "TestOperation.h"
 
-
 #define MIN_TEST	0	// Starting test, but 0 always runs
-#define MAX_TEST	8	// Last test
+#define MAX_TEST	1	// Last test
 
-#define MAX_OPS		10	// OperationQueue max
+#define MAX_OPS		250	// OperationQueue max
+#define NUM_OPS		(10*MAX_OPS)	// loops per test, must be multiple of MAX_OPS
 
-#define iCount		2	// loops per test
-#define numOps		25	// loops per test
+#define iCount		10	// loops per test
 
-#if 0	// 0 == no debug, 1 == lots of mesages
+#if 1	// 0 == no debug, 1 == lots of mesages
 #define TLOG(...) NSLog(__VA_ARGS__)
 #else
 #define TLOG(...)
 #endif
 
 #define WAIT_UNTIL(x, y, msg)						\
-	for(int j=0; j < 10*10 && !(x); ++j)  {			\
-		if(!j) TLOG(@"WAITING " #y "...");			\
-		usleep(100000);								\
+	for(int iii=0; iii < 10*10*10 && !(x); ++iii)  {	\
+		if(!iii) {TLOG(@"WAITING " #y "...");}		\
+		usleep(10000);								\
 	}												\
 	if(!(x)) {										\
 		NSLog(@"FAILED ON LOOP %d UNTIL " #y , i);	\
-		STAssertTrue((x), (msg));						\
+		[self dump];								\
+		STAssertTrue((x), (msg));					\
 		return;										\
-	} else											\
-		TLOG(@"...DONE " #y)
+	} else {										\
+		TLOG(@"...DONE " #y);						\
+	}												\
+	while(0)
 
 #define WAIT_WHILE(x, y, msg)						\
-	for(int j=0; j < 10*10 && (x); ++j)  {			\
-		if(!j) TLOG(@"WAITING " #y "...");			\
-		usleep(100000);								\
+	for(int iii=0; iii < 10*10*10 && (x); ++iii)  {	\
+		if(!iii) {TLOG(@"WAITING " #y "...");}		\
+		usleep(10000);								\
 	}												\
 	if((x)) {										\
 		NSLog(@"FAILED ON LOOP %d WHILE " #y , i);	\
+		[self dump];								\
 		STAssertFalse((x), (msg));					\
 		return;										\
-	} else											\
-		TLOG(@"...DONE " #y)
+	} else {										\
+		TLOG(@"...DONE " #y);						\
+	}												\
+	while(0)
 
 static void myAlrm(int sig)
 {
@@ -61,7 +66,7 @@ static void myAlrm(int sig)
 
 // //typedef enum {nofailure, failAtSetup, failAtStartup, failAfterFirstMsg, failWithFailureMsg } forceFailure;
 
-@interface FastEasyConcurrentWebFetchesTests () <OperationsRunnerProtocol, FastEasyConcurrentWebFetchesProtocol>
+@interface FastEasyConcurrentWebFetchesTests () <OperationsRunnerProtocol, TestOperationProtocol>
 
 @end
 
@@ -69,8 +74,6 @@ static void myAlrm(int sig)
 
 - (void)runOperation:(ConcurrentOperation *)op withMsg:(NSString *)msg;	// to submit an operation
 - (BOOL)runOperations:(NSSet *)operations;	// Set of ConcurrentOperation objects with their runMessage set (or not)
-
-- (void)enumerateOperations:(void(^)(ConcurrentOperation *op))b;		// in some very special cases you may need this (I did)
 - (NSUInteger)operationsCount;				// returns the total number of outstanding operations
 
 @end
@@ -78,8 +81,11 @@ static void myAlrm(int sig)
 @implementation FastEasyConcurrentWebFetchesTests
 {
 	OperationsRunner	*operationsRunner;
-	__block int			opFailed, opSucceeded;
-	int32_t				_DO_NOT_ACCESS_operationsCount;
+	__block int			opFailed, opSucceeded, opNeverRan;
+	int32_t				stageCounters[atEnd];
+
+	int					count;
+	//int					tstCount;
 
 	dispatch_queue_t	queue;
 	dispatch_group_t	group;
@@ -93,7 +99,6 @@ static void myAlrm(int sig)
 - (void)setUp
 {
     [super setUp];
-	
 	if(!operationsRunner) {
 		// re-using it should be more stressful than getting a new one each time
 		
@@ -107,9 +112,12 @@ static void myAlrm(int sig)
 		assert(operationsRunner.msgDelOn == msgOnSpecificQueue);
 		
 		// Having ops run slowly is more likely to cause logic errors to show up in testing
-		operationsRunner.priority = DISPATCH_QUEUE_PRIORITY_BACKGROUND;
+		operationsRunner.priority = DISPATCH_QUEUE_PRIORITY_HIGH; // DISPATCH_QUEUE_PRIORITY_BACKGROUND;
 		dispatch_set_target_queue(queue, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0));
 	}
+
+	count = NUM_OPS;
+	//tstCount = NUM_OPS > MAX_OPS ? MAX_OPS : count;
 }
 
 - (void)tearDown
@@ -121,95 +129,223 @@ static void myAlrm(int sig)
     [super tearDown];
 }
 
-// Verify ops do not complete without a complete/fail message, and that sending complete results in all operations succeeding
+- (void)dump
+{
+	NSLog(@"OperationsCount        = %d", [self operationsCount]);
+	NSLog(@"opFailed               = %d", opFailed);
+	NSLog(@"opSucceeded            = %d", opSucceeded);
+	NSLog(@"opNeverRan             = %d", opNeverRan);
+	NSLog(@"stageCounters[main]    = %d", stageCounters[0]);
+	NSLog(@"stageCounters[setup]   = %d", stageCounters[1]);
+	NSLog(@"stageCounters[started] = %d", stageCounters[2]);
+	NSLog(@"stageCounters[finish]  = %d", stageCounters[3]);
+	NSLog(@"stageCounters[exit]    = %d", stageCounters[4]);
+}
+
+#if 0 >= MIN_TEST && 0 <= MAX_TEST
+
 - (void)test0
+// Verify ops do not complete without a complete/fail message, and that sending complete results in all operations succeeding
 {
-	int count = numOps;
-	int tstCount = numOps > MAX_OPS ? MAX_OPS : count;
 	for(int i=1; i<=iCount; ++i) {
 		TLOG(@"TEST %d: ==================================================================================", i);
 		[self loopInit];
+
 		for(int j=0; j<count; ++j) {
 			TestOperation *t = [TestOperation new];
 			t.delegate = self;
+			t.forceAction = forceSuccess;
 			[self runOperation:t withMsg:[NSString stringWithFormat:@"Op %d", j]];
 		}
-		WAIT_UNTIL(tstCount == [self adjustOperationsCount:0], 1, @"Operations did not start running");
+		WAIT_UNTIL(count == [self adjustOperationsCount:0 atStage:atMain], 1, @"Operations did not start running");
 
-		BOOL ret = [self waitTilRunning:count];
-		if(!ret) break;
-
-		WAIT_UNTIL([self adjustOperationsCount:0] == tstCount, 3, @"Operations did not start running");
-		
-		[self enumerateOperations:^(ConcurrentOperation *op)
-			{
-				[op performBlock:^(ConcurrentOperation *op) { [op completed]; }];
-			} ];
-		WAIT_UNTIL(tstCount == (opFailed+opSucceeded), 2, @"All ops did not complete");
-		STAssertEquals(opSucceeded, tstCount, @"All ops should have succeeded");
-
-		[operationsRunner cancelOperations];
+		WAIT_UNTIL(count == (opFailed+opSucceeded+opNeverRan), 2, @"All ops did not complete");
+		STAssertEquals(opSucceeded, count, @"All ops should have succeeded");
 	}
 }
+#endif
 
-// Verify ops do not complete without a complete/fail message, and that sending failed results in all operations succeeding
+#if 1 >= MIN_TEST && 1 <= MAX_TEST
+
 - (void)test1
+// Verify ops do not complete without a complete/fail message, and that sending failed results in all operations succeeding
 {
-	int count = numOps;
-	int tstCount = numOps > MAX_OPS ? MAX_OPS : count;
 	for(int i=1; i<=iCount; ++i) {
 		TLOG(@"TEST %d: ==================================================================================", i);
 		[self loopInit];
+
 		for(int j=0; j<count; ++j) {
 			TestOperation *t = [TestOperation new];
 			t.delegate = self;
+			t.forceAction = forceFailure;
 			[self runOperation:t withMsg:[NSString stringWithFormat:@"Op %d", j]];
 		}
-		WAIT_UNTIL(tstCount == [self adjustOperationsCount:0], 1, @"Operations did not start running");
+		WAIT_UNTIL(count == [self adjustOperationsCount:0 atStage:atMain], 1, @"Operations did not start running");
 
-		BOOL ret = [self waitTilRunning:count];
-		if(!ret) break;
-		
-		[self enumerateOperations:^(ConcurrentOperation *op)
-			{
-				[op performBlock:^(ConcurrentOperation *op) { [op failed]; }];
-				//[op performSelector:@selector(failed) onThread:op.thread withObject:nil waitUntilDone:NO];
-			} ];
-		WAIT_UNTIL(tstCount == (opFailed+opSucceeded), 2, @"All ops did not complete");
-		STAssertEquals(opFailed, tstCount, @"All ops should have failed");
-
-		[operationsRunner cancelOperations];
+		WAIT_UNTIL(count == (opFailed+opSucceeded+opNeverRan), 2, @"All ops did not complete");
+		STAssertEquals(opFailed, count, @"All ops should have succeeded");
 	}
 }
+#endif
 
-// Verify when setup fails the right thing happens
+#if 2 >= MIN_TEST && 2 <= MAX_TEST
+// Verify if we canel the apps immediately, everything tears down OK
 - (void)test2
 {
-	int count = numOps;
 	for(int i=1; i<=iCount; ++i) {
 		TLOG(@"TEST %d: ==================================================================================", i);
 		[self loopInit];
 		for(int j=0; j<count; ++j) {
 			TestOperation *t = [TestOperation new];
 			t.delegate = self;
-			t.delayInMain = YES;
 			[self runOperation:t withMsg:[NSString stringWithFormat:@"Op %d", j]];
 		}
 		[operationsRunner cancelOperations];
 		
-		WAIT_UNTIL([self adjustOperationsCount:0] == 0, 1, @"Some operation got to setup, should not have");
-		
-		//STAssertEquals((int)[self operationsCount], 0, @"All ops should have just gone away");
+		WAIT_UNTIL([self operationsCount] == 0, 1, @"Some operation did not cancel");
+
+//NSLog(@"COUNT0=%d", [self adjustOperationsCount:0 atStage:atMain]);
+//NSLog(@"COUNT1=%d", [self adjustOperationsCount:0 atStage:atSetup]);
+//NSLog(@"COUNT2=%d", [self adjustOperationsCount:0 atStage:atStart]);
+
+		STAssertTrue([self adjustOperationsCount:0 atStage:atMain] <= count, @"Should only have a few");
+		STAssertTrue([self adjustOperationsCount:0 atStage:atSetup] <= count, @"Should only have a few");
+		STAssertTrue([self adjustOperationsCount:0 atStage:atStart] <= count, @"Should only have a few");
 		STAssertEquals(opFailed+opSucceeded, 0, @"Nothing should completed or failed");
+		//[self dump];
 	}
 }
+#endif
 
-- (BOOL)waitTilRunning:(int)count
+#if 3 >= MIN_TEST && 3 <= MAX_TEST
+// Verify if we canel the apps immediately, force apps to delay starting, everything tears down OK
+- (void)test3
+{
+	for(int i=1; i<=iCount; ++i) {
+		//@autoreleasepool
+		{
+			TLOG(@"TEST %d: ==================================================================================", i);
+			[self loopInit];
+			for(int j=0; j<count; ++j) {
+				TestOperation *t = [TestOperation new];
+				t.delegate = self;
+				t.delayInMain = TIMER_DELAY * 10 * 1000000.0;
+				[self runOperation:t withMsg:[NSString stringWithFormat:@"Op %d", j]];
+			}
+			BOOL ret = [operationsRunner cancelOperations];
+			STAssertTrue(ret, @"Cancel failed");
+			
+			WAIT_UNTIL([self operationsCount] == 0, 1, @"Some operation did not cancel");
+
+			STAssertTrue([self adjustOperationsCount:0 atStage:atMain] == 0, @"Should only have a few at main");
+			STAssertTrue([self adjustOperationsCount:0 atStage:atSetup] == 0, @"Should never reach setup");
+			STAssertTrue([self adjustOperationsCount:0 atStage:atStart] == 0, @"Should never reach start");
+			STAssertEquals(opFailed+opSucceeded+opNeverRan, 0, @"Nothing should completed or failed");
+			//[self dump];
+		}
+	}
+}
+#endif
+
+
+#if 4 >= MIN_TEST && 4 <= MAX_TEST
+// Verify when setup fails the right thing happens
+- (void)test4
+{
+	for(int i=1; i<=iCount; ++i) {
+		TLOG(@"TEST %d: ==================================================================================", i);
+		[self loopInit];
+		for(int j=0; j<count; ++j) {
+			TestOperation *t = [TestOperation new];
+			t.delegate = self;
+			t.forceAction = failAtSetup;
+			[self runOperation:t withMsg:[NSString stringWithFormat:@"Op %d", j]];
+		}		
+		WAIT_UNTIL([self operationsCount] == 0, 1, @"Some operation did not cancel");
+
+		STAssertTrue([self adjustOperationsCount:0 atStage:atMain] == count, @"All should make main");
+		STAssertTrue([self adjustOperationsCount:0 atStage:atSetup] == count, @"All should reach setup");
+		STAssertTrue([self adjustOperationsCount:0 atStage:atStart] == 0, @"Should never reach start");
+		STAssertEquals(opNeverRan, count, @"Nothing should completed or failed");
+	}
+}
+#endif
+
+#if 5 >= MIN_TEST && 5 <= MAX_TEST
+// Verify when setup fails the right thing happens
+- (void)test5
+{
+	for(int i=1; i<=iCount; ++i) {
+		TLOG(@"TEST %d: ==================================================================================", i);
+		[self loopInit];
+		for(int j=0; j<count; ++j) {
+			TestOperation *t = [TestOperation new];
+			t.delegate = self;
+			t.forceAction = failAtStartup;
+			[self runOperation:t withMsg:[NSString stringWithFormat:@"Op %d", j]];
+		}		
+		WAIT_UNTIL([self operationsCount] == 0, 1, @"Some operation did not cancel");
+
+		STAssertTrue([self adjustOperationsCount:0 atStage:atMain] == count, @"All should make main");
+		STAssertTrue([self adjustOperationsCount:0 atStage:atSetup] == count, @"All should reach setup");
+		STAssertTrue([self adjustOperationsCount:0 atStage:atStart] == count, @"Should never reach start");
+		STAssertEquals(opNeverRan, count, @"Nothing should completed or failed");
+	}
+}
+#endif
+
+#if 6 >= MIN_TEST && 6 <= MAX_TEST
+// Verify when a short timer goes off and we force a failed message, things cleanup
+- (void)test6
+{
+	for(int i=1; i<=iCount; ++i) {
+		TLOG(@"TEST %d: ==================================================================================", i);
+		[self loopInit];
+		for(int j=0; j<count; ++j) {
+			TestOperation *t = [TestOperation new];
+			t.delegate = self;
+			t.forceAction = forceFailure;
+			[self runOperation:t withMsg:[NSString stringWithFormat:@"Op %d", j]];
+		}		
+		WAIT_UNTIL([self operationsCount] == 0, 1, @"Some operation did not cancel");
+
+		STAssertTrue([self adjustOperationsCount:0 atStage:atMain] == count, @"All should make main");
+		STAssertTrue([self adjustOperationsCount:0 atStage:atSetup] == count, @"All should reach setup");
+		STAssertTrue([self adjustOperationsCount:0 atStage:atStart] == count, @"All should reach start");
+		STAssertEquals(opFailed, count, @"All failed");
+	}
+}
+#endif
+
+#if 7 >= MIN_TEST && 7 <= MAX_TEST
+- (void)test7
+{
+	for(int i=1; i<=iCount; ++i) {
+		TLOG(@"TEST %d: ==================================================================================", i);
+		[self loopInit];
+		for(int j=0; j<count; ++j) {
+			TestOperation *t = [TestOperation new];
+			t.delegate = self;
+			t.forceAction = forceSuccess;
+			[self runOperation:t withMsg:[NSString stringWithFormat:@"Op %d", j]];
+		}		
+		WAIT_UNTIL([self operationsCount] == 0, 1, @"Some operation did not cancel");
+
+		STAssertTrue([self adjustOperationsCount:0 atStage:atMain] == count, @"All should make main");
+		STAssertTrue([self adjustOperationsCount:0 atStage:atSetup] == count, @"All should reach setup");
+		STAssertTrue([self adjustOperationsCount:0 atStage:atStart] == count, @"All should reach start");
+		STAssertEquals(opSucceeded, count, @"All success");
+	}
+}
+#endif
+
+#if 0
+- (BOOL)waitTilRunning
 {
 	__block int cnt = 0;
 	for(int i=0; i<10; ++i) {
 		cnt = 0;
-		[self enumerateOperations:^(ConcurrentOperation *op)
+		[operationsRunner enumerateOperations:^(ConcurrentOperation *op)
 			{
 				if(op.isExecuting) {
 					dispatch_group_async(group, queue, ^
@@ -219,35 +355,42 @@ static void myAlrm(int sig)
 				}
 			} ];
 		dispatch_group_wait(group, DISPATCH_TIME_FOREVER);
-		if(cnt == count) break;
+		if(cnt == MAX_OPS) break;
 		usleep(100000);
 	}
 
 	usleep(100000);
 	dispatch_group_wait(group, DISPATCH_TIME_FOREVER);
 
-	STAssertEquals(opFailed+opSucceeded, 0, @"Nothing should completed or failed");
-	return (opFailed+opSucceeded) == 0;
+	//STAssertEquals(opFailed+opSucceeded, 0, @"Nothing should completed or failed");
+	return cnt == MAX_OPS;
 }
+#endif
 
-- (int32_t)adjustOperationsCount:(int32_t)val
+- (int32_t)adjustOperationsCount:(int32_t)val atStage:(registrationStage)stage
 {
-	int32_t nVal = OSAtomicAdd32(val, &_DO_NOT_ACCESS_operationsCount);
+	int32_t *ptr = &stageCounters[stage];
+	int32_t nVal = OSAtomicAdd32(val, ptr);
 	return nVal;
 }
 
 - (void)loopInit
 {
-	int32_t nVal = OSAtomicAdd32(0, &_DO_NOT_ACCESS_operationsCount);
-	OSAtomicAdd32(-nVal, &_DO_NOT_ACCESS_operationsCount);
+	memset(stageCounters, 0, sizeof(stageCounters));
+	//int32_t nVal = OSAtomicAdd32(0, &_DO_NOT_ACCESS_operationsCount);
+	//OSAtomicAdd32(-nVal, &_DO_NOT_ACCESS_operationsCount);
 
 	opFailed = 0;
 	opSucceeded = 0;
+	opNeverRan = 0;
+
+	[operationsRunner restartOperations];
 }
 
-- (void)register:(id)op
+- (void)register:(id)op atStage:(registrationStage)stage
 {
-	[self adjustOperationsCount:1];
+//NSLog(@"register %d", stage);
+	[self adjustOperationsCount:1 atStage:stage];
 }
 
 - (void)operationFinished:(ConcurrentOperation *)op count:(NSUInteger)remainingOps	// on queue
@@ -257,16 +400,15 @@ static void myAlrm(int sig)
 	switch(t.succeeded) {
 	default:
 	case -1:
-		STAssertTrue(NO, @"Returned unitialized status");
+		++opFailed;
 		break;
 	case 0:
-		++opFailed;
+		++opNeverRan;
 		break;
 	case 1:
 		++opSucceeded;
 		break;
 	}
-
 }
 
 - (id)forwardingTargetForSelector:(SEL)sel
@@ -274,8 +416,7 @@ static void myAlrm(int sig)
 	if(
 		sel == @selector(runOperation:withMsg:)	|| 
 		sel == @selector(runOperations:)		||
-		sel == @selector(operationsCount)		||
-		sel == @selector(enumerateOperations:)
+		sel == @selector(operationsCount)
 	) {
 		if(!operationsRunner) {
 			// Object only created if needed
