@@ -48,7 +48,7 @@
 @property (atomic, weak) id <OperationsRunnerProtocol>	delegate;
 @property (atomic, weak) id <OperationsRunnerProtocol>	savedDelegate;
 @property (atomic, assign) BOOL							cancelled;
-#if VERIFY_DEALLOC == 1
+#ifdef VERIFY_DEALLOC
 @property (nonatomic, assign) dispatch_semaphore_t		deallocs;
 #endif
 
@@ -59,12 +59,17 @@
 	long		_priority;							// the queue priority
 	int32_t		_DO_NOT_ACCESS_operationsCount;		// named so as to discourage direct access
 
-#if VERIFY_DEALLOC == 1
+#ifdef VERIFY_DEALLOC
 	int32_t		_DO_NOT_ACCESS_operationsTotal;		// named so as to discourage direct access
 #endif
-int cnt;
 }
 @dynamic priority;
+
+// so forwardingTargetForSelector has something to send to if no operationRunner exists
++ (BOOL)cancelOperations
+{
+	return YES;
+}
 
 - (id)initWithDelegate:(id <OperationsRunnerProtocol>)del
 {
@@ -85,7 +90,7 @@ int cnt;
 		_maxOps				= DEFAULT_MAX_OPS;
 		_mSecCancelDelay	= DEFAULT_MILLI_SEC_CANCEL_DELAY;
 
-#if VERIFY_DEALLOC == 1
+#ifdef VERIFY_DEALLOC
 		_deallocs			= dispatch_semaphore_create(0);
 #endif
 	}
@@ -100,7 +105,7 @@ int cnt;
 	dispatch_release(_operationsQueue);
 	dispatch_release(_operationsGroup);
 	dispatch_release(_dataSema);
-#if VERIFY_DEALLOC == 1
+#ifdef VERIFY_DEALLOC
 	dispatch_release(_deallocs);
 #endif
 }
@@ -111,7 +116,7 @@ int cnt;
 	return nVal;
 }
 
-#if VERIFY_DEALLOC == 1
+#ifdef VERIFY_DEALLOC
 - (int32_t)adjustOperationsTotal:(int32_t)val
 {
 	int32_t nVal = OSAtomicAdd32(val, &_DO_NOT_ACCESS_operationsTotal);
@@ -173,7 +178,7 @@ int cnt;
 	}
 	
 	[self adjustOperationsCount:1];	// peg immediately
-#if VERIFY_DEALLOC == 1
+#ifdef VERIFY_DEALLOC
 	{
 		[self adjustOperationsTotal:1];	// peg immediately
 		__weak __typeof__(self) weakSelf = self;
@@ -214,7 +219,7 @@ int cnt;
 
 	[self adjustOperationsCount:count];	// peg immediately
 
-#if VERIFY_DEALLOC == 1
+#ifdef VERIFY_DEALLOC
 	{
 		[self adjustOperationsTotal:count];	// peg immediately
 		__weak __typeof__(self) weakSelf = self;
@@ -439,7 +444,7 @@ NSLog(@"CNT=%d", cnt);
 //NSLog(@"TWO");
 	assert(!ret && "Wait for operations release");
 
-#if VERIFY_DEALLOC == 1
+#ifdef VERIFY_DEALLOC
 	LOG(@"WAIT FOR DEALLOC TEST...");
 	[self testIfAllDealloced];
 	LOG(@"...TEST DONE");
@@ -457,7 +462,7 @@ NSLog(@"CNT=%d", cnt);
 	self.cancelled = NO;
 }
 
-#if VERIFY_DEALLOC == 1
+#ifdef VERIFY_DEALLOC
 - (void)testIfAllDealloced
 {
 	// local counter for this test
@@ -520,7 +525,7 @@ NSLog(@"CNT=%d", cnt);
 		dict = @{ @"op" : op, @"count" : @(count) };
 	}
 
-#if VERIFY_DEALLOC == 1
+#ifdef VERIFY_DEALLOC
 	dispatch_block_t b;
 	if(!count) b = ^{
 						[self testIfAllDealloced];

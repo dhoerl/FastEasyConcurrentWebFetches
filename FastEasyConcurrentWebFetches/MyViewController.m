@@ -73,7 +73,7 @@ static NSUInteger lastPriority;
 }
 - (void)dealloc
 {
-	[operationsRunner cancelOperations];
+	[self cancelOperations];
 	// NSLog(@"Dealloc done!");
 }
 
@@ -130,14 +130,14 @@ static NSUInteger lastPriority;
 }
 - (IBAction)cancelAction:(id)sender
 {
-	[operationsRunner cancelOperations];
+	[self cancelOperations];
 	
 	[self defaultButtons];
 }
 
 - (IBAction)backAction:(id)sender
 {
-	[operationsRunner cancelOperations];	// good idea to do as soon as possible
+	[self cancelOperations];	// good idea to do as soon as possible
 
 	[self dismissViewControllerAnimated:YES completion:^{ ; }];
 }
@@ -205,20 +205,27 @@ static NSUInteger lastPriority;
 		sel == @selector(runOperation:withMsg:)	|| 
 		sel == @selector(runOperations:)		||
 		sel == @selector(operationsCount)		||
-		sel == @selector(enumerateOperations:)
+		sel == @selector(cancelOperations)		||
+		sel == @selector(restartOperations)
 	) {
 		if(!operationsRunner) {
+			if(sel == @selector(cancelOperations)) {
+				// cancel sent in say dealloc, don't create an object just to release it
+				return [OperationsRunner class];
+			}
 			// Object only created if needed
 			operationsRunner = [[OperationsRunner alloc] initWithDelegate:self];
 			operationsRunner.maxOps = lastMaxConcurrent;
 			[self priorityAction:priority];	// sets priority
+			// operationsRunner.priority = DISPATCH_QUEUE_PRIORITY_BACKGROUND;	// for example
+			// operationsRunner.maxOps = 4;										// for example
+			// operationsRunner.mSecCancelDelay = 10;							// for example
 		}
 		return operationsRunner;
 	} else {
 		return [super forwardingTargetForSelector:sel];
 	}
 }
-
 - (void)viewDidUnload {
 	spinner = nil;
 	elapsedTime = nil;

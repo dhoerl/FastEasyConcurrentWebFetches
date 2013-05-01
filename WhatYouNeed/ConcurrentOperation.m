@@ -63,14 +63,14 @@
 - (void)main
 {
 	dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
-	if(self.isCancelled) {
-		LOG(@"OP %@ CANCELLED AT MAIN", _runMessage);
-	} else {
+	if(!self.isCancelled) {
 		id obj;
 		if((obj = [self setup]) && [self start:obj]) {
 			// makes runloop functional
 			self.thread	= [NSThread currentThread];
-self.thread.name = _runMessage;
+#ifndef NDEBUG
+			self.thread.name = _runMessage;
+#endif
 			self.isExecuting = YES;
 			self.co_timer = [NSTimer scheduledTimerWithTimeInterval:60*60 target:self selector:@selector(timer:) userInfo:nil repeats:NO];
 
@@ -96,6 +96,7 @@ self.thread.name = _runMessage;
 			[self cancel];
 		}
 	}
+	dispatch_semaphore_signal(semaphore);	// so cancel and/or final block don't take a long time
 }
 
 - (void)cancelTimer
@@ -105,26 +106,23 @@ self.thread.name = _runMessage;
 
 - (BOOL)_OR_cancel:(NSUInteger)millisecondDelay
 {
-//NSLog(@"%@ _cancel: isFinished=%d", self.runMessage, self.isFinished);
 	BOOL ret = dispatch_semaphore_wait(semaphore, dispatch_time(DISPATCH_TIME_NOW, millisecondDelay*NSEC_PER_MSEC)) ? NO : YES;
 	if(ret) {
-//NSLog(@"%@ SEND CANCEL ON THREAD %@", _runMessage, self.thread);
 		self.isCancelled = YES;
 		if(self.isExecuting && !self.isFinished) {
-NSLog(@"%@ SEND CANCEL ON THREAD %@", _runMessage, self.thread);
 			[self performSelector:@selector(cancel) onThread:self.thread withObject:nil waitUntilDone:NO];
 			ret = YES;
 		}
 		dispatch_semaphore_signal(semaphore);
 	} else {
-		NSLog(@"FUCKED - NO CAN GET SEMA");
+		LOG(@"%@ failed to get the locking semaphore", self);
 	}
 	return ret;
 }
 
 - (void)cancel
 {
-	NSLog(@"OP: got CANCEL");
+	LOG(@"%@: got CANCEL", self);
 	[self cancelTimer];
 	
 	self.isFinished = YES;
@@ -151,59 +149,20 @@ NSLog(@"%@ SEND CANCEL ON THREAD %@", _runMessage, self.thread);
 	[self finish];
 }
 
-#if 0
-- (void)sendFinish				// on thread, subclasses to override then finally call super, for cleanup
-{
-	long ret = dispatch_semaphore_wait(semaphore, dispatch_time(DISPATCH_TIME_NOW, 10*NSEC_PER_MSEC));
-	if(!ret) {
-		if(self.isExecuting) {
-			self.isFinished = YES;
-			[self performSelector:@selector(finish) onThread:self.thread withObject:nil waitUntilDone:NO];
-		}
-		dispatch_semaphore_signal(semaphore);
-	}
-	// Subclasses can look at isFinished and isCancelled to determine appropriate action
-	LOG(@"%@ finish: isFinished=%d isCancelled=%d", self.runMessage, self.isCancelled);
-}
-#endif
-
 - (void)finish
 {
 	[self cancelTimer];
 }
 
-#if defined(UNIT_TESTING)
-- (void)performBlock:(concurrentBlock)b
-{
-	BOOL ret = dispatch_semaphore_wait(semaphore, dispatch_time(DISPATCH_TIME_NOW, 100*NSEC_PER_MSEC)) ? NO : YES;
-	if(ret) {
-//NSLog(@"%@ SEND CANCEL ON THREAD %@", _runMessage, self.thread);
-		self.isCancelled = YES;
-		if(self.isExecuting && !self.isFinished) {
-NSLog(@"%@ SEND CANCEL ON THREAD %@", _runMessage, self.thread);
-			[self performSelector:@selector(cancel) onThread:self.thread withObject:nil waitUntilDone:NO];
-			ret = YES;
-		}
-		dispatch_semaphore_signal(semaphore);
-	} else {
-		NSLog(@"FUCKED - NO CAN GET SEMA");
-	}
-}
-- (void)executeBlock:(concurrentBlock)b
-{
-	b(self);
-}
-#endif
-
 - (NSString *)description
 {
-	return [NSString stringWithFormat:@"OP[\"%@\"]", _runMessage];
+	return [NSString stringWithFormat:@"ConcurrentOp[\"%@\"]", _runMessage];
 }
 
 - (void)dealloc
 {
 	LOG(@"%@ Dealloc: isExecuting=%d isFinished=%d isCancelled=%d", _runMessage, _isExecuting, _isFinished, _isCancelled);
-#if VERIFY_DEALLOC	== 1
+#ifdef VERIFY_DEALLOC
 	if(_finishBlock) {
 		_finishBlock();
 	}

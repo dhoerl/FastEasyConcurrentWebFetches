@@ -73,8 +73,10 @@ static void myAlrm(int sig)
 @interface FastEasyConcurrentWebFetchesTests (OperationsRunner)
 
 - (void)runOperation:(ConcurrentOperation *)op withMsg:(NSString *)msg;	// to submit an operation
-- (BOOL)runOperations:(NSSet *)operations;	// Set of ConcurrentOperation objects with their runMessage set (or not)
-- (NSUInteger)operationsCount;				// returns the total number of outstanding operations
+- (BOOL)runOperations:(NSSet *)operations;			// Set of ConcurrentOperation objects with their runMessage set (or not)
+- (NSUInteger)operationsCount;						// returns the total number of outstanding operations
+- (BOOL)cancelOperations;							// stop all work, will not get any more delegate calls after it returns, returns YES if everything torn down properly
+- (void)restartOperations;							// restart things
 
 @end
 
@@ -93,7 +95,7 @@ static void myAlrm(int sig)
 
 - (void)dealloc
 {
-	[operationsRunner cancelOperations];	// you can send this at any time, for instance when the 'Back' button is tapped
+	[self cancelOperations];	// you can send this at any time, for instance when the 'Back' button is tapped
 }
 
 - (void)setUp
@@ -123,7 +125,7 @@ static void myAlrm(int sig)
 - (void)tearDown
 {
     // Tear-down code here.
-    [operationsRunner cancelOperations];
+    [self cancelOperations];
 	dispatch_group_wait(group, DISPATCH_TIME_FOREVER);
 
     [super tearDown];
@@ -384,7 +386,7 @@ static void myAlrm(int sig)
 	opSucceeded = 0;
 	opNeverRan = 0;
 
-	[operationsRunner restartOperations];
+	[self restartOperations];
 }
 
 - (void)register:(id)op atStage:(registrationStage)stage
@@ -416,13 +418,20 @@ static void myAlrm(int sig)
 	if(
 		sel == @selector(runOperation:withMsg:)	|| 
 		sel == @selector(runOperations:)		||
-		sel == @selector(operationsCount)
+		sel == @selector(operationsCount)		||
+		sel == @selector(cancelOperations)		||
+		sel == @selector(restartOperations)
 	) {
 		if(!operationsRunner) {
+			if(sel == @selector(cancelOperations)) {
+				// cancel sent in say dealloc, don't create an object just to release it
+				return [OperationsRunner class];
+			}
 			// Object only created if needed
 			operationsRunner = [[OperationsRunner alloc] initWithDelegate:self];
-			// operationsRunner.priority = DISPATCH_QUEUE_PRIORITY_BACKGROUND; // initial value, default is DISPATCH_QUEUE_PRIORITY_DEFAULT
-			// operationsRunner.maxOps = 4; // initial value if desired, default is infinite
+			// operationsRunner.priority = DISPATCH_QUEUE_PRIORITY_BACKGROUND;	// for example
+			// operationsRunner.maxOps = 4;										// for example
+			// operationsRunner.mSecCancelDelay = 10;							// for example
 		}
 		return operationsRunner;
 	} else {

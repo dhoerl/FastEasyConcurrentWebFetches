@@ -30,9 +30,9 @@
 @interface MyViewController (OperationsRunner)
 
 - (void)runOperation:(ConcurrentOperation *)op withMsg:(NSString *)msg;	// to submit an operation
-- (BOOL)runOperations:(NSSet *)operations;	// Set of ConcurrentOperation objects with their runMessage set (or not)
-
-- (void)enumerateOperations:(void(^)(ConcurrentOperation *op))b;		// in some very special cases you may need this (I did)
-- (NSUInteger)operationsCount;				// returns the total number of outstanding operations
+- (BOOL)runOperations:(NSSet *)operations;			// Set of ConcurrentOperation objects with their runMessage set (or not)
+- (NSUInteger)operationsCount;						// returns the total number of outstanding operations
+- (BOOL)cancelOperations;							// stop all work, will not get any more delegate calls after it returns, returns YES if everything torn down properly
+- (void)restartOperations;							// restart things
 
 @end
