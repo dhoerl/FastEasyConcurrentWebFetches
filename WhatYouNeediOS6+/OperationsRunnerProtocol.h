@@ -1,7 +1,7 @@
 //
 // FastEasyConcurrentWebFetches (TM)
 // Copyright (C) 2012-2013 by David Hoerl
-// 
+//
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
 // in the Software without restriction, including without limitation the rights
@@ -21,30 +21,11 @@
 // THE SOFTWARE.
 //
 
-@interface ConcurrentOperation : NSObject
-@property (atomic, weak, readonly) NSThread *thread;
-@property (nonatomic, copy) NSString *runMessage;		// debugging
-@property (atomic, assign, readonly) BOOL isCancelled;
-@property (atomic, assign, readonly) BOOL isExecuting;
-@property (atomic, assign, readonly) BOOL isFinished;
-#ifdef VERIFY_DEALLOC
-@property (nonatomic, strong) dispatch_block_t finishBlock;
-#endif
+@class ConcurrentOperation;
 
-- (void)main;								// starting point
+@protocol OperationsRunnerProtocol <NSObject>
 
-@end
-
-typedef void(^concurrentBlock)(ConcurrentOperation *op);
-
-// These are here for subclassers and not intended for general use
-@interface ConcurrentOperation (ForSubClassesInternalUse)
-
-- (id)setup;								// get the app started, object->continue, nil->failed so return
-- (BOOL)start:(id)setupObject;				// called after setup has succeeded with the setup's returned value
-- (void)completed;							// subclasses to override, call super
-- (void)failed;								// subclasses to override then finally call super
-- (void)finish;								// subclasses to override for cleanup, call super, only called if the operation successfully starts
-- (void)cancel;								// for subclasses, called on operation's thread
+// can get this on main thread (default), a specific thread you request, or anyThread
+- (void)operationFinished:(ConcurrentOperation *)op count:(NSUInteger)remainingOps;
 
 @end

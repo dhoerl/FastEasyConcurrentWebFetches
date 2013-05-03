@@ -21,26 +21,40 @@
 // THE SOFTWARE.
 //
 
-@interface ConcurrentOperation : NSObject
-@property (atomic, weak, readonly) NSThread *thread;
+// Unit Testing
+#if defined(UNIT_TESTING)
+typedef enum {forcingOff=0, forceSuccess, forceFailure, forceRetry } forceMode;
+#endif
+
+#import "ConcurrentOperation.h"
+
+@interface WebFetcher : NSObject
+@property(atomic, assign, readonly) BOOL isCancelled;
+@property(atomic, assign, readonly) BOOL isExecuting;
+@property(atomic, assign, readonly) BOOL isFinished;
 @property (nonatomic, copy) NSString *runMessage;		// debugging
-@property (atomic, assign, readonly) BOOL isCancelled;
-@property (atomic, assign, readonly) BOOL isExecuting;
-@property (atomic, assign, readonly) BOOL isFinished;
+@property (nonatomic, copy) NSString *urlStr;
+@property (nonatomic, strong, readonly) NSMutableData *webData;
+@property (nonatomic, strong) NSError *error;
+@property (nonatomic, copy) NSString *errorMessage;
+@property (nonatomic, assign) NSUInteger htmlStatus;
+
 #ifdef VERIFY_DEALLOC
 @property (nonatomic, strong) dispatch_block_t finishBlock;
 #endif
+#if defined(UNIT_TESTING)
+@property (nonatomic, assign) forceMode force;
+#endif
+
++ (BOOL)printDebugging;
++ (BOOL)persistentConnection;
++ (NSUInteger)timeout;
 
 - (void)main;								// starting point
 
-@end
+- (NSMutableURLRequest *)setup;				// get the app started, object->continue, nil->failed so return
+- (BOOL)connect:(NSURLRequest *)request;
 
-typedef void(^concurrentBlock)(ConcurrentOperation *op);
-
-// These are here for subclassers and not intended for general use
-@interface ConcurrentOperation (ForSubClassesInternalUse)
-
-- (id)setup;								// get the app started, object->continue, nil->failed so return
 - (BOOL)start:(id)setupObject;				// called after setup has succeeded with the setup's returned value
 - (void)completed;							// subclasses to override, call super
 - (void)failed;								// subclasses to override then finally call super
@@ -48,3 +62,7 @@ typedef void(^concurrentBlock)(ConcurrentOperation *op);
 - (void)cancel;								// for subclasses, called on operation's thread
 
 @end
+
+@interface WebFetcher (NSURLConnectionDelegate) <NSURLConnectionDelegate, NSURLConnectionDataDelegate>
+@end
+
