@@ -41,15 +41,12 @@
 @property(atomic, assign, readwrite) BOOL isExecuting;
 @property(atomic, assign, readwrite) BOOL isFinished;
 @property(atomic, strong, readwrite) NSTimer *co_timer;
-#if defined(UNIT_TESTING)
-@property(atomic, strong, readwrite) concurrentBlock block;
-#endif
 
 @end
 
 @implementation ConcurrentOperation
 {
-	   dispatch_semaphore_t semaphore;
+	dispatch_semaphore_t semaphore;
 }
 
 - (instancetype)init
@@ -74,19 +71,15 @@
 			self.isExecuting = YES;
 			self.co_timer = [NSTimer scheduledTimerWithTimeInterval:60*60 target:self selector:@selector(timer:) userInfo:nil repeats:NO];
 
-			//NSLog(@"%@ enter loop: isFinished=%d isCancelled=%d", self.runMessage, self.isFinished, self.isCancelled);
+			//LOG(@"%@ enter loop: isFinished=%d isCancelled=%d", self.runMessage, self.isFinished, self.isCancelled);
 			BOOL ret = YES;
 			while(ret && !self.isFinished) {
 				dispatch_semaphore_signal(semaphore);
+				LOG(@"%@ RUN_LOOP: sleep...", self.runMessage);
 				ret = [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]];
 				dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
 				LOG(@"%@ RUN_LOOP: isFinished=%d isCancelled=%d", self.runMessage, self.isFinished, self.isCancelled);
 			}
-#if defined(UNIT_TESTING)
-			if(self.block) {
-				self.block(self);
-			}
-#endif
 			[self cancelTimer];
 			self.isExecuting = NO;
 			self.thread = nil;
@@ -101,31 +94,40 @@
 
 - (void)cancelTimer
 {
+#ifndef NDEBUG
+	if(self.co_timer) assert([NSThread currentThread] == self.thread);
+#endif
 	[self.co_timer invalidate], self.co_timer = nil;
 }
 
 - (BOOL)_OR_cancel:(NSUInteger)millisecondDelay
 {
+	self.isCancelled = YES;
+
 	BOOL ret = dispatch_semaphore_wait(semaphore, dispatch_time(DISPATCH_TIME_NOW, millisecondDelay*NSEC_PER_MSEC)) ? NO : YES;
 	if(ret) {
-		self.isCancelled = YES;
 		if(self.isExecuting && !self.isFinished) {
+			LOG(@"%@: send cancel", self.runMessage);
+			self.isFinished = YES;	// redundant
 			[self performSelector:@selector(cancel) onThread:self.thread withObject:nil waitUntilDone:NO];
 			ret = YES;
 		}
 		dispatch_semaphore_signal(semaphore);
 	} else {
-		LOG(@"%@ failed to get the locking semaphore", self);
+		LOG(@"%@ failed to get the locking semaphore in %u milliseconds", self, millisecondDelay);
 	}
 	return ret;
 }
 
 - (void)cancel
 {
+#ifndef NDEBUG
+	if(self.co_timer) assert([NSThread currentThread] == self.thread);
+#endif
 	LOG(@"%@: got CANCEL", self);
-	[self cancelTimer];
-	
 	self.isFinished = YES;
+	
+	[self cancelTimer];
 }
 
 - (id)setup	// on thread
@@ -135,28 +137,43 @@
 
 - (BOOL)start:(id)setupObject	// on thread
 {
-	LOG(@"%@ start: isExecuting=%d", self.runMessage, self.isExecuting);
+	LOG(@"%@ Start: isExecuting=%d", self.runMessage, self.isExecuting);
 	return YES;
 }
 
 - (void)completed				// on thread, subclasses to override then finally call super
 {
-	[self finish];
+#ifndef NDEBUG
+	assert(self.co_timer);
+	assert([NSThread currentThread] == self.thread);
+#endif
+	[self performSelector:@selector(finish) onThread:self.thread withObject:nil waitUntilDone:NO];
 }
 
 - (void)failed					// on thread, subclasses to override then finally call super
 {
-	[self finish];
+#ifndef NDEBUG
+	assert(self.co_timer);
+	assert([NSThread currentThread] == self.thread);
+#endif
+	[self performSelector:@selector(finish) onThread:self.thread withObject:nil waitUntilDone:NO];
 }
 
 - (void)finish
 {
+#ifndef NDEBUG
+	assert(self.co_timer);
+	assert([NSThread currentThread] == self.thread);
+#endif
+
+	self.isFinished = YES;
+
 	[self cancelTimer];
 }
 
 - (NSString *)description
 {
-	return [NSString stringWithFormat:@"ConcurrentOp[\"%@\"]", _runMessage];
+	return [NSString stringWithFormat:@"ConOp[\"%@\"] isEx=%d ixFin=%d isCan=%d", _runMessage, _isExecuting, _isFinished, _isCancelled];
 }
 
 - (void)dealloc

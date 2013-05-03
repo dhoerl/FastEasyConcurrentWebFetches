@@ -21,16 +21,19 @@
 // THE SOFTWARE.
 //
 
+#import <objc/runtime.h>
+
 #import "OperationsRunnerProtocol.h"
 #import "ConcurrentOperation.h"
 
 @protocol OperationsRunnerProtocol;
 
 // DEFAULTS
-#define DEFAULT_MAX_OPS					10
-#define DEFAULT_PRIORITY				DISPATCH_QUEUE_PRIORITY_DEFAULT
+#define DEFAULT_MAX_OPS					4						// Apple suggests a number like 4 for iOS, would not exceed 10, as each is a NSThread
+#define DEFAULT_PRIORITY	DISPATCH_QUEUE_PRIORITY_DEFAULT		// both dispatch queues use this
 #define DEFAULT_MILLI_SEC_CANCEL_DELAY	100
 
+// how do you want the return message delivered
 typedef enum { msgDelOnMainThread=0, msgDelOnAnyThread, msgOnSpecificThread, msgOnSpecificQueue } msgType;
 
 @interface OperationsRunner : NSObject
@@ -50,16 +53,13 @@ typedef enum { msgDelOnMainThread=0, msgDelOnAnyThread, msgOnSpecificThread, msg
 
 #if 0 
 
-// 1) Add either a property or an ivar to the implementation file
-OperationsRunner *operationsRunner;
-
-// 2) Add the protocol to the class extension interface (often in the interface file)
+// 1) Add the protocol to the class extension interface (often in the interface file)
 @interface MyClass () <OperationsRunnerProtocol>
 
-// 3) Add the header to the implementation file
+// 2) Add the header to the implementation file
 #import "OperationsRunner.h"
 
-// 4) Add this method to the implementation file (I put it at the bottom, could go into a category too)
+// 3) Add this method to the implementation file (I put it at the bottom, could go into a category too)
 - (id)forwardingTargetForSelector:(SEL)sel
 {
 	if(
@@ -67,35 +67,39 @@ OperationsRunner *operationsRunner;
 		sel == @selector(runOperations:)		||
 		sel == @selector(operationsCount)		||
 		sel == @selector(cancelOperations)		||
-		sel == @selector(restartOperations)
+		sel == @selector(restartOperations)		||
+		sel == @selector(operationsRunner)
 	) {
-		if(!operationsRunner) {
+		static BOOL myKey;
+		id obj = objc_getAssociatedObject(self, &myKey);
+		if(!obj) {
 			if(sel == @selector(cancelOperations)) {
 				// cancel sent in say dealloc, don't create an object just to release it
-				return [OperationsRunner class];
+				obj = [OperationsRunner class];
+			} else {
+				// Object only created if needed. NOT THREAD SAFE (if you need that use a dispatch semaphone to insure only one object created
+				obj = [[OperationsRunner alloc] initWithDelegate:self];
+				objc_setAssociatedObject(self, &myKey, obj, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+				{
+					// Set priorities once, or optionally you can ask [self operationsRunner] to get/create the item, and set/change these dynamically
+					// OperationsRunner *OperationsRunner = (OperationsRunner *)obj;
+					// operationsRunner.priority = DISPATCH_QUEUE_PRIORITY_BACKGROUND;	// for example
+					// operationsRunner.maxOps = 4;										// for example
+					// operationsRunner.mSecCancelDelay = 10;							// for example
+				}
 			}
-			// Object only created if needed
-			operationsRunner = [[OperationsRunner alloc] initWithDelegate:self];
-			// operationsRunner.priority = DISPATCH_QUEUE_PRIORITY_BACKGROUND;	// for example
-			// operationsRunner.maxOps = 4;										// for example
-			// operationsRunner.mSecCancelDelay = 10;							// for example
 		}
-		return operationsRunner;
+		return obj;
 	} else {
 		return [super forwardingTargetForSelector:sel];
 	}
 }
 
-// 5) Add the cancel to your dealloc (or the whole dealloc if you have none now)
-- (void)dealloc
-{
-	[self cancelOperations];	// you can send this at any time, for instance when the 'Back' button is tapped
-}
-
-// 6) Declare a category with these methods in the interface or implementation file (change MyClass to your class)
+// 4) Declare a category with these methods in the interface or implementation file (change MyClass to your class)
 //    Put in your interface file if you want these to be used by other classes, or in the implementation to make them private
 @interface MyClass (OperationsRunner)
 
+- (OperationsRunner *)operationsRunner;				// get the current instance (or create it)
 - (void)runOperation:(ConcurrentOperation *)op withMsg:(NSString *)msg;	// to submit an operation
 - (BOOL)runOperations:(NSSet *)operations;			// Set of ConcurrentOperation objects with their runMessage set (or not)
 - (NSUInteger)operationsCount;						// returns the total number of outstanding operations

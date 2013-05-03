@@ -46,8 +46,4 @@ typedef void(^concurrentBlock)(ConcurrentOperation *op);
 - (void)finish;								// subclasses to override for cleanup, call super, only called if the operation successfully starts
 - (void)cancel;								// for subclasses, called on operation's thread
 
-#if defined(UNIT_TESTING)
-- (void)performBlock:(concurrentBlock)b;	// if in the runloop, causes this block to run, then the operation terminates (here for unit testing)
-#endif
-
 @end

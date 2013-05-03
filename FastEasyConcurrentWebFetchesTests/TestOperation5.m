@@ -10,7 +10,7 @@
 
 #import "TestOperationProtocol.h"
 
-#import "TestOperation.h"
+#import "TestOperation5.h"
 
 @interface TestOperation ()
 
@@ -76,6 +76,7 @@ static void myAlrm(int sig)
 {
 	[super finish];
 
+	//NSLog(@"GOT FINISH %@", self);
 	[t invalidate], t = nil;
 
 	++self.finishedMsg;
@@ -96,11 +97,13 @@ static void myAlrm(int sig)
 	
 	// Really important to do this if you use a timer in a super class. Ask me how I know this.
 	[t invalidate], t = nil;
-	NSLog(@"cancel timer");
+	//NSLog(@"cancel timer");
 }
 
 - (void)myTimer:(NSTimer *)timer
 {
+//NSLog(@"%@: myTimer", self.runMessage);
+
 	switch(self.forceAction) {
 	case forceSuccess:
 		[self completed];
@@ -113,7 +116,7 @@ static void myAlrm(int sig)
 		break;
 		
 	default:
-		if(++timerMax == 100) {
+		if(timerMax >= 100) {
 			[self completed];
 			[timer invalidate];
 		}

@@ -13,24 +13,24 @@
 
 #import "OperationsRunner.h"
 #import "TestOperationProtocol.h"
-#import "TestOperation.h"
+#import "TestOperation5.h"
 
 #define MIN_TEST	0	// Starting test, but 0 always runs
-#define MAX_TEST	1	// Last test
+#define MAX_TEST	8	// Last test
 
-#define MAX_OPS		250	// OperationQueue max
+#define MAX_OPS		4	// OperationQueue max
 #define NUM_OPS		(10*MAX_OPS)	// loops per test, must be multiple of MAX_OPS
 
-#define iCount		10	// loops per test
+#define iCount		1	// loops per test
 
-#if 1	// 0 == no debug, 1 == lots of mesages
+#if 0	// 0 == no debug, 1 == lots of mesages
 #define TLOG(...) NSLog(__VA_ARGS__)
 #else
 #define TLOG(...)
 #endif
 
 #define WAIT_UNTIL(x, y, msg)						\
-	for(int iii=0; iii < 10*10*10 && !(x); ++iii)  {	\
+	for(int iii=0; iii < NUM_OPS*10 && !(x); ++iii)  {	\
 		if(!iii) {TLOG(@"WAITING " #y "...");}		\
 		usleep(10000);								\
 	}												\
@@ -45,7 +45,7 @@
 	while(0)
 
 #define WAIT_WHILE(x, y, msg)						\
-	for(int iii=0; iii < 10*10*10 && (x); ++iii)  {	\
+	for(int iii=0; iii < NUM_OPS*10 && (x); ++iii)  {	\
 		if(!iii) {TLOG(@"WAITING " #y "...");}		\
 		usleep(10000);								\
 	}												\
@@ -72,6 +72,7 @@ static void myAlrm(int sig)
 
 @interface FastEasyConcurrentWebFetchesTests (OperationsRunner)
 
+- (OperationsRunner *)operationsRunner;				// get the current instance (or create it)
 - (void)runOperation:(ConcurrentOperation *)op withMsg:(NSString *)msg;	// to submit an operation
 - (BOOL)runOperations:(NSSet *)operations;			// Set of ConcurrentOperation objects with their runMessage set (or not)
 - (NSUInteger)operationsCount;						// returns the total number of outstanding operations
@@ -82,13 +83,10 @@ static void myAlrm(int sig)
 
 @implementation FastEasyConcurrentWebFetchesTests
 {
-	OperationsRunner	*operationsRunner;
 	__block int			opFailed, opSucceeded, opNeverRan;
 	int32_t				stageCounters[atEnd];
 
 	int					count;
-	//int					tstCount;
-
 	dispatch_queue_t	queue;
 	dispatch_group_t	group;
 }
@@ -101,13 +99,13 @@ static void myAlrm(int sig)
 - (void)setUp
 {
     [super setUp];
-	if(!operationsRunner) {
+
+	OperationsRunner *operationsRunner = [self operationsRunner];
+	if(!operationsRunner.delegateQueue) {
 		// re-using it should be more stressful than getting a new one each time
-		
 		queue = dispatch_queue_create("com.fecw.test", DISPATCH_QUEUE_SERIAL);
 		group = dispatch_group_create();
 	
-		operationsRunner = [[OperationsRunner alloc] initWithDelegate:self];
 		operationsRunner.delegateQueue = queue;
 		operationsRunner.delegateGroup = group;
 		operationsRunner.maxOps = MAX_OPS;
@@ -117,9 +115,8 @@ static void myAlrm(int sig)
 		operationsRunner.priority = DISPATCH_QUEUE_PRIORITY_HIGH; // DISPATCH_QUEUE_PRIORITY_BACKGROUND;
 		dispatch_set_target_queue(queue, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0));
 	}
-
 	count = NUM_OPS;
-	//tstCount = NUM_OPS > MAX_OPS ? MAX_OPS : count;
+
 }
 
 - (void)tearDown
@@ -202,7 +199,7 @@ static void myAlrm(int sig)
 			t.delegate = self;
 			[self runOperation:t withMsg:[NSString stringWithFormat:@"Op %d", j]];
 		}
-		[operationsRunner cancelOperations];
+		[self cancelOperations];
 		
 		WAIT_UNTIL([self operationsCount] == 0, 1, @"Some operation did not cancel");
 
@@ -234,7 +231,7 @@ static void myAlrm(int sig)
 				t.delayInMain = TIMER_DELAY * 10 * 1000000.0;
 				[self runOperation:t withMsg:[NSString stringWithFormat:@"Op %d", j]];
 			}
-			BOOL ret = [operationsRunner cancelOperations];
+			BOOL ret = [self cancelOperations];
 			STAssertTrue(ret, @"Cancel failed");
 			
 			WAIT_UNTIL([self operationsCount] == 0, 1, @"Some operation did not cancel");
@@ -314,6 +311,7 @@ static void myAlrm(int sig)
 		STAssertTrue([self adjustOperationsCount:0 atStage:atMain] == count, @"All should make main");
 		STAssertTrue([self adjustOperationsCount:0 atStage:atSetup] == count, @"All should reach setup");
 		STAssertTrue([self adjustOperationsCount:0 atStage:atStart] == count, @"All should reach start");
+		STAssertTrue([self adjustOperationsCount:0 atStage:atFinish] == count, @"All should reach start");
 		STAssertEquals(opFailed, count, @"All failed");
 	}
 }
@@ -420,20 +418,29 @@ static void myAlrm(int sig)
 		sel == @selector(runOperations:)		||
 		sel == @selector(operationsCount)		||
 		sel == @selector(cancelOperations)		||
-		sel == @selector(restartOperations)
+		sel == @selector(restartOperations)		||
+		sel == @selector(operationsRunner)
 	) {
-		if(!operationsRunner) {
+		static BOOL myKey;
+		id obj = objc_getAssociatedObject(self, &myKey);
+		if(!obj) {
 			if(sel == @selector(cancelOperations)) {
 				// cancel sent in say dealloc, don't create an object just to release it
-				return [OperationsRunner class];
+				obj = [OperationsRunner class];
+			} else {
+				// Object only created if needed. NOT THREAD SAFE (if you need that use a dispatch semaphone to insure only one object created
+				obj = [[OperationsRunner alloc] initWithDelegate:self];
+				objc_setAssociatedObject(self, &myKey, obj, OBJC_ASSOCIATION_RETAIN);
+				{
+					// Set priorities once, or optionally you can ask [self operationsRunner] to get/create the item, and set/change these dynamically
+					// OperationsRunner *OperationsRunner = (OperationsRunner *)obj;
+					// operationsRunner.priority = DISPATCH_QUEUE_PRIORITY_BACKGROUND;	// for example
+					// operationsRunner.maxOps = 4;										// for example
+					// operationsRunner.mSecCancelDelay = 10;							// for example
+				}
 			}
-			// Object only created if needed
-			operationsRunner = [[OperationsRunner alloc] initWithDelegate:self];
-			// operationsRunner.priority = DISPATCH_QUEUE_PRIORITY_BACKGROUND;	// for example
-			// operationsRunner.maxOps = 4;										// for example
-			// operationsRunner.mSecCancelDelay = 10;							// for example
 		}
-		return operationsRunner;
+		return obj;
 	} else {
 		return [super forwardingTargetForSelector:sel];
 	}

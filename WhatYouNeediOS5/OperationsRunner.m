@@ -21,7 +21,9 @@
 // THE SOFTWARE.
 //
 
+#ifdef VERIFY_DEALLOC
 #include <libkern/OSAtomic.h>
+#endif
 
 #if 0	// 0 == no debug, 1 == lots of mesages
 #define LOG(...) NSLog(__VA_ARGS__)
@@ -56,9 +58,7 @@
 
 @implementation OperationsRunner
 {
-	long		_priority;							// the queue priority
-	int32_t		_DO_NOT_ACCESS_operationsCount;		// named so as to discourage direct access
-
+	long		_priority;							// the queue priority      
 #ifdef VERIFY_DEALLOC
 	int32_t		_DO_NOT_ACCESS_operationsTotal;		// named so as to discourage direct access
 #endif
@@ -79,8 +79,9 @@
 		_operations			= [NSMutableSet setWithCapacity:10];
 		_operationsOnHold	= [NSMutableOrderedSet orderedSetWithCapacity:10];
 		_dataSema			= dispatch_semaphore_create(1);
+#ifdef VERIFY_DEALLOC
 		_deallocs			= dispatch_semaphore_create(0);
-		
+#endif
 		_opRunnerQueue		= dispatch_queue_create("com.dfh.opRunnerQueue", DISPATCH_QUEUE_SERIAL);
 		_opRunnerGroup		= dispatch_group_create();
 		_operationsQueue	= dispatch_queue_create("com.dfh.operationsQueue", DISPATCH_QUEUE_CONCURRENT);
@@ -110,11 +111,18 @@
 #endif
 }
 
+- (OperationsRunner *)operationsRunner
+{
+	return self;
+}
+
+#if 0
 - (int32_t)adjustOperationsCount:(int32_t)val
 {
 	int32_t nVal = OSAtomicAdd32(val, &_DO_NOT_ACCESS_operationsCount);
 	return nVal;
 }
+#endif
 
 #ifdef VERIFY_DEALLOC
 - (int32_t)adjustOperationsTotal:(int32_t)val
@@ -177,7 +185,7 @@
 		return;
 	}
 	
-	[self adjustOperationsCount:1];	// peg immediately
+	//[self adjustOperationsCount:1];	// peg immediately
 #ifdef VERIFY_DEALLOC
 	{
 		[self adjustOperationsTotal:1];	// peg immediately
@@ -190,8 +198,6 @@
 							};
 	}
 #endif
-
-	// Programming With ARC Release Notes pg 10 - non-trivial weak cases
 
 #ifndef NDEBUG
 	((ConcurrentOperation *)op).runMessage = msg;
@@ -217,7 +223,7 @@
 		return NO;
 	}
 
-	[self adjustOperationsCount:count];	// peg immediately
+	//[self adjustOperationsCount:count];	// peg immediately
 
 #ifdef VERIFY_DEALLOC
 	{
@@ -257,7 +263,6 @@
 	dispatch_semaphore_wait(_dataSema, DISPATCH_TIME_FOREVER);
 
 	if([_operations count] >= self.maxOps) {
-		//if(cnt>=9900) NSLog(@"Hold %@", op);
 		[_operationsOnHold addObject:op];
 		ret = FALSE;
 	} else {
@@ -289,32 +294,18 @@
 
 	return rSet;
 }
-- (ConcurrentOperation *)removeOp:(ConcurrentOperation *)op
-{
-	ConcurrentOperation *runOp;
-
-	dispatch_semaphore_wait(_dataSema, DISPATCH_TIME_FOREVER);
-
-	[_operations removeObject:op];
-	if([_operationsOnHold count]) {
-		runOp = [_operationsOnHold objectAtIndex:0];
-		[_operationsOnHold removeObjectAtIndex:0];
-	}
-	
-	dispatch_semaphore_signal(_dataSema);
-
-	return runOp;
-}
 - (NSUInteger)cancelAllOps
 {
 	__block NSUInteger cancelFailures = 0;
 	
 	dispatch_semaphore_wait(_dataSema, DISPATCH_TIME_FOREVER);
 
+#if 0
 	[_operationsOnHold enumerateObjectsUsingBlock:^(ConcurrentOperation *op, NSUInteger idx, BOOL *stop)
 		{
 			[op _OR_cancel:_mSecCancelDelay];
 		} ];
+#endif
 	[_operationsOnHold removeAllObjects];
 
 	[_operations enumerateObjectsUsingBlock:^(ConcurrentOperation *op, BOOL *stop)
@@ -329,6 +320,22 @@
 	
 	return cancelFailures;
 }
+- (NSUInteger)operationsCount
+{
+	dispatch_semaphore_wait(_dataSema, DISPATCH_TIME_FOREVER);
+
+static NSUInteger opCount, holdCount;
+NSUInteger oc = [_operations count];
+NSUInteger hc = [_operationsOnHold count];
+//if(opCount != oc || hc != holdCount) NSLog(@"COUNT ops=%u hold=%u",  oc, hc);
+opCount = oc;
+holdCount = hc;
+	NSUInteger count = [_operations count] + [_operationsOnHold count];
+
+	dispatch_semaphore_signal(_dataSema);
+	
+	return count;
+}
 
 - (void)_runOperation:(ConcurrentOperation *)op	// on queue
 {
@@ -336,8 +343,6 @@
 		//LOG(@"Cancel Before Running: %@", op);
 		return;
 	}
-
-//if(cnt>=9900) NSLog(@"RUN %@", op);
 
 #ifndef NDEBUG
 	if(!self.noDebugMsgs) LOG(@"Run Operation: %@", op.runMessage);
@@ -349,8 +354,9 @@
 			__typeof__(self) strongSelf = weakSelf;
 
 			if(!op.isCancelled) {
-			// Run the operation
+				// Run the operation
 				[op main];
+				//NSLog(@"LEAVE MAIN %@", op.runMessage);
 			}
 
 			// Completion block
@@ -361,6 +367,7 @@
 						__typeof__(op) strongOp = weakOp;
 						if(strongOp)
 						{
+//NSLog(@"SEND FINISH %@", op.runMessage);
 							[strongSelf _operationFinished:op];
 						}
 					} );
@@ -383,65 +390,15 @@
 
 	LOG(@"CANCEL ALL OPS");
 
-
-#if 0
-	int32_t totalOps = [self adjustOperationsCount:0];
-
-//	NSLog(@"WAIT FOR RUN GROUP TO COMPLETE");
-//	ret = dispatch_group_wait(_opRunnerGroup, dispatch_time(DISPATCH_TIME_NOW, 100*NSEC_PER_SEC));
-//ret = 1;
-	if(ret)
-	{
-#if 0
-		NSLog(@"_opRunnerGroup: %@", [(__bridge NSObject *)_opRunnerGroup debugDescription]);
-		NSLog(@"_opRunnerQueue: %@", [(__bridge NSObject *)_opRunnerQueue debugDescription]);
-		NSLog(@"_operationsGroup: %@", [(__bridge NSObject *)_operationsGroup debugDescription]);
-		NSLog(@"_operationsQueue: %@", [(__bridge NSObject *)_operationsQueue debugDescription]);
-#else
-NSLog(@"CNT=%d", cnt);
-		dispatch_debug(_opRunnerGroup, "_opRunnerGroup");
-		dispatch_debug(_opRunnerQueue, "_opRunnerQueue");
-		dispatch_debug(_operationsGroup, "_operationsGroup");
-		dispatch_debug(_operationsQueue, "_operationsQueue");
-#endif
-	}
-	assert(!ret && "Run Ops");
-	// Cancel all active apps
-	
-	
-	
-	__block BOOL cancelFailures = 0;
-	dispatch_group_async(_opRunnerGroup, _opRunnerQueue, ^
-		{
-			[_operationsOnHold enumerateObjectsUsingBlock:^(ConcurrentOperation *op, NSUInteger idx, BOOL *stop)
-				{
-					[op _OR_cancel:_mSecCancelDelay];
-				} ];
-			[_operationsOnHold removeAllObjects];
-
-			[_operations enumerateObjectsUsingBlock:^(ConcurrentOperation *op, BOOL *stop)
-				{
-					BOOL ret = [op _OR_cancel:_mSecCancelDelay];
-					if(!ret) ++cancelFailures;
-					//NSLog(@"SEND CANCEL TO %@", op.runMessage);
-				} ];
-			[_operations removeAllObjects];
-		} );
-
-	//NSLog(@"WAIT FOR GROUP TO COMPLETE");
-	// wait for the removeAllObjects
-#endif
-
 	NSUInteger cancelFailures = [self cancelAllOps];
+	assert(!cancelFailures);
 	
 	LOG(@"WAIT FOR OPS GROUP TO COMPLETE");
-	ret+= dispatch_group_wait(_operationsGroup, dispatch_time(DISPATCH_TIME_NOW, 100*NSEC_PER_SEC));
+	ret+= dispatch_group_wait(_operationsGroup, dispatch_time(DISPATCH_TIME_NOW, 1*NSEC_PER_SEC));
 	if(ret) dispatch_debug(_operationsGroup, "Howdie");
 	assert(!ret && "Run Ops");
 
-//NSLog(@"ONE %d", totalOps);
 	ret = dispatch_group_wait(_opRunnerGroup, dispatch_time(DISPATCH_TIME_NOW, 1*NSEC_PER_SEC));
-//NSLog(@"TWO");
 	assert(!ret && "Wait for operations release");
 
 #ifdef VERIFY_DEALLOC
@@ -450,8 +407,8 @@ NSLog(@"CNT=%d", cnt);
 	LOG(@"...TEST DONE");
 #endif
 
-	int32_t curval = [self adjustOperationsCount:0];
-	[self adjustOperationsCount:-curval];
+	//int32_t curval = [self adjustOperationsCount:0];
+	//[self adjustOperationsCount:-curval];
 	
 	return (ret || cancelFailures) ? NO : YES;
 }
@@ -482,52 +439,49 @@ NSLog(@"CNT=%d", cnt);
 }
 #endif
 
-#if 0
-- (void)enumerateOperations:(concurrentBlock)b
-{
-	//LOG(@"OP enumerateOperations");
-	dispatch_group_async(_operationsGroup, _opRunnerQueue, ^
-		{
-			[_operations enumerateObjectsUsingBlock:^(ConcurrentOperation *op, BOOL *stop)
-				{
-					[op performBlock:b];
-				}];   
-		} );
-}
-#endif
-
-- (NSUInteger)operationsCount
-{
-	return [self adjustOperationsCount:0];
-}
-
 - (void)_operationFinished:(ConcurrentOperation *)op	// excutes in opRunnerQueue
 {
-	ConcurrentOperation *nOp = [self removeOp:op];
+	BOOL isCancelled;
+	NSUInteger remainingCount = 0;
+	ConcurrentOperation *runOp;
 	
-	int32_t nVal = [self adjustOperationsCount:-1];
-	assert(nVal >= 0);
-	// assert(!([_operations count] == 0 && nVal));	Since we bump the counter at the submisson point, not in array, this could actually occurr
+	//NSLog(@"XXX op=%@", op.runMessage);
 
-	// if you cancel the operation when its in the set, will hit this case
-	if(op.isCancelled || self.cancelled) {
-		LOG(@"one of op.isCancelled=%d or self.isCancelled=%d", op.isCancelled, self.cancelled);
+/***/dispatch_semaphore_wait(_dataSema, DISPATCH_TIME_FOREVER);
+
+	isCancelled = self.cancelled;
+	[_operations removeObject:op];
+	if(!isCancelled) {
+		remainingCount = [_operationsOnHold count];
+		if(remainingCount) {
+			runOp = [_operationsOnHold objectAtIndex:0];
+			[_operationsOnHold removeObjectAtIndex:0];
+			[_operations addObject:runOp];
+			remainingCount -= 1;
+		}
+		remainingCount += [_operations count];
+	}
+
+/***/dispatch_semaphore_signal(_dataSema);
+
+	if(runOp) {
+		[self _runOperation:runOp];
+	}
+
+	if(isCancelled) {
 		return;
 	}
-	if(nOp) {
-		[self _runOperation:nOp];
-	}
+	assert(!op.isCancelled);
 
 	//LOG(@"OP RUNNER GOT A MESSAGE %d for thread %@", _msgDelOn, delegateThread);	
-	NSUInteger count = (NSUInteger)nVal;
 	NSDictionary *dict;
 	if(_msgDelOn !=  msgOnSpecificQueue) {
-		dict = @{ @"op" : op, @"count" : @(count) };
+		dict = @{ @"op" : op, @"count" : @(remainingCount) };
 	}
 
 #ifdef VERIFY_DEALLOC
 	dispatch_block_t b;
-	if(!count) b = ^{
+	if(!remainingCount) b = ^{
 						[self testIfAllDealloced];
 					};
 #endif
@@ -549,7 +503,7 @@ NSLog(@"CNT=%d", cnt);
 	{
 		__weak id <OperationsRunnerProtocol> del = self.delegate;
 		dispatch_block_t b =   ^{
-									[del operationFinished:op count:count];
+									[del operationFinished:op count:remainingCount];
 								};
 		if(_delegateGroup) {
 			dispatch_group_async(_delegateGroup, _delegateQueue, b);

@@ -58,8 +58,8 @@ static NSUInteger lastPriority;
 
 + (void)initialize
 {
-	lastOperationsCount	= 3;
-	lastMaxConcurrent	= 10;
+	lastOperationsCount	= 4;
+	lastMaxConcurrent	= 2;
 	lastPriority		= 1;
 }
 

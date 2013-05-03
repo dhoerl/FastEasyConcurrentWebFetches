@@ -68,8 +68,8 @@
 			{
 				weakSelf.htmlStatus = 200;
 				weakSelf.webData = [NSMutableData dataWithCapacity:256];
-				//[weakSelf performSelector:@selector(completed) onThread:self.thread withObject:nil waitUntilDone:NO];
-				[weakSelf performBlock:^(ConcurrentOperation *op) { [op completed]; }];
+				[weakSelf performSelector:@selector(completed) onThread:self.thread withObject:nil waitUntilDone:NO];
+				//[weakSelf performBlock:^(ConcurrentOperation *op) { [op completed]; }];
 			} );
 	}	break;
 
@@ -79,8 +79,8 @@
 		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 250 * NSEC_PER_MSEC), dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^
 			{
 				weakSelf.htmlStatus = 400;
-				//[weakSelf performSelector:@selector(failed) onThread:weakSelf.thread withObject:nil waitUntilDone:NO];
-				[weakSelf performBlock:^(ConcurrentOperation *op) { [op failed]; }];
+				[weakSelf performSelector:@selector(failed) onThread:weakSelf.thread withObject:nil waitUntilDone:NO];
+				//[weakSelf performBlock:^(ConcurrentOperation *op) { [op failed]; }];
 			} );
 	} break;
 	
@@ -91,8 +91,8 @@
 			{
 				weakSelf.error = [NSError errorWithDomain:@"NSURLErrorDomain" code:-1001 userInfo:@{ NSLocalizedDescriptionKey : @"timed out" }];	// Timeout
 				weakSelf.errorMessage = @"Forced Failure";
-				//[weakSelf performSelector:@selector(failed) onThread:weakSelf.thread withObject:nil waitUntilDone:NO];
-				[weakSelf performBlock:^(ConcurrentOperation *op) { [op failed]; }];
+				[weakSelf performSelector:@selector(failed) onThread:weakSelf.thread withObject:nil waitUntilDone:NO];
+				//[weakSelf performBlock:^(ConcurrentOperation *op) { [op failed]; }];
 			} );
 	} break;
 
