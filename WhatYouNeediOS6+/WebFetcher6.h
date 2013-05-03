@@ -26,12 +26,16 @@
 typedef enum {forcingOff=0, forceSuccess, forceFailure, forceRetry } forceMode;
 #endif
 
-#import "ConcurrentOperation.h"
+@class WebFetcher;
+typedef void(^finishBlock)(WebFetcher *op);
 
 @interface WebFetcher : NSObject
-@property(atomic, assign, readonly) BOOL isCancelled;
-@property(atomic, assign, readonly) BOOL isExecuting;
-@property(atomic, assign, readonly) BOOL isFinished;
+@property (atomic, assign, readonly) BOOL isCancelled;
+@property (atomic, assign, readonly) BOOL isExecuting;
+@property (atomic, assign, readonly) BOOL isFinished;
+@property (atomic, strong, readonly) NSOperationQueue *operationQueue;
+@property (atomic, strong, readonly) finishBlock finalBlock;
+// Your responsibility
 @property (nonatomic, copy) NSString *runMessage;		// debugging
 @property (nonatomic, copy) NSString *urlStr;
 @property (nonatomic, strong, readonly) NSMutableData *webData;
@@ -40,7 +44,7 @@ typedef enum {forcingOff=0, forceSuccess, forceFailure, forceRetry } forceMode;
 @property (nonatomic, assign) NSUInteger htmlStatus;
 
 #ifdef VERIFY_DEALLOC
-@property (nonatomic, strong) dispatch_block_t finishBlock;
+@property (nonatomic, strong) dispatch_block_t deallocBlock;
 #endif
 #if defined(UNIT_TESTING)
 @property (nonatomic, assign) forceMode force;
@@ -49,8 +53,6 @@ typedef enum {forcingOff=0, forceSuccess, forceFailure, forceRetry } forceMode;
 + (BOOL)printDebugging;
 + (BOOL)persistentConnection;
 + (NSUInteger)timeout;
-
-- (void)main;								// starting point
 
 - (NSMutableURLRequest *)setup;				// get the app started, object->continue, nil->failed so return
 - (BOOL)connect:(NSURLRequest *)request;
@@ -65,4 +67,3 @@ typedef enum {forcingOff=0, forceSuccess, forceFailure, forceRetry } forceMode;
 
 @interface WebFetcher (NSURLConnectionDelegate) <NSURLConnectionDelegate, NSURLConnectionDataDelegate>
 @end
-

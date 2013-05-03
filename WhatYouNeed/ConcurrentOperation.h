@@ -22,20 +22,19 @@
 //
 
 @interface ConcurrentOperation : NSObject
-@property (atomic, weak, readonly) NSThread *thread;
 @property (nonatomic, copy) NSString *runMessage;		// debugging
 @property (atomic, assign, readonly) BOOL isCancelled;
 @property (atomic, assign, readonly) BOOL isExecuting;
 @property (atomic, assign, readonly) BOOL isFinished;
-#ifdef VERIFY_DEALLOC
+#if defined(VERIFY_DEALLOC)
 @property (nonatomic, strong) dispatch_block_t finishBlock;
 #endif
-
+#if defined(UNIT_TESTING)	// lets us force errors in code
+@property (atomic, weak, readonly) NSThread *thread;
+#endif
 - (void)main;								// starting point
 
 @end
-
-typedef void(^concurrentBlock)(ConcurrentOperation *op);
 
 // These are here for subclassers and not intended for general use
 @interface ConcurrentOperation (ForSubClassesInternalUse)

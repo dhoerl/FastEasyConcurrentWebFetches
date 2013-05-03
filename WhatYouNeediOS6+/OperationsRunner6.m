@@ -42,11 +42,11 @@
 @interface OperationsRunner ()
 @property (nonatomic, strong) NSMutableSet				*operations;
 @property (nonatomic, strong) NSMutableOrderedSet		*operationsOnHold;	// output ops in the order they arrived
-@property (nonatomic, assign) dispatch_semaphore_t		dataSema;
-@property (nonatomic, assign) dispatch_queue_t			opRunnerQueue;
-@property (nonatomic, assign) dispatch_queue_t			operationsQueue;
-@property (nonatomic, assign) dispatch_group_t			opRunnerGroup;
-@property (nonatomic, assign) dispatch_group_t			operationsGroup;
+@property (nonatomic, strong) dispatch_semaphore_t		dataSema;
+@property (nonatomic, strong) dispatch_queue_t			opRunnerQueue;
+@property (nonatomic, strong) dispatch_queue_t			operationsQueue;
+@property (nonatomic, strong) dispatch_group_t			opRunnerGroup;
+@property (nonatomic, strong) dispatch_group_t			operationsGroup;
 @property (atomic, weak) id <OperationsRunnerProtocol>	delegate;
 @property (atomic, weak) id <OperationsRunnerProtocol>	savedDelegate;
 @property (atomic, assign) BOOL							cancelled;
@@ -100,15 +100,6 @@
 - (void)dealloc
 {
 	[self cancelOperations];
-
-	dispatch_release(_opRunnerQueue);
-	dispatch_release(_opRunnerGroup);
-	dispatch_release(_operationsQueue);
-	dispatch_release(_operationsGroup);
-	dispatch_release(_dataSema);
-#ifdef VERIFY_DEALLOC
-	dispatch_release(_deallocs);
-#endif
 }
 
 - (OperationsRunner *)operationsRunner
@@ -395,7 +386,6 @@ holdCount = hc;
 	
 	LOG(@"WAIT FOR OPS GROUP TO COMPLETE");
 	ret+= dispatch_group_wait(_operationsGroup, dispatch_time(DISPATCH_TIME_NOW, 1*NSEC_PER_SEC));
-	if(ret) dispatch_debug(_operationsGroup, "Howdie");
 	assert(!ret && "Run Ops");
 
 	ret = dispatch_group_wait(_opRunnerGroup, dispatch_time(DISPATCH_TIME_NOW, 1*NSEC_PER_SEC));

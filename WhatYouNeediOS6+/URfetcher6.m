@@ -26,9 +26,9 @@
 
 @implementation URfetcher
 
-+ (BOOL)persistentConnection { return NO; }
++ (BOOL)persistentConnection { return YES; }
 + (NSUInteger)timeout { return 60; }
-+ (BOOL)printDebugging { return NO; }
++ (BOOL)printDebugging { return YES; }
 
 - (NSURLRequest *)setup
 {

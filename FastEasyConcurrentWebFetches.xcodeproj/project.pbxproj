@@ -23,18 +23,21 @@
 		DECB1FED1733F9B40050C8F4 /* MyViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DEE915DB1722DEB20085F570 /* MyViewController.xib */; };
 		DECB1FEE1733F9B40050C8F4 /* LICENSE.md in Resources */ = {isa = PBXBuildFile; fileRef = DEE915F41722EF380085F570 /* LICENSE.md */; };
 		DECB1FEF1733F9B40050C8F4 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = DEE915F51722EF380085F570 /* README.md */; };
-		DECB1FFB1733F9C70050C8F4 /* FastEasyConcurrentWebFetchesTests.m in Sources */ = {isa = PBXBuildFile; fileRef = DEE915CE1722DE520085F570 /* FastEasyConcurrentWebFetchesTests.m */; };
 		DECB20001733F9C70050C8F4 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DEE915C11722DE520085F570 /* SenTestingKit.framework */; };
 		DECB20011733F9C70050C8F4 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DEE9159D1722DE520085F570 /* UIKit.framework */; };
 		DECB20021733F9C70050C8F4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DEE9159F1722DE520085F570 /* Foundation.framework */; };
 		DECB20041733F9C70050C8F4 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = DEE915CA1722DE520085F570 /* InfoPlist.strings */; };
-		DECB200E17340CA90050C8F4 /* OperationsRunner.m in Sources */ = {isa = PBXBuildFile; fileRef = DEE915E41722DECC0085F570 /* OperationsRunner.m */; };
-		DECB200F17340CB50050C8F4 /* ConcurrentOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = DEE915E21722DECC0085F570 /* ConcurrentOperation.m */; };
-		DECB201717340DC90050C8F4 /* OperationsRunner.m in Sources */ = {isa = PBXBuildFile; fileRef = DECB201117340DC90050C8F4 /* OperationsRunner.m */; };
-		DECB201817340DC90050C8F4 /* OperationsRunner.m in Sources */ = {isa = PBXBuildFile; fileRef = DECB201117340DC90050C8F4 /* OperationsRunner.m */; };
-		DECB201917340DC90050C8F4 /* URfetcher.m in Sources */ = {isa = PBXBuildFile; fileRef = DECB201417340DC90050C8F4 /* URfetcher.m */; };
-		DECB201B17340DC90050C8F4 /* WebFetcher.m in Sources */ = {isa = PBXBuildFile; fileRef = DECB201617340DC90050C8F4 /* WebFetcher.m */; };
-		DECB201C17340DC90050C8F4 /* WebFetcher.m in Sources */ = {isa = PBXBuildFile; fileRef = DECB201617340DC90050C8F4 /* WebFetcher.m */; };
+		DECB201717340DC90050C8F4 /* OperationsRunner6.m in Sources */ = {isa = PBXBuildFile; fileRef = DECB201117340DC90050C8F4 /* OperationsRunner6.m */; };
+		DECB201817340DC90050C8F4 /* OperationsRunner6.m in Sources */ = {isa = PBXBuildFile; fileRef = DECB201117340DC90050C8F4 /* OperationsRunner6.m */; };
+		DECB201917340DC90050C8F4 /* URfetcher6.m in Sources */ = {isa = PBXBuildFile; fileRef = DECB201417340DC90050C8F4 /* URfetcher6.m */; };
+		DECB201B17340DC90050C8F4 /* WebFetcher6.m in Sources */ = {isa = PBXBuildFile; fileRef = DECB201617340DC90050C8F4 /* WebFetcher6.m */; };
+		DECB201C17340DC90050C8F4 /* WebFetcher6.m in Sources */ = {isa = PBXBuildFile; fileRef = DECB201617340DC90050C8F4 /* WebFetcher6.m */; };
+		DECB2027173415570050C8F4 /* ConcurrentOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = DECB201F173415570050C8F4 /* ConcurrentOperation.m */; };
+		DECB2028173415570050C8F4 /* OperationsRunner.m in Sources */ = {isa = PBXBuildFile; fileRef = DECB2021173415570050C8F4 /* OperationsRunner.m */; };
+		DECB2029173415570050C8F4 /* URfetcher.m in Sources */ = {isa = PBXBuildFile; fileRef = DECB2024173415570050C8F4 /* URfetcher.m */; };
+		DECB202A173415570050C8F4 /* WebFetcher.m in Sources */ = {isa = PBXBuildFile; fileRef = DECB2026173415570050C8F4 /* WebFetcher.m */; };
+		DECB202B173416470050C8F4 /* ConcurrentOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = DECB201F173415570050C8F4 /* ConcurrentOperation.m */; };
+		DECB202C1734164B0050C8F4 /* OperationsRunner.m in Sources */ = {isa = PBXBuildFile; fileRef = DECB2021173415570050C8F4 /* OperationsRunner.m */; };
 		DEE9159E1722DE520085F570 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DEE9159D1722DE520085F570 /* UIKit.framework */; };
 		DEE915A01722DE520085F570 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DEE9159F1722DE520085F570 /* Foundation.framework */; };
 		DEE915A21722DE520085F570 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DEE915A11722DE520085F570 /* CoreGraphics.framework */; };
@@ -50,13 +53,9 @@
 		DEE915C31722DE520085F570 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DEE9159D1722DE520085F570 /* UIKit.framework */; };
 		DEE915C41722DE520085F570 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DEE9159F1722DE520085F570 /* Foundation.framework */; };
 		DEE915CC1722DE520085F570 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = DEE915CA1722DE520085F570 /* InfoPlist.strings */; };
-		DEE915CF1722DE520085F570 /* FastEasyConcurrentWebFetchesTests.m in Sources */ = {isa = PBXBuildFile; fileRef = DEE915CE1722DE520085F570 /* FastEasyConcurrentWebFetchesTests.m */; };
+		DEE915CF1722DE520085F570 /* FECWF5_Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = DEE915CE1722DE520085F570 /* FECWF5_Tests.m */; };
 		DEE915DD1722DEB20085F570 /* MyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DEE915DA1722DEB20085F570 /* MyViewController.m */; };
 		DEE915DE1722DEB20085F570 /* MyViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DEE915DB1722DEB20085F570 /* MyViewController.xib */; };
-		DEE915E91722DECC0085F570 /* ConcurrentOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = DEE915E21722DECC0085F570 /* ConcurrentOperation.m */; };
-		DEE915EA1722DECC0085F570 /* OperationsRunner.m in Sources */ = {isa = PBXBuildFile; fileRef = DEE915E41722DECC0085F570 /* OperationsRunner.m */; };
-		DEE915EB1722DECC0085F570 /* WebFetcher.m in Sources */ = {isa = PBXBuildFile; fileRef = DEE915E71722DECC0085F570 /* WebFetcher.m */; };
-		DEE915F31722EB380085F570 /* URfetcher.m in Sources */ = {isa = PBXBuildFile; fileRef = DEE915F21722EB370085F570 /* URfetcher.m */; };
 		DEE915F61722EF380085F570 /* LICENSE.md in Resources */ = {isa = PBXBuildFile; fileRef = DEE915F41722EF380085F570 /* LICENSE.md */; };
 		DEE915F71722EF380085F570 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = DEE915F51722EF380085F570 /* README.md */; };
 /* End PBXBuildFile section */
@@ -84,14 +83,24 @@
 		DE956F501729E2700026179D /* TestOperation5.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestOperation5.h; sourceTree = "<group>"; };
 		DECB1FF51733F9B40050C8F4 /* FECW For iOS5 copy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "FECW For iOS5 copy.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DECB200B1733F9C70050C8F4 /* FECW iOS5 Tests copy.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "FECW iOS5 Tests copy.octest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		DECB201017340DC90050C8F4 /* OperationsRunner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OperationsRunner.h; sourceTree = "<group>"; };
-		DECB201117340DC90050C8F4 /* OperationsRunner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OperationsRunner.m; sourceTree = "<group>"; };
-		DECB201217340DC90050C8F4 /* OperationsRunnerProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OperationsRunnerProtocol.h; sourceTree = "<group>"; };
-		DECB201317340DC90050C8F4 /* URfetcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = URfetcher.h; sourceTree = "<group>"; };
-		DECB201417340DC90050C8F4 /* URfetcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = URfetcher.m; sourceTree = "<group>"; };
-		DECB201517340DC90050C8F4 /* WebFetcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebFetcher.h; sourceTree = "<group>"; };
-		DECB201617340DC90050C8F4 /* WebFetcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebFetcher.m; sourceTree = "<group>"; };
-		DEE9159A1722DE520085F570 /* FastEasyConcurrentWebFetches.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FastEasyConcurrentWebFetches.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		DECB201017340DC90050C8F4 /* OperationsRunner6.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OperationsRunner6.h; sourceTree = "<group>"; };
+		DECB201117340DC90050C8F4 /* OperationsRunner6.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OperationsRunner6.m; sourceTree = "<group>"; };
+		DECB201217340DC90050C8F4 /* OperationsRunnerProtocol6.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OperationsRunnerProtocol6.h; sourceTree = "<group>"; };
+		DECB201317340DC90050C8F4 /* URfetcher6.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = URfetcher6.h; sourceTree = "<group>"; };
+		DECB201417340DC90050C8F4 /* URfetcher6.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = URfetcher6.m; sourceTree = "<group>"; };
+		DECB201517340DC90050C8F4 /* WebFetcher6.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebFetcher6.h; sourceTree = "<group>"; };
+		DECB201617340DC90050C8F4 /* WebFetcher6.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebFetcher6.m; sourceTree = "<group>"; };
+		DECB201E173415570050C8F4 /* ConcurrentOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConcurrentOperation.h; sourceTree = "<group>"; };
+		DECB201F173415570050C8F4 /* ConcurrentOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConcurrentOperation.m; sourceTree = "<group>"; };
+		DECB2020173415570050C8F4 /* OperationsRunner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OperationsRunner.h; sourceTree = "<group>"; };
+		DECB2021173415570050C8F4 /* OperationsRunner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OperationsRunner.m; sourceTree = "<group>"; };
+		DECB2022173415570050C8F4 /* OperationsRunnerProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OperationsRunnerProtocol.h; sourceTree = "<group>"; };
+		DECB2023173415570050C8F4 /* URfetcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = URfetcher.h; sourceTree = "<group>"; };
+		DECB2024173415570050C8F4 /* URfetcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = URfetcher.m; sourceTree = "<group>"; };
+		DECB2025173415570050C8F4 /* WebFetcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebFetcher.h; sourceTree = "<group>"; };
+		DECB2026173415570050C8F4 /* WebFetcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebFetcher.m; sourceTree = "<group>"; };
+		DECB202D17343EF80050C8F4 /* PrintMe */ = {isa = PBXFileReference; lastKnownFileType = text; path = PrintMe; sourceTree = "<group>"; };
+		DEE9159A1722DE520085F570 /* FastEasyConcurrentWebFetches.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = FastEasyConcurrentWebFetches.app; path = "FECWF For iOS5.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DEE9159D1722DE520085F570 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		DEE9159F1722DE520085F570 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		DEE915A11722DE520085F570 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -107,24 +116,15 @@
 		DEE915B51722DE520085F570 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		DEE915B61722DE520085F570 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		DEE915B91722DE520085F570 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/ViewController.xib; sourceTree = "<group>"; };
-		DEE915C01722DE520085F570 /* FastEasyConcurrentWebFetchesTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FastEasyConcurrentWebFetchesTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
+		DEE915C01722DE520085F570 /* FastEasyConcurrentWebFetchesTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = FastEasyConcurrentWebFetchesTests.octest; path = "FECWF iOS5 Tests.octest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DEE915C11722DE520085F570 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
 		DEE915C91722DE520085F570 /* FastEasyConcurrentWebFetchesTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "FastEasyConcurrentWebFetchesTests-Info.plist"; sourceTree = "<group>"; };
 		DEE915CB1722DE520085F570 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		DEE915CD1722DE520085F570 /* FastEasyConcurrentWebFetchesTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FastEasyConcurrentWebFetchesTests.h; sourceTree = "<group>"; };
-		DEE915CE1722DE520085F570 /* FastEasyConcurrentWebFetchesTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FastEasyConcurrentWebFetchesTests.m; sourceTree = "<group>"; };
+		DEE915CD1722DE520085F570 /* FECWF5_Tests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FECWF5_Tests.h; sourceTree = "<group>"; };
+		DEE915CE1722DE520085F570 /* FECWF5_Tests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FECWF5_Tests.m; sourceTree = "<group>"; };
 		DEE915D91722DEB20085F570 /* MyViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyViewController.h; sourceTree = "<group>"; };
 		DEE915DA1722DEB20085F570 /* MyViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyViewController.m; sourceTree = "<group>"; };
 		DEE915DB1722DEB20085F570 /* MyViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MyViewController.xib; sourceTree = "<group>"; };
-		DEE915E11722DECC0085F570 /* ConcurrentOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConcurrentOperation.h; sourceTree = "<group>"; };
-		DEE915E21722DECC0085F570 /* ConcurrentOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConcurrentOperation.m; sourceTree = "<group>"; };
-		DEE915E31722DECC0085F570 /* OperationsRunner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OperationsRunner.h; sourceTree = "<group>"; };
-		DEE915E41722DECC0085F570 /* OperationsRunner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OperationsRunner.m; sourceTree = "<group>"; };
-		DEE915E51722DECC0085F570 /* OperationsRunnerProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OperationsRunnerProtocol.h; sourceTree = "<group>"; };
-		DEE915E61722DECC0085F570 /* WebFetcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebFetcher.h; sourceTree = "<group>"; };
-		DEE915E71722DECC0085F570 /* WebFetcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebFetcher.m; sourceTree = "<group>"; };
-		DEE915F11722EB370085F570 /* URfetcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = URfetcher.h; sourceTree = "<group>"; };
-		DEE915F21722EB370085F570 /* URfetcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = URfetcher.m; sourceTree = "<group>"; };
 		DEE915F41722EF380085F570 /* LICENSE.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE.md; sourceTree = SOURCE_ROOT; };
 		DEE915F51722EF380085F570 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
@@ -176,15 +176,32 @@
 		DECB200D1733FE620050C8F4 /* WhatYouNeediOS6+ */ = {
 			isa = PBXGroup;
 			children = (
-				DECB201017340DC90050C8F4 /* OperationsRunner.h */,
-				DECB201117340DC90050C8F4 /* OperationsRunner.m */,
-				DECB201217340DC90050C8F4 /* OperationsRunnerProtocol.h */,
-				DECB201517340DC90050C8F4 /* WebFetcher.h */,
-				DECB201617340DC90050C8F4 /* WebFetcher.m */,
-				DECB201317340DC90050C8F4 /* URfetcher.h */,
-				DECB201417340DC90050C8F4 /* URfetcher.m */,
+				DECB201517340DC90050C8F4 /* WebFetcher6.h */,
+				DECB201617340DC90050C8F4 /* WebFetcher6.m */,
+				DECB201017340DC90050C8F4 /* OperationsRunner6.h */,
+				DECB201117340DC90050C8F4 /* OperationsRunner6.m */,
+				DECB201217340DC90050C8F4 /* OperationsRunnerProtocol6.h */,
+				DECB201317340DC90050C8F4 /* URfetcher6.h */,
+				DECB201417340DC90050C8F4 /* URfetcher6.m */,
 			);
 			path = "WhatYouNeediOS6+";
+			sourceTree = SOURCE_ROOT;
+		};
+		DECB201D173415570050C8F4 /* WhatYouNeediOS5 */ = {
+			isa = PBXGroup;
+			children = (
+				DECB201E173415570050C8F4 /* ConcurrentOperation.h */,
+				DECB201F173415570050C8F4 /* ConcurrentOperation.m */,
+				DECB2025173415570050C8F4 /* WebFetcher.h */,
+				DECB2026173415570050C8F4 /* WebFetcher.m */,
+				DECB2020173415570050C8F4 /* OperationsRunner.h */,
+				DECB2021173415570050C8F4 /* OperationsRunner.m */,
+				DECB2022173415570050C8F4 /* OperationsRunnerProtocol.h */,
+				DECB2023173415570050C8F4 /* URfetcher.h */,
+				DECB2024173415570050C8F4 /* URfetcher.m */,
+			);
+			name = WhatYouNeediOS5;
+			path = WhatYouNeed;
 			sourceTree = SOURCE_ROOT;
 		};
 		DEE915911722DE520085F570 = {
@@ -222,9 +239,9 @@
 		DEE915A31722DE520085F570 /* FastEasyConcurrentWebFetches */ = {
 			isa = PBXGroup;
 			children = (
+				DECB201D173415570050C8F4 /* WhatYouNeediOS5 */,
 				DEE915F51722EF380085F570 /* README.md */,
 				DEE915F41722EF380085F570 /* LICENSE.md */,
-				DEE915E01722DECC0085F570 /* WhatYouNeediOS5 */,
 				DECB200D1733FE620050C8F4 /* WhatYouNeediOS6+ */,
 				DEE915D91722DEB20085F570 /* MyViewController.h */,
 				DEE915DA1722DEB20085F570 /* MyViewController.m */,
@@ -256,8 +273,8 @@
 		DEE915C71722DE520085F570 /* FastEasyConcurrentWebFetchesTests */ = {
 			isa = PBXGroup;
 			children = (
-				DEE915CD1722DE520085F570 /* FastEasyConcurrentWebFetchesTests.h */,
-				DEE915CE1722DE520085F570 /* FastEasyConcurrentWebFetchesTests.m */,
+				DEE915CD1722DE520085F570 /* FECWF5_Tests.h */,
+				DEE915CE1722DE520085F570 /* FECWF5_Tests.m */,
 				DE956F4E1729E1E70026179D /* TestOperationProtocol.h */,
 				DE956F501729E2700026179D /* TestOperation5.h */,
 				DE956F4F1729E2700026179D /* TestOperation5.m */,
@@ -271,25 +288,10 @@
 			children = (
 				DEE915C91722DE520085F570 /* FastEasyConcurrentWebFetchesTests-Info.plist */,
 				DEE915CA1722DE520085F570 /* InfoPlist.strings */,
+				DECB202D17343EF80050C8F4 /* PrintMe */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
-		};
-		DEE915E01722DECC0085F570 /* WhatYouNeediOS5 */ = {
-			isa = PBXGroup;
-			children = (
-				DEE915E11722DECC0085F570 /* ConcurrentOperation.h */,
-				DEE915E21722DECC0085F570 /* ConcurrentOperation.m */,
-				DEE915E51722DECC0085F570 /* OperationsRunnerProtocol.h */,
-				DEE915E31722DECC0085F570 /* OperationsRunner.h */,
-				DEE915E41722DECC0085F570 /* OperationsRunner.m */,
-				DEE915E61722DECC0085F570 /* WebFetcher.h */,
-				DEE915E71722DECC0085F570 /* WebFetcher.m */,
-				DEE915F11722EB370085F570 /* URfetcher.h */,
-				DEE915F21722EB370085F570 /* URfetcher.m */,
-			);
-			path = WhatYouNeediOS5;
-			sourceTree = SOURCE_ROOT;
 		};
 /* End PBXGroup section */
 
@@ -482,9 +484,9 @@
 				DECB1FDC1733F9B40050C8F4 /* AppDelegate.m in Sources */,
 				DECB1FDD1733F9B40050C8F4 /* ViewController.m in Sources */,
 				DECB1FDE1733F9B40050C8F4 /* MyViewController.m in Sources */,
-				DECB201717340DC90050C8F4 /* OperationsRunner.m in Sources */,
-				DECB201917340DC90050C8F4 /* URfetcher.m in Sources */,
-				DECB201B17340DC90050C8F4 /* WebFetcher.m in Sources */,
+				DECB201717340DC90050C8F4 /* OperationsRunner6.m in Sources */,
+				DECB201917340DC90050C8F4 /* URfetcher6.m in Sources */,
+				DECB201B17340DC90050C8F4 /* WebFetcher6.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -492,9 +494,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DECB1FFB1733F9C70050C8F4 /* FastEasyConcurrentWebFetchesTests.m in Sources */,
-				DECB201817340DC90050C8F4 /* OperationsRunner.m in Sources */,
-				DECB201C17340DC90050C8F4 /* WebFetcher.m in Sources */,
+				DECB201817340DC90050C8F4 /* OperationsRunner6.m in Sources */,
+				DECB201C17340DC90050C8F4 /* WebFetcher6.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -506,10 +507,10 @@
 				DEE915AE1722DE520085F570 /* AppDelegate.m in Sources */,
 				DEE915B71722DE520085F570 /* ViewController.m in Sources */,
 				DEE915DD1722DEB20085F570 /* MyViewController.m in Sources */,
-				DEE915E91722DECC0085F570 /* ConcurrentOperation.m in Sources */,
-				DEE915EA1722DECC0085F570 /* OperationsRunner.m in Sources */,
-				DEE915EB1722DECC0085F570 /* WebFetcher.m in Sources */,
-				DEE915F31722EB380085F570 /* URfetcher.m in Sources */,
+				DECB2027173415570050C8F4 /* ConcurrentOperation.m in Sources */,
+				DECB2028173415570050C8F4 /* OperationsRunner.m in Sources */,
+				DECB2029173415570050C8F4 /* URfetcher.m in Sources */,
+				DECB202A173415570050C8F4 /* WebFetcher.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -517,10 +518,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DEE915CF1722DE520085F570 /* FastEasyConcurrentWebFetchesTests.m in Sources */,
+				DEE915CF1722DE520085F570 /* FECWF5_Tests.m in Sources */,
 				DE956F511729E2700026179D /* TestOperation5.m in Sources */,
-				DECB200E17340CA90050C8F4 /* OperationsRunner.m in Sources */,
-				DECB200F17340CB50050C8F4 /* ConcurrentOperation.m in Sources */,
+				DECB202B173416470050C8F4 /* ConcurrentOperation.m in Sources */,
+				DECB202C1734164B0050C8F4 /* OperationsRunner.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -631,7 +632,7 @@
 			buildSettings = {
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "FastEasyConcurrentWebFetches/FastEasyConcurrentWebFetches-Prefix.pch";
-				INFOPLIST_FILE = "FECW For iOS5 copy-Info.plist";
+				INFOPLIST_FILE = "FastEasyConcurrentWebFetches/FastEasyConcurrentWebFetches-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				PRODUCT_NAME = "FECW For iOS5 copy";
 				WRAPPER_EXTENSION = app;
@@ -643,7 +644,7 @@
 			buildSettings = {
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "FastEasyConcurrentWebFetches/FastEasyConcurrentWebFetches-Prefix.pch";
-				INFOPLIST_FILE = "FECW For iOS5 copy-Info.plist";
+				INFOPLIST_FILE = "FastEasyConcurrentWebFetches/FastEasyConcurrentWebFetches-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				PRODUCT_NAME = "FECW For iOS5 copy";
 				WRAPPER_EXTENSION = app;
@@ -655,7 +656,7 @@
 			buildSettings = {
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "FastEasyConcurrentWebFetches/FastEasyConcurrentWebFetches-Prefix.pch";
-				INFOPLIST_FILE = "FECW For iOS5 copy-Info.plist";
+				INFOPLIST_FILE = "FastEasyConcurrentWebFetches/FastEasyConcurrentWebFetches-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				PRODUCT_NAME = "FECW For iOS5 copy";
 				WRAPPER_EXTENSION = app;
@@ -667,7 +668,7 @@
 			buildSettings = {
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "FastEasyConcurrentWebFetches/FastEasyConcurrentWebFetches-Prefix.pch";
-				INFOPLIST_FILE = "FECW For iOS5 copy-Info.plist";
+				INFOPLIST_FILE = "FastEasyConcurrentWebFetches/FastEasyConcurrentWebFetches-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				PRODUCT_NAME = "FECW For iOS5 copy";
 				WRAPPER_EXTENSION = app;

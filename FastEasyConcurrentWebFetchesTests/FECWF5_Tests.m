@@ -9,7 +9,7 @@
 #include <signal.h>
 #include <libkern/OSAtomic.h>
 
-#import "FastEasyConcurrentWebFetchesTests.h"
+#import "FECWF5_Tests.h"
 
 #import "OperationsRunner.h"
 #import "TestOperationProtocol.h"

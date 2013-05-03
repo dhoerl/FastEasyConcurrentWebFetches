@@ -21,7 +21,7 @@
 // THE SOFTWARE.
 //
 
-#import "WebFetcher.h"
+#import "WebFetcher6.h"
 
 #if 0	// 0 == no debug, 1 == lots of mesages
 #define LOG(...) NSLog(__VA_ARGS__)
@@ -34,164 +34,14 @@
 #define PROGRESS_UPDATE(x) ( ((x)*.75f)/(responseLength) + PROGRESS_OFFSET)
 
 @interface WebFetcher ()
-@property(nonatomic, strong) NSURLConnection *connection;
-@property(nonatomic, strong, readwrite) NSMutableData *webData;
+@property (atomic, assign, readwrite) BOOL isCancelled;
+@property (atomic, assign, readwrite) BOOL isExecuting;
+@property (atomic, assign, readwrite) BOOL isFinished;
+@property (atomic, strong, readwrite) NSOperationQueue *operationQueue;
+@property (nonatomic, strong) NSURLConnection *connection;
+@property (nonatomic, strong, readwrite) NSMutableData *webData;
 
 @end
-
-#if 0
-
-
-@interface ConcurrentOperation ()
-@property(atomic, assign, readwrite) BOOL isCancelled;
-@property(atomic, assign, readwrite) BOOL isExecuting;
-@property(atomic, assign, readwrite) BOOL isFinished;
-#if defined(UNIT_TESTING)
-@property(atomic, strong, readwrite) concurrentBlock block;
-#endif
-
-@end
-
-@implementation ConcurrentOperation
-{
-	dispatch_semaphore_t semaphore;
-}
-
-- (instancetype)init
-{
-	if((self = [super init])) {
-		semaphore = dispatch_semaphore_create(1);
-	}
-	return self;
-}
-
-- (void)main
-{
-	dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
-	if(!self.isCancelled) {
-		id obj;
-		if((obj = [self setup]) && [self start:obj]) {
-			// makes runloop functional
-			self.thread	= [NSThread currentThread];
-#ifndef NDEBUG
-			self.thread.name = _runMessage;
-#endif
-			self.isExecuting = YES;
-			self.co_timer = [NSTimer scheduledTimerWithTimeInterval:60*60 target:self selector:@selector(timer:) userInfo:nil repeats:NO];
-
-			//LOG(@"%@ enter loop: isFinished=%d isCancelled=%d", self.runMessage, self.isFinished, self.isCancelled);
-			BOOL ret = YES;
-			while(ret && !self.isFinished) {
-				dispatch_semaphore_signal(semaphore);
-				LOG(@"%@ RUN_LOOP: sleep...", self.runMessage);
-				ret = [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]];
-				dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
-				LOG(@"%@ RUN_LOOP: isFinished=%d isCancelled=%d", self.runMessage, self.isFinished, self.isCancelled);
-			}
-#if defined(UNIT_TESTING)
-			if(self.block) {
-				self.block(self);
-			}
-#endif
-			[self cancelTimer];
-			self.isExecuting = NO;
-			self.thread = nil;
-
-		}
-		if(self.isCancelled) {
-			[self cancel];
-		}
-	}
-	dispatch_semaphore_signal(semaphore);	// so cancel and/or final block don't take a long time
-}
-
-- (void)cancelTimer
-{
-#ifndef NDEBUG
-	if(self.co_timer) assert([NSThread currentThread] == self.thread);
-#endif
-	[self.co_timer invalidate], self.co_timer = nil;
-}
-
-- (BOOL)_OR_cancel:(NSUInteger)millisecondDelay
-{
-	self.isCancelled = YES;
-
-	BOOL ret = dispatch_semaphore_wait(semaphore, dispatch_time(DISPATCH_TIME_NOW, millisecondDelay*NSEC_PER_MSEC)) ? NO : YES;
-	if(ret) {
-		if(self.isExecuting && !self.isFinished) {
-			LOG(@"%@: send cancel", self.runMessage);
-			self.isFinished = YES;	// redundant
-			[self performSelector:@selector(cancel) onThread:self.thread withObject:nil waitUntilDone:NO];
-			ret = YES;
-		}
-		dispatch_semaphore_signal(semaphore);
-	} else {
-		LOG(@"%@ failed to get the locking semaphore in %u milliseconds", self, millisecondDelay);
-	}
-	return ret;
-}
-
-- (void)cancel
-{
-#ifndef NDEBUG
-	if(self.co_timer) assert([NSThread currentThread] == self.thread);
-#endif
-	LOG(@"%@: got CANCEL", self);
-	self.isFinished = YES;
-	
-	[self cancelTimer];
-}
-
-- (id)setup	// on thread
-{
-	return @"";
-}
-
-- (BOOL)start:(id)setupObject	// on thread
-{
-	LOG(@"%@ Start: isExecuting=%d", self.runMessage, self.isExecuting);
-	return YES;
-}
-
-- (void)completed				// on thread, subclasses to override then finally call super
-{
-#ifndef NDEBUG
-	assert(self.co_timer);
-	assert([NSThread currentThread] == self.thread);
-#endif
-	[self performSelector:@selector(finish) onThread:self.thread withObject:nil waitUntilDone:NO];
-}
-
-- (void)failed					// on thread, subclasses to override then finally call super
-{
-#ifndef NDEBUG
-	assert(self.co_timer);
-	assert([NSThread currentThread] == self.thread);
-#endif
-	[self performSelector:@selector(finish) onThread:self.thread withObject:nil waitUntilDone:NO];
-}
-
-- (void)finish
-{
-#ifndef NDEBUG
-	assert(self.co_timer);
-	assert([NSThread currentThread] == self.thread);
-#endif
-
-	self.isFinished = YES;
-
-	[self cancelTimer];
-}
-
-- (NSString *)description
-{
-	return [NSString stringWithFormat:@"ConOp[\"%@\"] isEx=%d ixFin=%d isCan=%d", _runMessage, _isExecuting, _isFinished, _isCancelled];
-}
-
-@end
-#endif
-
 
 @implementation WebFetcher
 {
@@ -206,15 +56,29 @@
 	[cache setMemoryCapacity:0];
 }
 
-+ (BOOL)persistentConnection { return NO; }
++ (BOOL)persistentConnection { return YES; }
 + (NSUInteger)timeout { return 60; }
-+ (BOOL)printDebugging { return NO; }
++ (BOOL)printDebugging { return YES; }
+
+- (BOOL)_OR_cancel:(NSUInteger)millisecondDelay
+{
+	BOOL ret = !self.isCancelled;
+	if(ret) {
+		self.isCancelled = YES;
+		[self.connection cancel], self.connection = nil;
+		[self cancel];
+	}
+	return YES;
+}
+
+- (void)cancel
+{
+	LOG(@"%@: got CANCEL", self);
+	self.isFinished = YES;
+}
 
 - (NSMutableURLRequest *)setup
 {
-	id foo = [super setup];	// foo just a flag
-	if(!foo) return nil;
-
 	Class class = [self class];
 
 #if defined(UNIT_TESTING)	// lets us force errors in code
@@ -271,6 +135,8 @@
 
 - (BOOL)start:(NSMutableURLRequest *)request
 {
+	LOG(@"%@ Start: isExecuting=%d", self.runMessage, self.isExecuting);
+
 	BOOL allOK = [self connect:request];
 	return allOK;
 }
@@ -287,15 +153,11 @@
 
 	assert(request);
 
-	_connection = [[NSURLConnection alloc] initWithRequest:request delegate:self startImmediately:YES];
+	_connection = [[NSURLConnection alloc] initWithRequest:request delegate:self startImmediately:NO];
+	[_connection setDelegateQueue:_operationQueue];
+	if(_connection) self.isExecuting = YES;
+
 	return _connection ? YES : NO;
-}
-
-- (void)cancel
-{
-	[_connection cancel];
-
-	[super cancel];	// last
 }
 
 - (void)completed // subclasses to override then finally call super
@@ -305,7 +167,7 @@
 #endif
 	// we need a tad delay to let the completed return before the KVO message kicks in
 	
-	[super completed];
+	[self finish];
 }
 
 - (void)failed // subclasses to override then finally call super
@@ -313,20 +175,32 @@
 #ifndef NDEBUG
 	if([[self class] printDebugging]) LOG(@"WF: failed");
 #endif
-	
-	[super failed];
+
+	[self finish];
+}
+
+- (void)finish
+{
+	self.isFinished = YES;
 }
 
 - (void)dealloc
 {
-	[self.connection cancel];	// again, just to be 100% sure
+	[_connection cancel];	// again, just to be 100% sure
 
-	LOG(@"%@ Dealloc: isExecuting=%d isFinished=%d isCancelled=%d", _runMessage, _isExecuting, _isFinished, _isCancelled);
+#ifndef NDEBUG
+	if([[self class] printDebugging]) LOG(@"%@ Dealloc: isExecuting=%d isFinished=%d isCancelled=%d", _runMessage, _isExecuting, _isFinished, _isCancelled);
+#endif
 #ifdef VERIFY_DEALLOC
-	if(_finishBlock) {
-		_finishBlock();
+	if(_deallocBlock) {
+		_deallocBlock();
 	}
 #endif
+}
+
+- (NSString *)description
+{
+	return [NSString stringWithFormat:@"ConOp[\"%@\"] isEx=%d ixFin=%d isCan=%d", _runMessage, _isExecuting, _isFinished, _isCancelled];
 }
 
 @end
@@ -345,10 +219,9 @@
 	return request;
 }
 
-
 - (void)connection:(NSURLConnection *)_conn didReceiveResponse:(NSURLResponse *)response
 {
-	if([super isCancelled]) {
+	if(self.isCancelled) {
 		[_connection cancel];
 #ifndef NDEBUG
 		if([[self class] printDebugging]) LOG(@"Connection:cancelled!");
@@ -379,10 +252,10 @@
 
 - (void)connection:(NSURLConnection *)_conn didReceiveData:(NSData *)data
 {
-//#ifndef NDEBUG
+#ifndef NDEBUG
 	if([[self class] printDebugging]) LOG(@"Connection:didReceiveData len=%lu %@", (unsigned long)[data length], [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
-//#endif
-	if([super isCancelled]) {
+#endif
+	if(self.isCancelled) {
 		[_connection cancel];
 		return;
 	}
@@ -402,11 +275,11 @@
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)_conn
 {
-//#ifndef NDEBUG
+#ifndef NDEBUG
 	if([[self class] printDebugging]) LOG(@"Connection:connectionDidFinishLoading len=%u", [_webData length]);
-//#endif
+#endif
 
-	if([super isCancelled]) {
+	if(self.isCancelled) {
 		[_connection cancel];
 		return;
 	}
