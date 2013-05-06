@@ -6,17 +6,14 @@
 //  Copyright (c) 2013 dhoerl. All rights reserved.
 //
 
-#import "ConcurrentOperation.h"
+#import "WebFetcher.h"
 
 #define TIMER_DELAY 0.1
 
 @protocol TestOperationProtocol;
 
-typedef enum { noAction, failAtSetup, failAtStartup, forceSuccess, forceFailure } forceMode;
-
-@interface TestOperation : ConcurrentOperation
+@interface TestOperation : WebFetcher
 @property (nonatomic, weak) id <TestOperationProtocol> delegate;
-@property (atomic, assign) forceMode forceAction;
 @property (atomic, assign) int succeeded;	// -1 == init, 0 == FAIL, 1 -- SUCCESS
 @property (atomic, assign) NSUInteger finishedMsg;
 @property (atomic, assign) BOOL fireTimer;

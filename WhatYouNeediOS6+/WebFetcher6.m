@@ -37,8 +37,7 @@
 @property (atomic, assign, readwrite) BOOL isCancelled;
 @property (atomic, assign, readwrite) BOOL isExecuting;
 @property (atomic, assign, readwrite) BOOL isFinished;
-@property (atomic, strong, readwrite) NSOperationQueue *operationQueue;
-@property (nonatomic, strong) NSURLConnection *connection;
+@property (atomic, strong, readwrite) NSURLConnection *connection;
 @property (nonatomic, strong, readwrite) NSMutableData *webData;
 
 @end
@@ -82,46 +81,7 @@
 	Class class = [self class];
 
 #if defined(UNIT_TESTING)	// lets us force errors in code
-	switch(_force) {
-	case forceSuccess:
-	{
-		__weak __typeof__(self) weakSelf = self;
-		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 250 * NSEC_PER_MSEC), dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^
-			{
-				weakSelf.htmlStatus = 200;
-				weakSelf.webData = [NSMutableData dataWithCapacity:256];
-				[weakSelf performSelector:@selector(completed) onThread:self.thread withObject:nil waitUntilDone:NO];
-				//[weakSelf performBlock:^(ConcurrentOperation *op) { [op completed]; }];
-			} );
-	}	break;
-
-	case forceFailure:
-	{
-		__weak __typeof__(self) weakSelf = self;
-		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 250 * NSEC_PER_MSEC), dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^
-			{
-				weakSelf.htmlStatus = 400;
-				[weakSelf performSelector:@selector(failed) onThread:weakSelf.thread withObject:nil waitUntilDone:NO];
-				//[weakSelf performBlock:^(ConcurrentOperation *op) { [op failed]; }];
-			} );
-	} break;
-	
-	case forceRetry:
-	{
-		__weak __typeof__(self) weakSelf = self;
-		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 250 * NSEC_PER_MSEC), dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^
-			{
-				weakSelf.error = [NSError errorWithDomain:@"NSURLErrorDomain" code:-1001 userInfo:@{ NSLocalizedDescriptionKey : @"timed out" }];	// Timeout
-				weakSelf.errorMessage = @"Forced Failure";
-				[weakSelf performSelector:@selector(failed) onThread:weakSelf.thread withObject:nil waitUntilDone:NO];
-				//[weakSelf performBlock:^(ConcurrentOperation *op) { [op failed]; }];
-			} );
-	} break;
-
-	default:
-		assert(!"should never get here");
-		break;
-	}
+	self.urlStr = @"http://www.apple.com/";
 #endif
 
 	NSURL *url = [NSURL URLWithString:_urlStr];
@@ -146,18 +106,55 @@
 #ifndef NDEBUG
 	if([[self class] printDebugging]) LOG(@"URLSTRING1=%@", [request URL]);
 #endif
+	assert(request);
+
+	self.connection = [[NSURLConnection alloc] initWithRequest:request delegate:self startImmediately:NO];
+	if(self.connection) self.isExecuting = YES;
 
 #if defined(UNIT_TESTING)	// lets us force errors in code
+	switch(self.forceAction) {
+	case forceSuccess:
+	{
+		__weak __typeof__(self) weakSelf = self;
+		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 100 * NSEC_PER_MSEC), dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^
+			{
+				weakSelf.htmlStatus = 200;
+				weakSelf.webData = [NSMutableData dataWithCapacity:256];
+				[self completed];
+			} );
+		return YES;
+	}	break;
+
+	case forceFailure:
+	{
+		__weak __typeof__(self) weakSelf = self;
+		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 100 * NSEC_PER_MSEC), dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^
+			{
+				weakSelf.htmlStatus = 400;
+				[self failed];
+			} );
+		return YES;
+	} break;
+	
+	case forceRetry:
+	{
+		__weak __typeof__(self) weakSelf = self;
+		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 100 * NSEC_PER_MSEC), dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^
+			{
+				weakSelf.error = [NSError errorWithDomain:@"NSURLErrorDomain" code:-1001 userInfo:@{ NSLocalizedDescriptionKey : @"timed out" }];	// Timeout
+				weakSelf.errorMessage = @"Forced Failure";
+				[self failed];
+			} );
+		return YES;
+	} break;
+
+	default:
+		break;
+	}
 	return YES;
 #endif
 
-	assert(request);
-
-	_connection = [[NSURLConnection alloc] initWithRequest:request delegate:self startImmediately:NO];
-	[_connection setDelegateQueue:_operationQueue];
-	if(_connection) self.isExecuting = YES;
-
-	return _connection ? YES : NO;
+	return self.connection ? YES : NO;
 }
 
 - (void)completed // subclasses to override then finally call super
@@ -182,11 +179,12 @@
 - (void)finish
 {
 	self.isFinished = YES;
+	_finalBlock(self);
 }
 
 - (void)dealloc
 {
-	[_connection cancel];	// again, just to be 100% sure
+	[self.connection cancel];	// again, just to be 100% sure
 
 #ifndef NDEBUG
 	if([[self class] printDebugging]) LOG(@"%@ Dealloc: isExecuting=%d isFinished=%d isCancelled=%d", _runMessage, _isExecuting, _isFinished, _isCancelled);
@@ -207,7 +205,7 @@
 
 @implementation WebFetcher (NSURLConnectionDelegate)
 
-- (NSURLRequest *)connection:(NSURLConnection *)_conn willSendRequest:(NSURLRequest *)request redirectResponse:(NSHTTPURLResponse *)redirectResponse	// NSURLResponse NSHTTPURLResponse
+- (NSURLRequest *)connection:(NSURLConnection *)conn willSendRequest:(NSURLRequest *)request redirectResponse:(NSHTTPURLResponse *)redirectResponse	// NSURLResponse NSHTTPURLResponse
 {
 #ifndef NDEBUG
 	if([[self class] printDebugging]) LOG(@"Connection:willSendRequest %@ redirect %@", request, redirectResponse);
@@ -219,10 +217,10 @@
 	return request;
 }
 
-- (void)connection:(NSURLConnection *)_conn didReceiveResponse:(NSURLResponse *)response
+- (void)connection:(NSURLConnection *)conn didReceiveResponse:(NSURLResponse *)response
 {
 	if(self.isCancelled) {
-		[_connection cancel];
+		[conn cancel];
 #ifndef NDEBUG
 		if([[self class] printDebugging]) LOG(@"Connection:cancelled!");
 #endif
@@ -250,19 +248,19 @@
 	_webData = [NSMutableData dataWithCapacity:responseLength];
 }
 
-- (void)connection:(NSURLConnection *)_conn didReceiveData:(NSData *)data
+- (void)connection:(NSURLConnection *)conn didReceiveData:(NSData *)data
 {
 #ifndef NDEBUG
 	if([[self class] printDebugging]) LOG(@"Connection:didReceiveData len=%lu %@", (unsigned long)[data length], [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
 #endif
 	if(self.isCancelled) {
-		[_connection cancel];
+		[conn cancel];
 		return;
 	}
 	[_webData appendData:data];
 }
 
-- (void)connection:(NSURLConnection *)_conn didFailWithError:(NSError *)err
+- (void)connection:(NSURLConnection *)conn didFailWithError:(NSError *)err
 {
 #ifndef NDEBUG
 	//if([[self class] printDebugging])
@@ -273,14 +271,14 @@
 	[self failed];
 }
 
-- (void)connectionDidFinishLoading:(NSURLConnection *)_conn
+- (void)connectionDidFinishLoading:(NSURLConnection *)conn
 {
 #ifndef NDEBUG
 	if([[self class] printDebugging]) LOG(@"Connection:connectionDidFinishLoading len=%u", [_webData length]);
 #endif
 
 	if(self.isCancelled) {
-		[_connection cancel];
+		[conn cancel];
 		return;
 	}
 
@@ -304,7 +302,7 @@
 }
 //#if 0
 
-- (void)_connection:(NSURLConnection *)_connection didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge
+- (void)_connection:(NSURLConnection *)conn didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge
 {
     [challenge.sender useCredential:[NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust] forAuthenticationChallenge:challenge];
 }
@@ -316,7 +314,7 @@
 	return YES;
 }
 
-- (void)_connection:(NSURLConnection *)_connection didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge
+- (void)_connection:(NSURLConnection *)conn didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge
 {
 	LOG(@"GOT %@", challenge);
 	[[challenge sender] continueWithoutCredentialForAuthenticationChallenge:challenge];

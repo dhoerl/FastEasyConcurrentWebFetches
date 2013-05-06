@@ -27,7 +27,7 @@
 @property (atomic, assign, readonly) BOOL isExecuting;
 @property (atomic, assign, readonly) BOOL isFinished;
 #if defined(VERIFY_DEALLOC)
-@property (nonatomic, strong) dispatch_block_t finishBlock;
+@property (nonatomic, strong) dispatch_block_t deallocBlock;
 #endif
 #if defined(UNIT_TESTING)	// lets us force errors in code
 @property (atomic, weak, readonly) NSThread *thread;

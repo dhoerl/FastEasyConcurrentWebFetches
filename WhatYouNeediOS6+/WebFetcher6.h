@@ -23,7 +23,7 @@
 
 // Unit Testing
 #if defined(UNIT_TESTING)
-typedef enum {forcingOff=0, forceSuccess, forceFailure, forceRetry } forceMode;
+typedef enum { forcingOff=0, failAtSetup, failAtStartup, forceSuccess, forceFailure, forceRetry } forceMode;
 #endif
 
 @class WebFetcher;
@@ -33,8 +33,8 @@ typedef void(^finishBlock)(WebFetcher *op);
 @property (atomic, assign, readonly) BOOL isCancelled;
 @property (atomic, assign, readonly) BOOL isExecuting;
 @property (atomic, assign, readonly) BOOL isFinished;
-@property (atomic, strong, readonly) NSOperationQueue *operationQueue;
-@property (atomic, strong, readonly) finishBlock finalBlock;
+@property (atomic, strong, strong) finishBlock finalBlock;
+@property (atomic, strong, readonly) NSURLConnection *connection;
 // Your responsibility
 @property (nonatomic, copy) NSString *runMessage;		// debugging
 @property (nonatomic, copy) NSString *urlStr;
@@ -46,8 +46,9 @@ typedef void(^finishBlock)(WebFetcher *op);
 #ifdef VERIFY_DEALLOC
 @property (nonatomic, strong) dispatch_block_t deallocBlock;
 #endif
+
 #if defined(UNIT_TESTING)
-@property (nonatomic, assign) forceMode force;
+@property (nonatomic, assign) forceMode forceAction;
 #endif
 
 + (BOOL)printDebugging;

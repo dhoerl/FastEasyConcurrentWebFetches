@@ -21,11 +21,11 @@
 // THE SOFTWARE.
 //
 
-@class ConcurrentOperation;
+@class WebFetcher;
 
 @protocol OperationsRunnerProtocol <NSObject>
 
 // can get this on main thread (default), a specific thread you request, or anyThread
-- (void)operationFinished:(ConcurrentOperation *)op count:(NSUInteger)remainingOps;
+- (void)operationFinished:(WebFetcher *)op count:(NSUInteger)remainingOps;
 
 @end

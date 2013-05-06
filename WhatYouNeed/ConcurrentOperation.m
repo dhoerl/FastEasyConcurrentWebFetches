@@ -162,8 +162,8 @@
 - (void)finish
 {
 #ifndef NDEBUG
-	assert(self.co_timer);
-	assert([NSThread currentThread] == self.thread);
+	if(self.isExecuting) assert(self.co_timer);
+	if(self.thread) assert([NSThread currentThread] == self.thread);
 #endif
 
 	self.isFinished = YES;
@@ -180,8 +180,8 @@
 {
 	LOG(@"%@ Dealloc: isExecuting=%d isFinished=%d isCancelled=%d", _runMessage, _isExecuting, _isFinished, _isCancelled);
 #ifdef VERIFY_DEALLOC
-	if(_finishBlock) {
-		_finishBlock();
+	if(_deallocBlock) {
+		_deallocBlock();
 	}
 #endif
 }

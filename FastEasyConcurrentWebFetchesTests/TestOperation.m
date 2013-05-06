@@ -6,25 +6,17 @@
 //  Copyright (c) 2013 dhoerl. All rights reserved.
 //
 
-//#include <signal.h>
-
 #import "TestOperationProtocol.h"
-
-#import "TestOperation5.h"
+#import "TestOperation.h"
 
 @interface TestOperation ()
 
 @end
 
-static void myAlrm(int sig)
-{
-	NSLog(@"myAlrm!!!!");
-}
-
 @implementation TestOperation
 {
-	NSTimer *t;
-	NSUInteger timerMax;
+	//NSTimer *t;
+	//NSUInteger timerMax;
 }
 
 - (void)main
@@ -57,12 +49,11 @@ static void myAlrm(int sig)
 	
 	BOOL ret = [super start:setupObject];
 
-	ret = self.forceAction == failAtStartup ? NO : ret;
-	
-	if(ret) {
-		t = [NSTimer scheduledTimerWithTimeInterval:TIMER_DELAY target:self selector:@selector(myTimer:) userInfo:nil repeats:YES];
+	BOOL ret2 = self.forceAction == failAtStartup ? NO : ret;
+	if(!ret2 && ret) {
+		[self finish];
 	}
-	return ret;
+	return ret2;
 }
 
 - (void)completed
@@ -75,9 +66,6 @@ static void myAlrm(int sig)
 - (void)finish
 {
 	[super finish];
-
-	//NSLog(@"GOT FINISH %@", self);
-	[t invalidate], t = nil;
 
 	++self.finishedMsg;
 
@@ -94,34 +82,7 @@ static void myAlrm(int sig)
 - (void)cancel
 {
 	[super cancel];
-	
-	// Really important to do this if you use a timer in a super class. Ask me how I know this.
-	[t invalidate], t = nil;
-	//NSLog(@"cancel timer");
-}
 
-- (void)myTimer:(NSTimer *)timer
-{
-//NSLog(@"%@: myTimer", self.runMessage);
-
-	switch(self.forceAction) {
-	case forceSuccess:
-		[self completed];
-		[timer invalidate];
-		break;
-
-	case forceFailure:
-		[self failed];
-		[timer invalidate];
-		break;
-		
-	default:
-		if(timerMax >= 100) {
-			[self completed];
-			[timer invalidate];
-		}
-		break;
-	}
 }
 
 @end

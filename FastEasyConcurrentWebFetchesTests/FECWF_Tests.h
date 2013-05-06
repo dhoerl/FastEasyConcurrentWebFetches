@@ -1,5 +1,5 @@
 //
-//  FastEasyConcurrentWebFetchesTests.h
+//  FECWF5_Tests.h
 //  FastEasyConcurrentWebFetchesTests
 //
 //  Created by David Hoerl on 4/20/13.
@@ -8,6 +8,6 @@
 
 #import <SenTestingKit/SenTestingKit.h>
 
-@interface FastEasyConcurrentWebFetchesTests : SenTestCase
+@interface FECWF_Tests : SenTestCase
 
 @end

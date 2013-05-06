@@ -33,17 +33,6 @@
 - (NSURLRequest *)setup
 {
 	NSMutableURLRequest *request = [super setup];
-
-#if defined(UNIT_TESTING)
-	// Unit Testing
-	switch(self.force) {
-	case forceFailure:
-	case forceSuccess:
-		return request;
-	default:
-		break;
-	}
-#endif
 	return request;
 }
 

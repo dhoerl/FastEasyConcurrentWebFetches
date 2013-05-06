@@ -31,7 +31,7 @@
 
 @interface WebFetcher ()
 @property(nonatomic, strong) NSURLConnection *connection;
-@property(nonatomic, strong, readwrite) NSMutableData *webData;
+@property(atomic, strong, readwrite) NSMutableData *webData;
 
 @end
 
@@ -57,50 +57,11 @@
 	id foo = [super setup];	// foo just a flag
 	if(!foo) return nil;
 
-	Class class = [self class];
-
 #if defined(UNIT_TESTING)	// lets us force errors in code
-	switch(_force) {
-	case forceSuccess:
-	{
-		__weak __typeof__(self) weakSelf = self;
-		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 250 * NSEC_PER_MSEC), dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^
-			{
-				weakSelf.htmlStatus = 200;
-				weakSelf.webData = [NSMutableData dataWithCapacity:256];
-				[weakSelf performSelector:@selector(completed) onThread:self.thread withObject:nil waitUntilDone:NO];
-				//[weakSelf performBlock:^(ConcurrentOperation *op) { [op completed]; }];
-			} );
-	}	break;
-
-	case forceFailure:
-	{
-		__weak __typeof__(self) weakSelf = self;
-		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 250 * NSEC_PER_MSEC), dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^
-			{
-				weakSelf.htmlStatus = 400;
-				[weakSelf performSelector:@selector(failed) onThread:weakSelf.thread withObject:nil waitUntilDone:NO];
-				//[weakSelf performBlock:^(ConcurrentOperation *op) { [op failed]; }];
-			} );
-	} break;
-	
-	case forceRetry:
-	{
-		__weak __typeof__(self) weakSelf = self;
-		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 250 * NSEC_PER_MSEC), dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^
-			{
-				weakSelf.error = [NSError errorWithDomain:@"NSURLErrorDomain" code:-1001 userInfo:@{ NSLocalizedDescriptionKey : @"timed out" }];	// Timeout
-				weakSelf.errorMessage = @"Forced Failure";
-				[weakSelf performSelector:@selector(failed) onThread:weakSelf.thread withObject:nil waitUntilDone:NO];
-				//[weakSelf performBlock:^(ConcurrentOperation *op) { [op failed]; }];
-			} );
-	} break;
-
-	default:
-		assert(!"should never get here");
-		break;
-	}
+	self.urlStr = @"http://www.apple.com/";
 #endif
+
+	Class class = [self class];
 
 	NSURL *url = [NSURL URLWithString:_urlStr];
 	NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:[class timeout]];
@@ -123,13 +84,59 @@
 	if([[self class] printDebugging]) LOG(@"URLSTRING1=%@", [request URL]);
 #endif
 
-#if defined(UNIT_TESTING)	// lets us force errors in code
-	return YES;
-#endif
-
 	assert(request);
 
-	_connection = [[NSURLConnection alloc] initWithRequest:request delegate:self startImmediately:YES];
+	BOOL startNow;
+#if defined(UNIT_TESTING)	// lets us force errors in code
+	switch(_forceAction) {
+	case forceSuccess:
+	{
+		__weak __typeof__(self) weakSelf = self;
+		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 100 * NSEC_PER_MSEC), dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^
+			{
+				weakSelf.htmlStatus = 200;
+				weakSelf.webData = [NSMutableData dataWithCapacity:256];
+				[weakSelf performSelector:@selector(completed) onThread:self.thread withObject:nil waitUntilDone:NO];
+				//[weakSelf performBlock:^(ConcurrentOperation *op) { [op completed]; }];
+			} );
+		return YES;
+	}	break;
+
+	case forceFailure:
+	{
+		__weak __typeof__(self) weakSelf = self;
+		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 100 * NSEC_PER_MSEC), dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^
+			{
+				weakSelf.htmlStatus = 400;
+				[weakSelf performSelector:@selector(failed) onThread:weakSelf.thread withObject:nil waitUntilDone:NO];
+				//[weakSelf performBlock:^(ConcurrentOperation *op) { [op failed]; }];
+			} );
+		return YES;
+	} break;
+	
+	case forceRetry:
+	{
+		__weak __typeof__(self) weakSelf = self;
+		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 100 * NSEC_PER_MSEC), dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^
+			{
+				weakSelf.error = [NSError errorWithDomain:@"NSURLErrorDomain" code:-1001 userInfo:@{ NSLocalizedDescriptionKey : @"timed out" }];	// Timeout
+				weakSelf.errorMessage = @"Forced Failure";
+				[weakSelf performSelector:@selector(failed) onThread:weakSelf.thread withObject:nil waitUntilDone:NO];
+				//[weakSelf performBlock:^(ConcurrentOperation *op) { [op failed]; }];
+			} );
+		return YES;
+	} break;
+
+	default:
+		break;
+	}
+	startNow = NO;
+#else
+	// Normal path
+	startNow = YES;
+#endif
+
+	_connection = [[NSURLConnection alloc] initWithRequest:request delegate:self startImmediately:startNow];
 	return _connection ? YES : NO;
 }
 
@@ -157,6 +164,17 @@
 #endif
 	
 	[super failed];
+}
+
+- (void)finish
+{
+#ifndef NDEBUG
+	if([[self class] printDebugging]) LOG(@"WF: finish");
+#endif
+
+	[super finish];
+
+	[_connection cancel];	// rare condition where we failed in startup
 }
 
 - (void)dealloc

@@ -66,10 +66,9 @@
 @dynamic priority;
 
 // so forwardingTargetForSelector has something to send to if no operationRunner exists
-+ (BOOL)cancelOperations
-{
-	return YES;
-}
++ (BOOL)cancelOperations { return NO; }
++ (BOOL)restartOperations { return NO; }
++ (BOOL)disposeOperations { return NO; }
 
 - (id)initWithDelegate:(id <OperationsRunnerProtocol>)del
 {
@@ -116,14 +115,6 @@
 	return self;
 }
 
-#if 0
-- (int32_t)adjustOperationsCount:(int32_t)val
-{
-	int32_t nVal = OSAtomicAdd32(val, &_DO_NOT_ACCESS_operationsCount);
-	return nVal;
-}
-#endif
-
 #ifdef VERIFY_DEALLOC
 - (int32_t)adjustOperationsTotal:(int32_t)val
 {
@@ -151,22 +142,13 @@
 - (void)setPriority:(long)priority
 {	
 	if(_priority != priority) {
-		long cmdPriority;
-		long opsPriority;
+	
 		// keep this around while in development
 		switch(priority) {
 		case DISPATCH_QUEUE_PRIORITY_HIGH:
-			cmdPriority = DISPATCH_QUEUE_PRIORITY_HIGH;
-			opsPriority = DISPATCH_QUEUE_PRIORITY_DEFAULT;
-			break;
 		case DISPATCH_QUEUE_PRIORITY_DEFAULT:
-			cmdPriority = DISPATCH_QUEUE_PRIORITY_DEFAULT;
-			opsPriority = DISPATCH_QUEUE_PRIORITY_LOW;
-			break;
 		case DISPATCH_QUEUE_PRIORITY_LOW:
 		case DISPATCH_QUEUE_PRIORITY_BACKGROUND:
-			cmdPriority = DISPATCH_QUEUE_PRIORITY_LOW;
-			opsPriority = DISPATCH_QUEUE_PRIORITY_BACKGROUND;
 			break;
 		default:
 			assert(!"Invalid Priority Value");
@@ -174,8 +156,9 @@
 		}
 		_priority = priority;
 		
-		dispatch_set_target_queue(_opRunnerQueue, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0));
-		dispatch_set_target_queue(_operationsQueue, dispatch_get_global_queue(opsPriority, 0));
+		dispatch_queue_t target = dispatch_get_global_queue(priority, 0);
+		dispatch_set_target_queue(_opRunnerQueue, target);
+		dispatch_set_target_queue(_operationsQueue, target);
 	}
 }
 
@@ -190,7 +173,7 @@
 	{
 		[self adjustOperationsTotal:1];	// peg immediately
 		__weak __typeof__(self) weakSelf = self;
-		op.finishBlock =   ^{
+		op.deallocBlock =   ^{
 								__typeof__(self) strongSelf = weakSelf;
 								if(strongSelf) {
 									dispatch_semaphore_signal(strongSelf.deallocs);
@@ -231,7 +214,7 @@
 		__weak __typeof__(self) weakSelf = self;
 		[ops enumerateObjectsUsingBlock:^(ConcurrentOperation *op, BOOL *stop)
 			{
-				op.finishBlock = ^	{
+				op.deallocBlock = ^	{
 										__typeof__(self) strongSelf = weakSelf;
 										if(strongSelf) {
 											dispatch_semaphore_signal(strongSelf.deallocs);
@@ -271,7 +254,7 @@
 	}
 	
 	dispatch_semaphore_signal(_dataSema);
-
+	
 	return ret;
 }
 - (NSSet *)addOps:(NSSet *)ops
@@ -413,10 +396,16 @@ holdCount = hc;
 	return (ret || cancelFailures) ? NO : YES;
 }
 
-- (void)restartOperations
+- (BOOL)restartOperations
 {
 	self.delegate = self.savedDelegate;
 	self.cancelled = NO;
+	return YES;
+}
+
+- (BOOL)disposeOperations
+{
+	return YES;
 }
 
 #ifdef VERIFY_DEALLOC

@@ -9,11 +9,18 @@
 #include <signal.h>
 #include <libkern/OSAtomic.h>
 
-#import "FECWF5_Tests.h"
+#import "FECWF_Tests.h"
 
+#if __IPHONE_OS_VERSION_MIN_REQUIRED >= 60000
+#import "OperationsRunner6.h"
+#import "OperationsRunnerProtocol6.h"
+#else
 #import "OperationsRunner.h"
+#import "OperationsRunnerProtocol.h"
+#endif
+
 #import "TestOperationProtocol.h"
-#import "TestOperation5.h"
+#import "TestOperation.h"
 
 #define MIN_TEST	0	// Starting test, but 0 always runs
 #define MAX_TEST	8	// Last test
@@ -66,11 +73,11 @@ static void myAlrm(int sig)
 
 // //typedef enum {nofailure, failAtSetup, failAtStartup, failAfterFirstMsg, failWithFailureMsg } forceFailure;
 
-@interface FastEasyConcurrentWebFetchesTests () <OperationsRunnerProtocol, TestOperationProtocol>
+@interface FECWF_Tests () <OperationsRunnerProtocol, TestOperationProtocol>
 
 @end
 
-@interface FastEasyConcurrentWebFetchesTests (OperationsRunner)
+@interface FECWF_Tests (OperationsRunner)
 
 - (OperationsRunner *)operationsRunner;				// get the current instance (or create it)
 - (void)runOperation:(ConcurrentOperation *)op withMsg:(NSString *)msg;	// to submit an operation
@@ -81,7 +88,7 @@ static void myAlrm(int sig)
 
 @end
 
-@implementation FastEasyConcurrentWebFetchesTests
+@implementation FECWF_Tests
 {
 	__block int			opFailed, opSucceeded, opNeverRan;
 	int32_t				stageCounters[atEnd];

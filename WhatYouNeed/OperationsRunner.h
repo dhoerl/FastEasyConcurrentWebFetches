@@ -44,7 +44,7 @@ typedef enum { msgDelOnMainThread=0, msgDelOnAnyThread, msgOnSpecificThread, msg
 @property (nonatomic, assign) BOOL noDebugMsgs;					// suppress debug messages
 @property (nonatomic, assign) long priority;					// targets the internal GCD queue doleing out the operations
 @property (nonatomic, assign) NSUInteger maxOps;				// set the NSOperationQueue's maxConcurrentOperationCount
-@property (nonatomic, assign) NSUInteger mSecCancelDelay;		// set the NSOperationQueue's maxConcurrentOperationCount
+@property (nonatomic, assign) NSUInteger mSecCancelDelay;		// set the milliseconds wait time for operations to respond to the cancel command
 
 // These methods are for direct messaging. The reason cancelOperations is here is to prevent the creattion of an object, just to cancel it.
 - (id)initWithDelegate:(id <OperationsRunnerProtocol>)del;		// designated initializer
@@ -62,16 +62,15 @@ typedef enum { msgDelOnMainThread=0, msgDelOnAnyThread, msgOnSpecificThread, msg
 // 3) Add this method to the implementation file (I put it at the bottom, could go into a category too)
 - (id)forwardingTargetForSelector:(SEL)sel
 {
+	static BOOL opRunnerKey;
+	id obj = objc_getAssociatedObject(self, &opRunnerKey);
+	// Look for common selectors first
 	if(
 		sel == @selector(runOperation:withMsg:)	|| 
 		sel == @selector(runOperations:)		||
 		sel == @selector(operationsCount)		||
-		sel == @selector(cancelOperations)		||
-		sel == @selector(restartOperations)		||
 		sel == @selector(operationsRunner)
 	) {
-		static BOOL myKey;
-		id obj = objc_getAssociatedObject(self, &myKey);
 		if(!obj) {
 			if(sel == @selector(cancelOperations)) {
 				// cancel sent in say dealloc, don't create an object just to release it
@@ -79,7 +78,7 @@ typedef enum { msgDelOnMainThread=0, msgDelOnAnyThread, msgOnSpecificThread, msg
 			} else {
 				// Object only created if needed. NOT THREAD SAFE (if you need that use a dispatch semaphone to insure only one object created
 				obj = [[OperationsRunner alloc] initWithDelegate:self];
-				objc_setAssociatedObject(self, &myKey, obj, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+				objc_setAssociatedObject(self, &opRunnerKey, obj, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 				{
 					// Set priorities once, or optionally you can ask [self operationsRunner] to get/create the item, and set/change these dynamically
 					// OperationsRunner *OperationsRunner = (OperationsRunner *)obj;
@@ -90,6 +89,22 @@ typedef enum { msgDelOnMainThread=0, msgDelOnAnyThread, msgOnSpecificThread, msg
 			}
 		}
 		return obj;
+	} else
+	if(
+		sel == @selector(cancelOperations)		||
+		sel == @selector(restartOperations)		||
+		sel == @selector(disposeOperations)
+	) {
+		if(!obj) {
+			// cancel sent in say dealloc, don't create an object just to release it
+			obj = [OperationsRunner class];
+		} else {
+			if(sel == @selector(disposeOperations)) {
+				objc_setAssociatedObject(self, &opRunnerKey, nil, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+				// cancel sent in say dealloc, don't create an object just to release it
+			}
+		}
+		return obj;
 	} else {
 		return [super forwardingTargetForSelector:sel];
 	}
@@ -97,6 +112,9 @@ typedef enum { msgDelOnMainThread=0, msgDelOnAnyThread, msgOnSpecificThread, msg
 
 // 4) Declare a category with these methods in the interface or implementation file (change MyClass to your class)
 //    Put in your interface file if you want these to be used by other classes, or in the implementation to make them private
+@class OperationsRunner;
+@class ConcurrentOperation;
+
 @interface MyClass (OperationsRunner)
 
 - (OperationsRunner *)operationsRunner;				// get the current instance (or create it)
@@ -104,7 +122,8 @@ typedef enum { msgDelOnMainThread=0, msgDelOnAnyThread, msgOnSpecificThread, msg
 - (BOOL)runOperations:(NSSet *)operations;			// Set of ConcurrentOperation objects with their runMessage set (or not)
 - (NSUInteger)operationsCount;						// returns the total number of outstanding operations
 - (BOOL)cancelOperations;							// stop all work, will not get any more delegate calls after it returns, returns YES if everything torn down properly
-- (void)restartOperations;							// restart things
+- (BOOL)restartOperations;							// restart things
+- (BOOL)disposeOperations;							// dealloc the OperationsRunner (only needed for special cases where you really want to get rid of all helper objects)
 
 @end
 

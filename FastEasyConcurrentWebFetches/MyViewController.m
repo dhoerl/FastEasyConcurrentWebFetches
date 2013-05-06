@@ -24,9 +24,14 @@
 #import "MyViewController.h"
 
 #import "URfetcher.h"
-// 3) Add the header to the implementation file
+
+#if __IPHONE_OS_VERSION_MIN_REQUIRED >= 60000
+#import "OperationsRunner6.h"
+#import "OperationsRunnerProtocol6.h"
+#else
 #import "OperationsRunner.h"
 #import "OperationsRunnerProtocol.h"
+#endif
 
 static NSUInteger lastOperationsCount;
 static NSUInteger lastMaxConcurrent;
@@ -51,8 +56,6 @@ static NSUInteger lastPriority;
 	IBOutlet UISegmentedControl *priority;
 	IBOutlet UILabel *elapsedTime;
 
-	// 1) Add either a property or an ivar to the implementation file
-	OperationsRunner *operationsRunner;
 	NSDate *startDate;
 }
 
@@ -152,7 +155,7 @@ static NSUInteger lastPriority;
 {
 	lastMaxConcurrent = (NSUInteger)lrintf([(UISlider *)sender value]);
 	maxConcurrentText.text = [NSString stringWithFormat:@"%u", lastMaxConcurrent];
-	operationsRunner.maxOps = lastMaxConcurrent;
+	[self operationsRunner].maxOps = lastMaxConcurrent;
 }
 
 - (IBAction)priorityAction:(id)sender
@@ -169,7 +172,7 @@ static NSUInteger lastPriority;
 	case 2:	val = DISPATCH_QUEUE_PRIORITY_LOW;			break;
 	case 3:	val = DISPATCH_QUEUE_PRIORITY_BACKGROUND;	break;
 	}
-	operationsRunner.priority = val;
+	[self operationsRunner].priority = val;
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -201,27 +204,48 @@ static NSUInteger lastPriority;
 // 4) Add this method to the implementation file
 - (id)forwardingTargetForSelector:(SEL)sel
 {
+	static BOOL opRunnerKey;
+	id obj = objc_getAssociatedObject(self, &opRunnerKey);
+	// Look for common selectors first
 	if(
 		sel == @selector(runOperation:withMsg:)	|| 
 		sel == @selector(runOperations:)		||
 		sel == @selector(operationsCount)		||
-		sel == @selector(cancelOperations)		||
-		sel == @selector(restartOperations)
+		sel == @selector(operationsRunner)
 	) {
-		if(!operationsRunner) {
+		if(!obj) {
 			if(sel == @selector(cancelOperations)) {
 				// cancel sent in say dealloc, don't create an object just to release it
-				return [OperationsRunner class];
+				obj = [OperationsRunner class];
+			} else {
+				// Object only created if needed. NOT THREAD SAFE (if you need that use a dispatch semaphone to insure only one object created
+				obj = [[OperationsRunner alloc] initWithDelegate:self];
+				objc_setAssociatedObject(self, &opRunnerKey, obj, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+				{
+					// Set priorities once, or optionally you can ask [self operationsRunner] to get/create the item, and set/change these dynamically
+					OperationsRunner *operationsRunner = (OperationsRunner *)obj;
+					operationsRunner.maxOps = lastMaxConcurrent;
+					[self priorityAction:priority];	// sets priority
+				}
 			}
-			// Object only created if needed
-			operationsRunner = [[OperationsRunner alloc] initWithDelegate:self];
-			operationsRunner.maxOps = lastMaxConcurrent;
-			[self priorityAction:priority];	// sets priority
-			// operationsRunner.priority = DISPATCH_QUEUE_PRIORITY_BACKGROUND;	// for example
-			// operationsRunner.maxOps = 4;										// for example
-			// operationsRunner.mSecCancelDelay = 10;							// for example
 		}
-		return operationsRunner;
+		return obj;
+	} else
+	if(
+		sel == @selector(cancelOperations)		||
+		sel == @selector(restartOperations)		||
+		sel == @selector(disposeOperations)
+	) {
+		if(!obj) {
+			// cancel sent in say dealloc, don't create an object just to release it
+			obj = [OperationsRunner class];
+		} else {
+			if(sel == @selector(disposeOperations)) {
+				objc_setAssociatedObject(self, &opRunnerKey, nil, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+				// cancel sent in say dealloc, don't create an object just to release it
+			}
+		}
+		return obj;
 	} else {
 		return [super forwardingTargetForSelector:sel];
 	}

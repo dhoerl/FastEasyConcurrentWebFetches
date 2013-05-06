@@ -23,19 +23,19 @@
 
 // Unit Testing
 #if defined(UNIT_TESTING)
-typedef enum {forcingOff=0, forceSuccess, forceFailure, forceRetry } forceMode;
+typedef enum { forcingOff=0, failAtSetup, failAtStartup, forceSuccess, forceFailure, forceRetry } forceMode;
 #endif
 
 #import "ConcurrentOperation.h"
 
 @interface WebFetcher : ConcurrentOperation
+@property (atomic, strong, readonly) NSMutableData *webData;
 @property (nonatomic, copy) NSString *urlStr;
-@property (nonatomic, strong, readonly) NSMutableData *webData;
 @property (nonatomic, strong) NSError *error;
 @property (nonatomic, copy) NSString *errorMessage;
 @property (nonatomic, assign) NSUInteger htmlStatus;
 #if defined(UNIT_TESTING)
-@property (nonatomic, assign) forceMode force;
+@property (nonatomic, assign) forceMode forceAction;
 #endif
 
 + (BOOL)printDebugging;

@@ -24,15 +24,18 @@
 @interface MyViewController : UIViewController
 @end
 
+@class OperationsRunner;
 @class ConcurrentOperation;
 
 // 5) Declare a category with these methods in the interface file (ie public) (change MyClass to your class)
 @interface MyViewController (OperationsRunner)
 
+- (OperationsRunner *)operationsRunner;				// get the current instance (or create it)
 - (void)runOperation:(ConcurrentOperation *)op withMsg:(NSString *)msg;	// to submit an operation
 - (BOOL)runOperations:(NSSet *)operations;			// Set of ConcurrentOperation objects with their runMessage set (or not)
 - (NSUInteger)operationsCount;						// returns the total number of outstanding operations
 - (BOOL)cancelOperations;							// stop all work, will not get any more delegate calls after it returns, returns YES if everything torn down properly
-- (void)restartOperations;							// restart things
+- (BOOL)restartOperations;							// restart things
+- (BOOL)disposeOperations;							// dealloc the OperationsRunner (only needed for special cases where you really want to get rid of all helper objects)
 
 @end
