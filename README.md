@@ -11,6 +11,13 @@ This code, migrated from NSOperation-WebFetches-MadeEasy, was the basis of the L
 
 UPDATES:
 
+  2.0 (5/6/2013): Massive re-write with Unit Tests
+    - Created two folders of needed files, one for iOS5 the other for iOS6
+	- iOS5 uses the preexisiting runloop sleeping, and was migrated from NSOperations to pure blocks
+	- iOS6 drops ConcurrentOperations, uses WebFetchers as the base operation class, and uses the now working setDelegateQueue: method for delegate callbacks
+	- 8 unit tests that work for both iOS5 and iOS6
+	- integration steps reduced from 6 to 4, no need for even an ivar now
+
   1.1 (4/23/2013): Improved diagnostics
     - new compile time flag VERIFY_DEALLOC does a final test to verify all operations have been dealloced
 	- new 'start' method removes the need to send a 'connect:' message in the 'setup' method
