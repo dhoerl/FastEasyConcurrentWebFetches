@@ -14,9 +14,13 @@
 #if __IPHONE_OS_VERSION_MIN_REQUIRED >= 60000
 #import "OperationsRunner6.h"
 #import "OperationsRunnerProtocol6.h"
+#define FECWF_RUN_OPERATION_TYPE		FECWF_WEBFETCHER
+#import "URfetcher6.h"
 #else
 #import "OperationsRunner.h"
 #import "OperationsRunnerProtocol.h"
+#import "URfetcher.h"
+#define FECWF_RUN_OPERATION_TYPE		FECWF_CONCURRENT_OPERATION
 #endif
 
 #import "TestOperationProtocol.h"
@@ -25,10 +29,10 @@
 #define MIN_TEST	0	// Starting test, but 0 always runs
 #define MAX_TEST	8	// Last test
 
-#define MAX_OPS		4	// OperationQueue max
+#define MAX_OPS		10	// OperationQueue max
 #define NUM_OPS		(10*MAX_OPS)	// loops per test, must be multiple of MAX_OPS
 
-#define iCount		1	// loops per test
+#define iCount		10	// loops per test
 
 #if 0	// 0 == no debug, 1 == lots of mesages
 #define TLOG(...) NSLog(__VA_ARGS__)
@@ -73,15 +77,15 @@ static void myAlrm(int sig)
 
 // //typedef enum {nofailure, failAtSetup, failAtStartup, failAfterFirstMsg, failWithFailureMsg } forceFailure;
 
-@interface FECWF_Tests () <OperationsRunnerProtocol, TestOperationProtocol>
+@interface FECWF_Tests () <FECWF_OPSRUNNER_PROTOCOL, TestOperationProtocol>
 
 @end
 
 @interface FECWF_Tests (OperationsRunner)
 
 - (OperationsRunner *)operationsRunner;				// get the current instance (or create it)
-- (void)runOperation:(ConcurrentOperation *)op withMsg:(NSString *)msg;	// to submit an operation
-- (BOOL)runOperations:(NSSet *)operations;			// Set of ConcurrentOperation objects with their runMessage set (or not)
+- (void)runOperation:(FECWF_RUN_OPERATION_TYPE *)op withMsg:(NSString *)msg;	// to submit an operation
+- (BOOL)runOperations:(NSSet *)operations;			// Set of FECWF_CONCURRENT_OPERATION objects with their runMessage set (or not)
 - (NSUInteger)operationsCount;						// returns the total number of outstanding operations
 - (BOOL)cancelOperations;							// stop all work, will not get any more delegate calls after it returns, returns YES if everything torn down properly
 - (void)restartOperations;							// restart things
@@ -161,7 +165,19 @@ static void myAlrm(int sig)
 			TestOperation *t = [TestOperation new];
 			t.delegate = self;
 			t.forceAction = forceSuccess;
-			[self runOperation:t withMsg:[NSString stringWithFormat:@"Op %d", j]];
+			{
+				long priority;
+				switch((j+i) % 4) {
+				case 0:	priority = DISPATCH_QUEUE_PRIORITY_HIGH; break;
+				case 1:	priority = DISPATCH_QUEUE_PRIORITY_DEFAULT; break;
+				case 2:	priority = DISPATCH_QUEUE_PRIORITY_LOW; break;
+				case 3:	default: priority = DISPATCH_QUEUE_PRIORITY_BACKGROUND;	break;
+				}
+				dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^
+					{
+						[self runOperation:t withMsg:[NSString stringWithFormat:@"Op %d", j]];
+					} );
+			}
 		}
 		WAIT_UNTIL(count == [self adjustOperationsCount:0 atStage:atMain], 1, @"Operations did not start running");
 
@@ -184,7 +200,19 @@ static void myAlrm(int sig)
 			TestOperation *t = [TestOperation new];
 			t.delegate = self;
 			t.forceAction = forceFailure;
-			[self runOperation:t withMsg:[NSString stringWithFormat:@"Op %d", j]];
+			{
+				long priority;
+				switch((j+i) % 4) {
+				case 0:	priority = DISPATCH_QUEUE_PRIORITY_HIGH; break;
+				case 1:	priority = DISPATCH_QUEUE_PRIORITY_DEFAULT; break;
+				case 2:	priority = DISPATCH_QUEUE_PRIORITY_LOW; break;
+				case 3:	default: priority = DISPATCH_QUEUE_PRIORITY_BACKGROUND;	break;
+				}
+				dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^
+					{
+						[self runOperation:t withMsg:[NSString stringWithFormat:@"Op %d", j]];
+					} );
+			}
 		}
 		WAIT_UNTIL(count == [self adjustOperationsCount:0 atStage:atMain], 1, @"Operations did not start running");
 
@@ -204,10 +232,26 @@ static void myAlrm(int sig)
 		for(int j=0; j<count; ++j) {
 			TestOperation *t = [TestOperation new];
 			t.delegate = self;
-			[self runOperation:t withMsg:[NSString stringWithFormat:@"Op %d", j]];
+			{
+				long priority;
+				switch((j+i) % 4) {
+				case 0:	priority = DISPATCH_QUEUE_PRIORITY_HIGH; break;
+				case 1:	priority = DISPATCH_QUEUE_PRIORITY_DEFAULT; break;
+				case 2:	priority = DISPATCH_QUEUE_PRIORITY_LOW; break;
+				case 3:	default: priority = DISPATCH_QUEUE_PRIORITY_BACKGROUND;	break;
+				}
+				dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^
+					{
+						[self runOperation:t withMsg:[NSString stringWithFormat:@"Op %d", j]];
+					} );
+			}
 		}
 		[self cancelOperations];
 		
+		sleep(2);
+		if([self operationsCount]) {
+			NSLog(@"OPERATIONS: %@", [[self operationsRunner] description]);
+		}
 		WAIT_UNTIL([self operationsCount] == 0, 1, @"Some operation did not cancel");
 
 //NSLog(@"COUNT0=%d", [self adjustOperationsCount:0 atStage:atMain]);
@@ -352,7 +396,7 @@ static void myAlrm(int sig)
 	__block int cnt = 0;
 	for(int i=0; i<10; ++i) {
 		cnt = 0;
-		[operationsRunner enumerateOperations:^(ConcurrentOperation *op)
+		[operationsRunner enumerateOperations:^(FECWF_CONCURRENT_OPERATION *op)
 			{
 				if(op.isExecuting) {
 					dispatch_group_async(group, queue, ^
@@ -400,7 +444,7 @@ static void myAlrm(int sig)
 	[self adjustOperationsCount:1 atStage:stage];
 }
 
-- (void)operationFinished:(ConcurrentOperation *)op count:(NSUInteger)remainingOps	// on queue
+- (void)operationFinished:(FECWF_RUN_OPERATION_TYPE *)op count:(NSUInteger)remainingOps	// on queue
 {
 	TestOperation *t = (TestOperation *)op;
 
@@ -420,31 +464,41 @@ static void myAlrm(int sig)
 
 - (id)forwardingTargetForSelector:(SEL)sel
 {
+	static BOOL opRunnerKey;
+	id obj = objc_getAssociatedObject(self, &opRunnerKey);
+	// Look for common selectors first
 	if(
 		sel == @selector(runOperation:withMsg:)	|| 
 		sel == @selector(runOperations:)		||
 		sel == @selector(operationsCount)		||
-		sel == @selector(cancelOperations)		||
-		sel == @selector(restartOperations)		||
 		sel == @selector(operationsRunner)
 	) {
-		static BOOL myKey;
-		id obj = objc_getAssociatedObject(self, &myKey);
 		if(!obj) {
-			if(sel == @selector(cancelOperations)) {
+			// Object only created if needed. NOT THREAD SAFE (if you need that use a dispatch semaphone to insure only one object created
+			obj = [[OperationsRunner alloc] initWithDelegate:self];
+			objc_setAssociatedObject(self, &opRunnerKey, obj, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+			{
+				// Set priorities once, or optionally you can ask [self operationsRunner] to get/create the item, and set/change these dynamically
+				// OperationsRunner *operationsRunner = (OperationsRunner *)obj;
+				// operationsRunner.priority = DISPATCH_QUEUE_PRIORITY_BACKGROUND;	// for example
+				// operationsRunner.maxOps = 4;										// for example
+				// operationsRunner.mSecCancelDelay = 10;							// for example
+			}
+		}
+		return obj;
+	} else
+	if(
+		sel == @selector(cancelOperations)		||
+		sel == @selector(restartOperations)		||
+		sel == @selector(disposeOperations)
+	) {
+		if(!obj) {
+			// cancel sent in say dealloc, don't create an object just to release it
+			obj = [OperationsRunner class];
+		} else {
+			if(sel == @selector(disposeOperations)) {
+				objc_setAssociatedObject(self, &opRunnerKey, nil, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 				// cancel sent in say dealloc, don't create an object just to release it
-				obj = [OperationsRunner class];
-			} else {
-				// Object only created if needed. NOT THREAD SAFE (if you need that use a dispatch semaphone to insure only one object created
-				obj = [[OperationsRunner alloc] initWithDelegate:self];
-				objc_setAssociatedObject(self, &myKey, obj, OBJC_ASSOCIATION_RETAIN);
-				{
-					// Set priorities once, or optionally you can ask [self operationsRunner] to get/create the item, and set/change these dynamically
-					// OperationsRunner *OperationsRunner = (OperationsRunner *)obj;
-					// operationsRunner.priority = DISPATCH_QUEUE_PRIORITY_BACKGROUND;	// for example
-					// operationsRunner.maxOps = 4;										// for example
-					// operationsRunner.mSecCancelDelay = 10;							// for example
-				}
 			}
 		}
 		return obj;

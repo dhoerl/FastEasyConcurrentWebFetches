@@ -29,13 +29,13 @@
 #define LOG(...)
 #endif
 
-@interface ConcurrentOperation (DoesNotExist)
+@interface FECWF_CONCURRENT_OPERATION (DoesNotExist)
 
 - (void)timer:(NSTimer *)t; // keep the compiler happy with an unfullfilled promise
 
 @end
 
-@interface ConcurrentOperation ()
+@interface FECWF_CONCURRENT_OPERATION ()
 @property(atomic, weak, readwrite) NSThread *thread;
 @property(atomic, assign, readwrite) BOOL isCancelled;
 @property(atomic, assign, readwrite) BOOL isExecuting;
@@ -44,7 +44,7 @@
 
 @end
 
-@implementation ConcurrentOperation
+@implementation FECWF_CONCURRENT_OPERATION
 {
 	dispatch_semaphore_t semaphore;
 }

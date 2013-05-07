@@ -19,6 +19,7 @@
 	//NSUInteger timerMax;
 }
 
+#if __IPHONE_OS_VERSION_MIN_REQUIRED < 60000
 - (void)main
 {
 	// Idea is to artificially create some startup delay
@@ -33,6 +34,7 @@
 
 	[self.delegate register:self atStage:atExit];
 }
+#endif
 
 - (id)setup
 {

@@ -21,11 +21,15 @@
 // THE SOFTWARE.
 //
 
-@class ConcurrentOperation;
+#import "ConcurrentOperation.h"
 
-@protocol OperationsRunnerProtocol <NSObject>
+#ifndef FECWF_OPSRUNNER_PROTOCOL
+#define FECWF_OPSRUNNER_PROTOCOL OperationsRunnerProtocol
+#endif
+
+@protocol FECWF_OPSRUNNER_PROTOCOL <NSObject>
 
 // can get this on main thread (default), a specific thread you request, or anyThread
-- (void)operationFinished:(ConcurrentOperation *)op count:(NSUInteger)remainingOps;
+- (void)operationFinished:(FECWF_CONCURRENT_OPERATION *)op count:(NSUInteger)remainingOps;
 
 @end

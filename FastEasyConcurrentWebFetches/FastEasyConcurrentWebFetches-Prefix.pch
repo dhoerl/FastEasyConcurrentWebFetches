@@ -4,11 +4,19 @@
 
 #import <Availability.h>
 
-#ifndef __IPHONE_4_0
-#warning "This project uses features only available in iOS SDK 4.0 and later."
+#ifndef __IPHONE_5_1
+#warning "This project uses features only available in iOS SDK 5.1 and later."
 #endif
 
 #ifdef __OBJC__
 	#import <UIKit/UIKit.h>
 	#import <Foundation/Foundation.h>
+
+#if 1
+	#define FECWF_CONCURRENT_OPERATION		MyConcurrentOperation
+	#define FECWF_WEBFETCHER				MyWebFetcher
+	#define FECWF_OPERATIONSRUNNER			MyOperationRunner
+	#define FECWF_OPSRUNNER_PROTOCOL		MyOperationRunnerProtocol
+#endif
+
 #endif

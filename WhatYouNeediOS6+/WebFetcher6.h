@@ -21,15 +21,19 @@
 // THE SOFTWARE.
 //
 
+#ifndef FECWF_WEBFETCHER
+#define FECWF_WEBFETCHER WebFetcher
+#endif
+
 // Unit Testing
 #if defined(UNIT_TESTING)
 typedef enum { forcingOff=0, failAtSetup, failAtStartup, forceSuccess, forceFailure, forceRetry } forceMode;
 #endif
 
-@class WebFetcher;
-typedef void(^finishBlock)(WebFetcher *op);
+@class FECWF_WEBFETCHER;
+typedef void(^finishBlock)(FECWF_WEBFETCHER *op);
 
-@interface WebFetcher : NSObject
+@interface FECWF_WEBFETCHER : NSObject
 @property (atomic, assign, readonly) BOOL isCancelled;
 @property (atomic, assign, readonly) BOOL isExecuting;
 @property (atomic, assign, readonly) BOOL isFinished;
@@ -66,5 +70,5 @@ typedef void(^finishBlock)(WebFetcher *op);
 
 @end
 
-@interface WebFetcher (NSURLConnectionDelegate) <NSURLConnectionDelegate, NSURLConnectionDataDelegate>
+@interface FECWF_WEBFETCHER (NSURLConnectionDelegate) <NSURLConnectionDelegate, NSURLConnectionDataDelegate>
 @end

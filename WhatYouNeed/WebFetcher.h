@@ -21,14 +21,18 @@
 // THE SOFTWARE.
 //
 
+#import "ConcurrentOperation.h"
+
 // Unit Testing
 #if defined(UNIT_TESTING)
 typedef enum { forcingOff=0, failAtSetup, failAtStartup, forceSuccess, forceFailure, forceRetry } forceMode;
 #endif
 
-#import "ConcurrentOperation.h"
+#ifndef FECWF_WEBFETCHER
+#define FECWF_WEBFETCHER WebFetcher
+#endif
 
-@interface WebFetcher : ConcurrentOperation
+@interface FECWF_WEBFETCHER : FECWF_CONCURRENT_OPERATION
 @property (atomic, strong, readonly) NSMutableData *webData;
 @property (nonatomic, copy) NSString *urlStr;
 @property (nonatomic, strong) NSError *error;
@@ -47,5 +51,6 @@ typedef enum { forcingOff=0, failAtSetup, failAtStartup, forceSuccess, forceFail
 
 @end
 
-@interface WebFetcher (NSURLConnectionDelegate) <NSURLConnectionDelegate, NSURLConnectionDataDelegate>
+// Advises subclasses
+@interface FECWF_WEBFETCHER (NSURLConnectionDelegate) <NSURLConnectionDelegate, NSURLConnectionDataDelegate>
 @end

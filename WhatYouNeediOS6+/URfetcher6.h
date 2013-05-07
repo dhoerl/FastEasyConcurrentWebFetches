@@ -22,8 +22,8 @@
 // THE SOFTWARE.
 //
 
-#import "WebFetcher.h"
+#import "WebFetcher6.h"
 
-@interface URfetcher : WebFetcher
+@interface URfetcher : FECWF_WEBFETCHER
 
 @end

@@ -24,6 +24,6 @@
 
 #import "WebFetcher.h"
 
-@interface URfetcher : WebFetcher
+@interface URfetcher : FECWF_WEBFETCHER
 
 @end

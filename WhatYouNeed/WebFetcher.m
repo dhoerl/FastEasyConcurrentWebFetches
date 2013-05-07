@@ -29,13 +29,13 @@
 
 #define LOG NSLog
 
-@interface WebFetcher ()
+@interface FECWF_WEBFETCHER ()
 @property(nonatomic, strong) NSURLConnection *connection;
 @property(atomic, strong, readwrite) NSMutableData *webData;
 
 @end
 
-@implementation WebFetcher
+@implementation FECWF_WEBFETCHER
 {
 	NSUInteger responseLength;
 }
@@ -97,7 +97,7 @@
 				weakSelf.htmlStatus = 200;
 				weakSelf.webData = [NSMutableData dataWithCapacity:256];
 				[weakSelf performSelector:@selector(completed) onThread:self.thread withObject:nil waitUntilDone:NO];
-				//[weakSelf performBlock:^(ConcurrentOperation *op) { [op completed]; }];
+				//[weakSelf performBlock:^(FECWF_CONCURRENT_OPERATION *op) { [op completed]; }];
 			} );
 		return YES;
 	}	break;
@@ -109,7 +109,7 @@
 			{
 				weakSelf.htmlStatus = 400;
 				[weakSelf performSelector:@selector(failed) onThread:weakSelf.thread withObject:nil waitUntilDone:NO];
-				//[weakSelf performBlock:^(ConcurrentOperation *op) { [op failed]; }];
+				//[weakSelf performBlock:^(FECWF_CONCURRENT_OPERATION *op) { [op failed]; }];
 			} );
 		return YES;
 	} break;
@@ -122,7 +122,7 @@
 				weakSelf.error = [NSError errorWithDomain:@"NSURLErrorDomain" code:-1001 userInfo:@{ NSLocalizedDescriptionKey : @"timed out" }];	// Timeout
 				weakSelf.errorMessage = @"Forced Failure";
 				[weakSelf performSelector:@selector(failed) onThread:weakSelf.thread withObject:nil waitUntilDone:NO];
-				//[weakSelf performBlock:^(ConcurrentOperation *op) { [op failed]; }];
+				//[weakSelf performBlock:^(FECWF_CONCURRENT_OPERATION *op) { [op failed]; }];
 			} );
 		return YES;
 	} break;
@@ -184,7 +184,7 @@
 
 @end
 
-@implementation WebFetcher (NSURLConnectionDelegate)
+@implementation FECWF_WEBFETCHER (NSURLConnectionDelegate)
 
 - (NSURLRequest *)connection:(NSURLConnection *)_conn willSendRequest:(NSURLRequest *)request redirectResponse:(NSHTTPURLResponse *)redirectResponse	// NSURLResponse NSHTTPURLResponse
 {

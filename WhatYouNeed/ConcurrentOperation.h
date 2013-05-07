@@ -21,7 +21,11 @@
 // THE SOFTWARE.
 //
 
-@interface ConcurrentOperation : NSObject
+#ifndef FECWF_CONCURRENT_OPERATION
+#define FECWF_CONCURRENT_OPERATION ConcurrentOperation
+#endif
+
+@interface FECWF_CONCURRENT_OPERATION : NSObject
 @property (nonatomic, copy) NSString *runMessage;		// debugging
 @property (atomic, assign, readonly) BOOL isCancelled;
 @property (atomic, assign, readonly) BOOL isExecuting;
@@ -37,7 +41,7 @@
 @end
 
 // These are here for subclassers and not intended for general use
-@interface ConcurrentOperation (ForSubClassesInternalUse)
+@interface FECWF_CONCURRENT_OPERATION (ForSubClassesInternalUse)
 
 - (id)setup;								// get the app started, object->continue, nil->failed so return
 - (BOOL)start:(id)setupObject;				// called after setup has succeeded with the setup's returned value

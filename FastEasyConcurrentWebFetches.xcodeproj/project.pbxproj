@@ -83,24 +83,24 @@
 /* Begin PBXFileReference section */
 		DE956F4E1729E1E70026179D /* TestOperationProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TestOperationProtocol.h; sourceTree = "<group>"; };
 		DE956F4F1729E2700026179D /* TestOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestOperation.m; sourceTree = "<group>"; };
-		DE956F501729E2700026179D /* TestOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestOperation.h; sourceTree = "<group>"; };
+		DE956F501729E2700026179D /* TestOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = TestOperation.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		DECB1FF51733F9B40050C8F4 /* FECW For iOS5 copy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "FECW For iOS5 copy.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DECB200B1733F9C70050C8F4 /* FECW iOS6 Tests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "FECW iOS6 Tests.octest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		DECB201017340DC90050C8F4 /* OperationsRunner6.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OperationsRunner6.h; sourceTree = "<group>"; };
-		DECB201117340DC90050C8F4 /* OperationsRunner6.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OperationsRunner6.m; sourceTree = "<group>"; };
-		DECB201217340DC90050C8F4 /* OperationsRunnerProtocol6.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OperationsRunnerProtocol6.h; sourceTree = "<group>"; };
-		DECB201317340DC90050C8F4 /* URfetcher6.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = URfetcher6.h; sourceTree = "<group>"; };
+		DECB201017340DC90050C8F4 /* OperationsRunner6.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = OperationsRunner6.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		DECB201117340DC90050C8F4 /* OperationsRunner6.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = OperationsRunner6.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		DECB201217340DC90050C8F4 /* OperationsRunnerProtocol6.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = OperationsRunnerProtocol6.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		DECB201317340DC90050C8F4 /* URfetcher6.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = URfetcher6.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		DECB201417340DC90050C8F4 /* URfetcher6.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = URfetcher6.m; sourceTree = "<group>"; };
 		DECB201517340DC90050C8F4 /* WebFetcher6.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebFetcher6.h; sourceTree = "<group>"; };
 		DECB201617340DC90050C8F4 /* WebFetcher6.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebFetcher6.m; sourceTree = "<group>"; };
 		DECB201E173415570050C8F4 /* ConcurrentOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConcurrentOperation.h; sourceTree = "<group>"; };
 		DECB201F173415570050C8F4 /* ConcurrentOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConcurrentOperation.m; sourceTree = "<group>"; };
-		DECB2020173415570050C8F4 /* OperationsRunner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OperationsRunner.h; sourceTree = "<group>"; };
-		DECB2021173415570050C8F4 /* OperationsRunner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OperationsRunner.m; sourceTree = "<group>"; };
-		DECB2022173415570050C8F4 /* OperationsRunnerProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OperationsRunnerProtocol.h; sourceTree = "<group>"; };
-		DECB2023173415570050C8F4 /* URfetcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = URfetcher.h; sourceTree = "<group>"; };
+		DECB2020173415570050C8F4 /* OperationsRunner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = OperationsRunner.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		DECB2021173415570050C8F4 /* OperationsRunner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = OperationsRunner.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		DECB2022173415570050C8F4 /* OperationsRunnerProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = OperationsRunnerProtocol.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		DECB2023173415570050C8F4 /* URfetcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = URfetcher.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		DECB2024173415570050C8F4 /* URfetcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = URfetcher.m; sourceTree = "<group>"; };
-		DECB2025173415570050C8F4 /* WebFetcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebFetcher.h; sourceTree = "<group>"; };
+		DECB2025173415570050C8F4 /* WebFetcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = WebFetcher.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		DECB2026173415570050C8F4 /* WebFetcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebFetcher.m; sourceTree = "<group>"; };
 		DECB202D17343EF80050C8F4 /* PrintMe */ = {isa = PBXFileReference; lastKnownFileType = text; path = PrintMe; sourceTree = "<group>"; };
 		DEE9159A1722DE520085F570 /* FECWF For iOS5.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "FECWF For iOS5.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -110,7 +110,7 @@
 		DEE915A51722DE520085F570 /* FastEasyConcurrentWebFetches-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "FastEasyConcurrentWebFetches-Info.plist"; sourceTree = "<group>"; };
 		DEE915A71722DE520085F570 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		DEE915A91722DE520085F570 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		DEE915AB1722DE520085F570 /* FastEasyConcurrentWebFetches-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "FastEasyConcurrentWebFetches-Prefix.pch"; sourceTree = "<group>"; };
+		DEE915AB1722DE520085F570 /* FastEasyConcurrentWebFetches-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = "FastEasyConcurrentWebFetches-Prefix.pch"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		DEE915AC1722DE520085F570 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		DEE915AD1722DE520085F570 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		DEE915AF1722DE520085F570 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
@@ -124,12 +124,12 @@
 		DEE915C91722DE520085F570 /* FastEasyConcurrentWebFetchesTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "FastEasyConcurrentWebFetchesTests-Info.plist"; sourceTree = "<group>"; };
 		DEE915CB1722DE520085F570 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		DEE915CD1722DE520085F570 /* FECWF_Tests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FECWF_Tests.h; sourceTree = "<group>"; };
-		DEE915CE1722DE520085F570 /* FECWF_Tests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FECWF_Tests.m; sourceTree = "<group>"; };
+		DEE915CE1722DE520085F570 /* FECWF_Tests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = FECWF_Tests.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		DEE915D91722DEB20085F570 /* MyViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyViewController.h; sourceTree = "<group>"; };
-		DEE915DA1722DEB20085F570 /* MyViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyViewController.m; sourceTree = "<group>"; };
+		DEE915DA1722DEB20085F570 /* MyViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = MyViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		DEE915DB1722DEB20085F570 /* MyViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MyViewController.xib; sourceTree = "<group>"; };
 		DEE915F41722EF380085F570 /* LICENSE.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE.md; sourceTree = SOURCE_ROOT; };
-		DEE915F51722EF380085F570 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = SOURCE_ROOT; };
+		DEE915F51722EF380085F570 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; lineEnding = 0; path = README.md; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -640,7 +640,7 @@
 				GCC_PREFIX_HEADER = "FastEasyConcurrentWebFetches/FastEasyConcurrentWebFetches-Prefix.pch";
 				INFOPLIST_FILE = "FastEasyConcurrentWebFetches/FastEasyConcurrentWebFetches-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
-				PRODUCT_NAME = "FECW For iOS5 copy";
+				PRODUCT_NAME = "FECW For iOS6";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -652,7 +652,7 @@
 				GCC_PREFIX_HEADER = "FastEasyConcurrentWebFetches/FastEasyConcurrentWebFetches-Prefix.pch";
 				INFOPLIST_FILE = "FastEasyConcurrentWebFetches/FastEasyConcurrentWebFetches-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
-				PRODUCT_NAME = "FECW For iOS5 copy";
+				PRODUCT_NAME = "FECW For iOS6";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -664,7 +664,7 @@
 				GCC_PREFIX_HEADER = "FastEasyConcurrentWebFetches/FastEasyConcurrentWebFetches-Prefix.pch";
 				INFOPLIST_FILE = "FastEasyConcurrentWebFetches/FastEasyConcurrentWebFetches-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
-				PRODUCT_NAME = "FECW For iOS5 copy";
+				PRODUCT_NAME = "FECW For iOS6";
 				WRAPPER_EXTENSION = app;
 			};
 			name = ReleaseWithAsserts;
@@ -676,7 +676,7 @@
 				GCC_PREFIX_HEADER = "FastEasyConcurrentWebFetches/FastEasyConcurrentWebFetches-Prefix.pch";
 				INFOPLIST_FILE = "FastEasyConcurrentWebFetches/FastEasyConcurrentWebFetches-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
-				PRODUCT_NAME = "FECW For iOS5 copy";
+				PRODUCT_NAME = "FECW For iOS6";
 				WRAPPER_EXTENSION = app;
 			};
 			name = ReleaseWithAssertsUnitTests;

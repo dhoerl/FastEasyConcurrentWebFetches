@@ -26,7 +26,7 @@
 #import "OperationsRunnerProtocol.h"
 #import "ConcurrentOperation.h"
 
-@protocol OperationsRunnerProtocol;
+@protocol FECWF_OPSRUNNER_PROTOCOL;
 
 // DEFAULTS
 #define DEFAULT_MAX_OPS					4						// Apple suggests a number like 4 for iOS, would not exceed 10, as each is a NSThread
@@ -47,19 +47,26 @@ typedef enum { msgDelOnMainThread=0, msgDelOnAnyThread, msgOnSpecificThread, msg
 @property (nonatomic, assign) NSUInteger mSecCancelDelay;		// set the milliseconds wait time for operations to respond to the cancel command
 
 // These methods are for direct messaging. The reason cancelOperations is here is to prevent the creattion of an object, just to cancel it.
-- (id)initWithDelegate:(id <OperationsRunnerProtocol>)del;		// designated initializer
+- (id)initWithDelegate:(id <FECWF_OPSRUNNER_PROTOCOL>)del;		// designated initializer
 
 @end
 
 #if 0 
 
-// 1) Add the protocol to the class extension interface (often in the interface file)
-@interface MyClass () <OperationsRunnerProtocol>
+// 1) Add these to your .pch file, adding whatever prefix you want, or skip to just get these as defaults
+	#define FECWF_CONCURRENT_OPERATION		ConcurrentOperation
+	#define FECWF_WEBFETCHER				WebFetcher
+	#define FECWF_OPERATIONSRUNNER			OperationRunner
+	#define FECWF_OPSRUNNER_PROTOCOL		OperationRunnerProtocol
 
-// 2) Add the header to the implementation file
+// 2) Add the protocol to the class extension interface (often in the interface file)
+@interface MyClass () <FECWF_OPSRUNNER_PROTOCOL>
+
+// 3) Add the header to the implementation file
 #import "OperationsRunner.h"
+#import "WebFetcher.h" // "WebFetcher6.h"
 
-// 3) Add this method to the implementation file (I put it at the bottom, could go into a category too)
+// 4) Add this method to the implementation file (I put it at the bottom, could go into a category too)
 - (id)forwardingTargetForSelector:(SEL)sel
 {
 	static BOOL opRunnerKey;
@@ -72,20 +79,15 @@ typedef enum { msgDelOnMainThread=0, msgDelOnAnyThread, msgOnSpecificThread, msg
 		sel == @selector(operationsRunner)
 	) {
 		if(!obj) {
-			if(sel == @selector(cancelOperations)) {
-				// cancel sent in say dealloc, don't create an object just to release it
-				obj = [OperationsRunner class];
-			} else {
-				// Object only created if needed. NOT THREAD SAFE (if you need that use a dispatch semaphone to insure only one object created
-				obj = [[OperationsRunner alloc] initWithDelegate:self];
-				objc_setAssociatedObject(self, &opRunnerKey, obj, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-				{
-					// Set priorities once, or optionally you can ask [self operationsRunner] to get/create the item, and set/change these dynamically
-					// OperationsRunner *OperationsRunner = (OperationsRunner *)obj;
-					// operationsRunner.priority = DISPATCH_QUEUE_PRIORITY_BACKGROUND;	// for example
-					// operationsRunner.maxOps = 4;										// for example
-					// operationsRunner.mSecCancelDelay = 10;							// for example
-				}
+			// Object only created if needed. NOT THREAD SAFE (if you need that use a dispatch semaphone to insure only one object created
+			obj = [[OperationsRunner alloc] initWithDelegate:self];
+			objc_setAssociatedObject(self, &opRunnerKey, obj, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+			{
+				// Set priorities once, or optionally you can ask [self operationsRunner] to get/create the item, and set/change these dynamically
+				// OperationsRunner *operationsRunner = (OperationsRunner *)obj;
+				// operationsRunner.priority = DISPATCH_QUEUE_PRIORITY_BACKGROUND;	// for example
+				// operationsRunner.maxOps = 4;										// for example
+				// operationsRunner.mSecCancelDelay = 10;							// for example
 			}
 		}
 		return obj;
@@ -110,16 +112,17 @@ typedef enum { msgDelOnMainThread=0, msgDelOnAnyThread, msgOnSpecificThread, msg
 	}
 }
 
-// 4) Declare a category with these methods in the interface or implementation file (change MyClass to your class)
+// 5) Declare a category with these methods in the interface or implementation file (change MyClass to your class)
 //    Put in your interface file if you want these to be used by other classes, or in the implementation to make them private
-@class OperationsRunner;
-@class ConcurrentOperation;
+
+#import "OperationsRunner.h"
+#import "ConcurrentOperation.h"
 
 @interface MyClass (OperationsRunner)
 
 - (OperationsRunner *)operationsRunner;				// get the current instance (or create it)
-- (void)runOperation:(ConcurrentOperation *)op withMsg:(NSString *)msg;	// to submit an operation
-- (BOOL)runOperations:(NSSet *)operations;			// Set of ConcurrentOperation objects with their runMessage set (or not)
+- (void)runOperation:(FECWF_CONCURRENT_OPERATION *)op withMsg:(NSString *)msg;	// to submit an operation
+- (BOOL)runOperations:(NSSet *)operations;			// Set of FECWF_CONCURRENT_OPERATION objects with their runMessage set (or not)
 - (NSUInteger)operationsCount;						// returns the total number of outstanding operations
 - (BOOL)cancelOperations;							// stop all work, will not get any more delegate calls after it returns, returns YES if everything torn down properly
 - (BOOL)restartOperations;							// restart things
@@ -128,3 +131,4 @@ typedef enum { msgDelOnMainThread=0, msgDelOnAnyThread, msgOnSpecificThread, msg
 @end
 
 #endif
+

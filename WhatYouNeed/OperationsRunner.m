@@ -35,7 +35,7 @@
 
 #import "ConcurrentOperation.h"
 
-@interface ConcurrentOperation (OperationsRunner)
+@interface FECWF_CONCURRENT_OPERATION (OperationsRunner)
 - (BOOL)_OR_cancel:(NSUInteger)millisecondDelay;							// for use by OperationsRunner
 @end
 
@@ -47,8 +47,8 @@
 @property (nonatomic, assign) dispatch_queue_t			operationsQueue;
 @property (nonatomic, assign) dispatch_group_t			opRunnerGroup;
 @property (nonatomic, assign) dispatch_group_t			operationsGroup;
-@property (atomic, weak) id <OperationsRunnerProtocol>	delegate;
-@property (atomic, weak) id <OperationsRunnerProtocol>	savedDelegate;
+@property (atomic, weak) id <FECWF_OPSRUNNER_PROTOCOL>	delegate;
+@property (atomic, weak) id <FECWF_OPSRUNNER_PROTOCOL>	savedDelegate;
 @property (atomic, assign) BOOL							cancelled;
 #ifdef VERIFY_DEALLOC
 @property (nonatomic, assign) dispatch_semaphore_t		deallocs;
@@ -70,7 +70,7 @@
 + (BOOL)restartOperations { return NO; }
 + (BOOL)disposeOperations { return NO; }
 
-- (id)initWithDelegate:(id <OperationsRunnerProtocol>)del
+- (id)initWithDelegate:(id <FECWF_OPSRUNNER_PROTOCOL>)del
 {
     if((self = [super init])) {
 		_savedDelegate = _delegate = del;
@@ -162,7 +162,7 @@
 	}
 }
 
-- (void)runOperation:(ConcurrentOperation *)op withMsg:(NSString *)msg
+- (void)runOperation:(FECWF_CONCURRENT_OPERATION *)op withMsg:(NSString *)msg
 {
 	if(self.cancelled) {
 		return;
@@ -183,7 +183,7 @@
 #endif
 
 #ifndef NDEBUG
-	((ConcurrentOperation *)op).runMessage = msg;
+	((FECWF_CONCURRENT_OPERATION *)op).runMessage = msg;
 #endif
 
 	if([self addOp:op]) {
@@ -212,7 +212,7 @@
 	{
 		[self adjustOperationsTotal:count];	// peg immediately
 		__weak __typeof__(self) weakSelf = self;
-		[ops enumerateObjectsUsingBlock:^(ConcurrentOperation *op, BOOL *stop)
+		[ops enumerateObjectsUsingBlock:^(FECWF_CONCURRENT_OPERATION *op, BOOL *stop)
 			{
 				op.deallocBlock = ^	{
 										__typeof__(self) strongSelf = weakSelf;
@@ -230,7 +230,7 @@
 	__weak __typeof__(self) weakSelf = self;
 	dispatch_group_async(_opRunnerGroup, _opRunnerQueue, ^
 		{
-			[rSet enumerateObjectsUsingBlock:^(ConcurrentOperation *op, BOOL *stop)
+			[rSet enumerateObjectsUsingBlock:^(FECWF_CONCURRENT_OPERATION *op, BOOL *stop)
 				{
 					[weakSelf _runOperation:op];
 				} ];
@@ -239,7 +239,7 @@
 	return YES;
 }
 
-- (BOOL)addOp:(ConcurrentOperation *)op
+- (BOOL)addOp:(FECWF_CONCURRENT_OPERATION *)op
 {
 	BOOL ret;
 
@@ -263,7 +263,7 @@
 
 	dispatch_semaphore_wait(_dataSema, DISPATCH_TIME_FOREVER);
 
-	[ops enumerateObjectsUsingBlock:^(ConcurrentOperation *op, BOOL *stop)
+	[ops enumerateObjectsUsingBlock:^(FECWF_CONCURRENT_OPERATION *op, BOOL *stop)
 		{
 			if([_operations count] >= self.maxOps) {
 				[_operationsOnHold addObject:op];
@@ -284,14 +284,14 @@
 	dispatch_semaphore_wait(_dataSema, DISPATCH_TIME_FOREVER);
 
 #if 0
-	[_operationsOnHold enumerateObjectsUsingBlock:^(ConcurrentOperation *op, NSUInteger idx, BOOL *stop)
+	[_operationsOnHold enumerateObjectsUsingBlock:^(FECWF_CONCURRENT_OPERATION *op, NSUInteger idx, BOOL *stop)
 		{
 			[op _OR_cancel:_mSecCancelDelay];
 		} ];
 #endif
 	[_operationsOnHold removeAllObjects];
 
-	[_operations enumerateObjectsUsingBlock:^(ConcurrentOperation *op, BOOL *stop)
+	[_operations enumerateObjectsUsingBlock:^(FECWF_CONCURRENT_OPERATION *op, BOOL *stop)
 		{
 			BOOL ret = [op _OR_cancel:_mSecCancelDelay];
 			if(!ret) ++cancelFailures;
@@ -320,10 +320,11 @@ holdCount = hc;
 	return count;
 }
 
-- (void)_runOperation:(ConcurrentOperation *)op	// on queue
+- (void)_runOperation:(FECWF_CONCURRENT_OPERATION *)op	// on queue
 {
 	if(self.cancelled) {
 		//LOG(@"Cancel Before Running: %@", op);
+		[self _operationFinished:op];
 		return;
 	}
 
@@ -428,11 +429,11 @@ holdCount = hc;
 }
 #endif
 
-- (void)_operationFinished:(ConcurrentOperation *)op	// excutes in opRunnerQueue
+- (void)_operationFinished:(FECWF_CONCURRENT_OPERATION *)op	// excutes in opRunnerQueue
 {
 	BOOL isCancelled;
 	NSUInteger remainingCount = 0;
-	ConcurrentOperation *runOp;
+	FECWF_CONCURRENT_OPERATION *runOp;
 	
 	//NSLog(@"XXX op=%@", op.runMessage);
 
@@ -490,7 +491,7 @@ holdCount = hc;
 		
 	case msgOnSpecificQueue:
 	{
-		__weak id <OperationsRunnerProtocol> del = self.delegate;
+		__weak id <FECWF_OPSRUNNER_PROTOCOL> del = self.delegate;
 		dispatch_block_t b =   ^{
 									[del operationFinished:op count:remainingCount];
 								};
@@ -505,7 +506,7 @@ holdCount = hc;
 
 - (void)operationFinished:(NSDictionary *)dict // excutes from multiple possible threads
 {
-	ConcurrentOperation *op	= dict[@"op"];
+	FECWF_CONCURRENT_OPERATION *op	= dict[@"op"];
 	NSUInteger count		= [(NSNumber *)dict[@"count"] unsignedIntegerValue];
 	
 	// Could have been queued on a thread and gotten cancelled. Once past this test the operation will be delivered
@@ -514,6 +515,18 @@ holdCount = hc;
 	}
 	
 	[self.delegate operationFinished:op count:count];
+}
+
+- (NSString *)description
+{
+	NSMutableString *mStr = [NSMutableString stringWithCapacity:256];
+	[mStr appendFormat:@"OpsOnHold=%d OpsRunning=%d\n", [_operationsOnHold count], [_operations count]];
+	[_operations enumerateObjectsUsingBlock:^(FECWF_CONCURRENT_OPERATION *op, BOOL *stop)
+		{
+			[mStr appendString:[op description]];
+			[mStr appendString:@"\n"];
+		}];
+	return mStr;
 }
 
 @end

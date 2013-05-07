@@ -33,7 +33,7 @@
 #define PROGRESS_OFFSET 0.25f
 #define PROGRESS_UPDATE(x) ( ((x)*.75f)/(responseLength) + PROGRESS_OFFSET)
 
-@interface WebFetcher ()
+@interface FECWF_WEBFETCHER ()
 @property (atomic, assign, readwrite) BOOL isCancelled;
 @property (atomic, assign, readwrite) BOOL isExecuting;
 @property (atomic, assign, readwrite) BOOL isFinished;
@@ -42,7 +42,7 @@
 
 @end
 
-@implementation WebFetcher
+@implementation FECWF_WEBFETCHER
 {
 	NSUInteger responseLength;
 }
@@ -203,7 +203,7 @@
 
 @end
 
-@implementation WebFetcher (NSURLConnectionDelegate)
+@implementation FECWF_WEBFETCHER (NSURLConnectionDelegate)
 
 - (NSURLRequest *)connection:(NSURLConnection *)conn willSendRequest:(NSURLRequest *)request redirectResponse:(NSHTTPURLResponse *)redirectResponse	// NSURLResponse NSHTTPURLResponse
 {

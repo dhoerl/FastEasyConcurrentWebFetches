@@ -23,25 +23,40 @@
 
 #import "MyViewController.h"
 
-#import "URfetcher.h"
 
 #if __IPHONE_OS_VERSION_MIN_REQUIRED >= 60000
 #import "OperationsRunner6.h"
 #import "OperationsRunnerProtocol6.h"
+#define FECWF_RUN_OPERATION_TYPE		FECWF_WEBFETCHER
+#import "URfetcher6.h"
 #else
 #import "OperationsRunner.h"
 #import "OperationsRunnerProtocol.h"
+#import "URfetcher.h"
+#define FECWF_RUN_OPERATION_TYPE		FECWF_CONCURRENT_OPERATION
 #endif
 
 static NSUInteger lastOperationsCount;
 static NSUInteger lastMaxConcurrent;
 static NSUInteger lastPriority;
 
-@interface MyViewController () <OperationsRunnerProtocol>
+// 2) Add the protocol to the class extension interface in the implementation
+@interface MyViewController () <FECWF_OPSRUNNER_PROTOCOL>
+@end
+
+// 4) Declare a category with these methods in the interface file (ie public) (change MyClass to your class)
+@interface MyViewController (OperationsRunner)
+
+- (OperationsRunner *)operationsRunner;				// get the current instance (or create it)
+- (void)runOperation:(FECWF_RUN_OPERATION_TYPE *)op withMsg:(NSString *)msg;	// to submit an operation
+- (BOOL)runOperations:(NSSet *)operations;			// Set of FECWF_CONCURRENT_OPERATION objects with their runMessage set (or not)
+- (NSUInteger)operationsCount;						// returns the total number of outstanding operations
+- (BOOL)cancelOperations;							// stop all work, will not get any more delegate calls after it returns, returns YES if everything torn down properly
+- (BOOL)restartOperations;							// restart things
+- (BOOL)disposeOperations;							// dealloc the OperationsRunner (only needed for special cases where you really want to get rid of all helper objects)
 
 @end
 
-// 2) Add the protocol to the class extension interface in the implementation
 @implementation MyViewController
 {
 	IBOutlet UIButton *fetch;
