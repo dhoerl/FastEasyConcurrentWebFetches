@@ -184,7 +184,7 @@
 	}
 }
 
-- (BOOL)runOperations:(NSSet *)ops
+- (BOOL)runOperations:(NSOrderedSet *)ops
 {
 	int32_t count = (int32_t)[ops count];
 	if(!count) {
@@ -200,7 +200,7 @@
 	{
 		[self adjustOperationsTotal:count];	// peg immediately
 		__weak __typeof__(self) weakSelf = self;
-		[ops enumerateObjectsUsingBlock:^(FECWF_WEBFETCHER *op, BOOL *stop)
+		[ops enumerateObjectsUsingBlock:^(FECWF_WEBFETCHER *op, NSUInteger idx, BOOL *stop)
 			{
 				op.deallocBlock = ^	{
 										__typeof__(self) strongSelf = weakSelf;
@@ -231,8 +231,7 @@
 {
 	BOOL ret;
 
-	dispatch_semaphore_wait(_dataSema, DISPATCH_TIME_FOREVER);
-
+/***/dispatch_semaphore_wait(_dataSema, DISPATCH_TIME_FOREVER);
 	if([_operations count] >= self.maxOps) {
 		[_operationsOnHold addObject:op];
 		ret = FALSE;
@@ -240,18 +239,16 @@
 		[_operations addObject:op];	// Second we retain and save a reference to the operation
 		ret = YES;
 	}
-	
-	dispatch_semaphore_signal(_dataSema);
+/***/dispatch_semaphore_signal(_dataSema);
 
 	return ret;
 }
-- (NSSet *)addOps:(NSSet *)ops
+- (NSSet *)addOps:(NSOrderedSet *)ops
 {
 	NSMutableSet *rSet = [NSMutableSet setWithCapacity:[ops count]];
 
-	dispatch_semaphore_wait(_dataSema, DISPATCH_TIME_FOREVER);
-
-	[ops enumerateObjectsUsingBlock:^(FECWF_WEBFETCHER *op, BOOL *stop)
+/***/dispatch_semaphore_wait(_dataSema, DISPATCH_TIME_FOREVER);
+	[ops enumerateObjectsUsingBlock:^(FECWF_WEBFETCHER *op, NSUInteger idx, BOOL *stop)
 		{
 			if([_operations count] >= self.maxOps) {
 				[_operationsOnHold addObject:op];
@@ -260,8 +257,7 @@
 				[rSet addObject:op];
 			}
 		} ];
-
-	dispatch_semaphore_signal(_dataSema);
+/***/dispatch_semaphore_signal(_dataSema);
 
 	return rSet;
 }
@@ -269,8 +265,7 @@
 {
 	__block NSUInteger cancelFailures = 0;
 	
-	dispatch_semaphore_wait(_dataSema, DISPATCH_TIME_FOREVER);
-
+/***/dispatch_semaphore_wait(_dataSema, DISPATCH_TIME_FOREVER);
 	[_operationsOnHold removeAllObjects];
 
 	[_operations enumerateObjectsUsingBlock:^(FECWF_WEBFETCHER *op, BOOL *stop)
@@ -280,15 +275,13 @@
 			//NSLog(@"SEND CANCEL TO %@", op.runMessage);
 		} ];
 	[_operations removeAllObjects];
-	
-	dispatch_semaphore_signal(_dataSema);
+/***/dispatch_semaphore_signal(_dataSema);
 	
 	return cancelFailures;
 }
 - (NSUInteger)operationsCount
 {
-	dispatch_semaphore_wait(_dataSema, DISPATCH_TIME_FOREVER);
-
+/***/dispatch_semaphore_wait(_dataSema, DISPATCH_TIME_FOREVER);
 static NSUInteger opCount, holdCount;
 NSUInteger oc = [_operations count];
 NSUInteger hc = [_operationsOnHold count];
@@ -296,8 +289,7 @@ NSUInteger hc = [_operationsOnHold count];
 opCount = oc;
 holdCount = hc;
 	NSUInteger count = [_operations count] + [_operationsOnHold count];
-
-	dispatch_semaphore_signal(_dataSema);
+/***/dispatch_semaphore_signal(_dataSema);
 	
 	return count;
 }
@@ -332,7 +324,9 @@ holdCount = hc;
 								};
 								
 			[op.connection setDelegateQueue:_operationsQueue];
+#ifndef UNIT_TESTING
 			[op.connection start];
+#endif
 		}
 	} else {
 		started = NO;
@@ -414,73 +408,32 @@ holdCount = hc;
 
 - (void)_operationFinished:(FECWF_WEBFETCHER *)op	// excutes in opRunnerQueue
 {
-	BOOL isCancelled;
-	NSUInteger remainingCount = 0;
-	FECWF_WEBFETCHER *runOp;
-	
-	//NSLog(@"XXX op=%@", op.runMessage);
-
-/***/dispatch_semaphore_wait(_dataSema, DISPATCH_TIME_FOREVER);
-
-	isCancelled = self.cancelled;
-	[_operations removeObject:op];
-	if(!isCancelled) {
-		remainingCount = [_operationsOnHold count];
-		if(remainingCount) {
-			runOp = [_operationsOnHold objectAtIndex:0];
-			[_operationsOnHold removeObjectAtIndex:0];
-			[_operations addObject:runOp];
-			remainingCount -= 1;
-		}
-		remainingCount += [_operations count];
-	}
-
-/***/dispatch_semaphore_signal(_dataSema);
-
-	if(isCancelled) {
+	if(self.cancelled) {
 		return;
 	}
 	assert(!op.isCancelled);
-
-	if(runOp) {
-		__weak __typeof__(self) weakSelf = self;
-		dispatch_group_async(_opRunnerGroup, _opRunnerQueue, ^
-			{
-				[weakSelf _runOperation:runOp];
-			} );
-	}
-
+	
+	//NSLog(@"_operationFinished op=%@", op.runMessage);
 	//LOG(@"OP RUNNER GOT A MESSAGE %d for thread %@", _msgDelOn, delegateThread);	
-	NSDictionary *dict;
-	if(_msgDelOn !=  msgOnSpecificQueue) {
-		dict = @{ @"op" : op, @"count" : @(remainingCount) };
-	}
-
-#ifdef VERIFY_DEALLOC
-	dispatch_block_t b;
-	if(!remainingCount) b = ^{
-						[self testIfAllDealloced];
-					};
-#endif
 
 	switch(_msgDelOn) {
 	case msgDelOnMainThread:
-		[self performSelectorOnMainThread:@selector(operationFinished:) withObject:dict waitUntilDone:NO];
+		[self performSelectorOnMainThread:@selector(operationFinished:) withObject:op waitUntilDone:NO];
 		break;
 
 	case msgDelOnAnyThread:
-		[self operationFinished:dict];
+		[self operationFinished:op];
 		break;
 	
 	case msgOnSpecificThread:
-		[self performSelector:@selector(operationFinished:) onThread:_delegateThread withObject:dict waitUntilDone:NO];
+		[self performSelector:@selector(operationFinished:) onThread:_delegateThread withObject:op waitUntilDone:NO];
 		break;
 		
 	case msgOnSpecificQueue:
 	{
-		__weak id <FECWF_OPSRUNNER_PROTOCOL> del = self.delegate;
+		//__weak id <FECWF_OPSRUNNER_PROTOCOL> del = self.delegate;
 		dispatch_block_t b =   ^{
-									[del operationFinished:op count:remainingCount];
+									[self operationFinished:op];
 								};
 		if(_delegateGroup) {
 			dispatch_group_async(_delegateGroup, _delegateQueue, b);
@@ -491,17 +444,42 @@ holdCount = hc;
 	}
 }
 
-- (void)operationFinished:(NSDictionary *)dict // excutes from multiple possible threads
+- (void)operationFinished:(FECWF_WEBFETCHER *)op // excutes from multiple possible threads
 {
-	FECWF_WEBFETCHER *op	= dict[@"op"];
-	NSUInteger count		= [(NSNumber *)dict[@"count"] unsignedIntegerValue];
-	
 	// Could have been queued on a thread and gotten cancelled. Once past this test the operation will be delivered
 	if(op.isCancelled || self.cancelled) {
 		return;
 	}
+
+/***/dispatch_semaphore_wait(_dataSema, DISPATCH_TIME_FOREVER);
+	[_operations removeObject:op];
+	NSUInteger remainingCount = [_operationsOnHold count];
+	FECWF_WEBFETCHER *runOp;
+	if(remainingCount) {
+		runOp = [_operationsOnHold objectAtIndex:0];
+		[_operationsOnHold removeObjectAtIndex:0];
+		[_operations addObject:runOp];
+		remainingCount -= 1;
+	}
+	remainingCount += [_operations count];
+/***/dispatch_semaphore_signal(_dataSema);
+
+	if(runOp) {
+		__weak __typeof__(self) weakSelf = self;
+		dispatch_group_async(_opRunnerGroup, _opRunnerQueue, ^
+			{
+				[weakSelf _runOperation:runOp];
+			} );
+	}
 	
-	[self.delegate operationFinished:op count:count];
+	[self.delegate operationFinished:op count:remainingCount];
+
+#if defined(VERIFY_DEALLOC) && !defined(UNIT_TESTING)
+	if(!remainingCount) {
+		NSLog(@"DEALLOC TEST");
+		[self testIfAllDealloced];
+	}
+#endif
 }
 
 - (NSString *)description
