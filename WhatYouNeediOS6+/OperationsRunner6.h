@@ -52,7 +52,7 @@ typedef enum { msgDelOnMainThread=0, msgDelOnAnyThread, msgOnSpecificThread, msg
 
 #if 0 
 
-// 1) Add these to your .pch file, adding whatever prefix you want, or skip to just get these as defaults
+// 1) Add these (with your prefix) to your .pch file, or skip to just get these as defaults
 	#define FECWF_CONCURRENT_OPERATION		ConcurrentOperation
 	#define FECWF_WEBFETCHER				WebFetcher
 	#define FECWF_OPERATIONSRUNNER			OperationRunner
@@ -121,7 +121,7 @@ typedef enum { msgDelOnMainThread=0, msgDelOnAnyThread, msgOnSpecificThread, msg
 
 - (OperationsRunner *)operationsRunner;				// get the current instance (or create it)
 - (void)runOperation:(FECWF_WEBFETCHER *)op withMsg:(NSString *)msg;	// to submit an operation
-- (BOOL)runOperations:(NSSet *)operations;			// Set of FECWF_CONCURRENT_OPERATION objects with their runMessage set (or not)
+- (BOOL)runOperations:(NSOrderedSet *)operations;	// Set of FECWF_CONCURRENT_OPERATION objects with their runMessage set (or not)
 - (NSUInteger)operationsCount;						// returns the total number of outstanding operations
 - (BOOL)cancelOperations;							// stop all work, will not get any more delegate calls after it returns, returns YES if everything torn down properly
 - (BOOL)restartOperations;							// restart things

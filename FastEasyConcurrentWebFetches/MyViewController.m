@@ -23,6 +23,9 @@
 
 #import "MyViewController.h"
 
+#define URL		@"http://dl.dropboxusercontent.com/u/60414145/Tyco.jpg"
+//#define URL		@@"http:/www.apple.com/"
+
 
 #if __IPHONE_OS_VERSION_MIN_REQUIRED >= 60000
 #import "OperationsRunner6.h"
@@ -49,7 +52,7 @@ static NSUInteger lastPriority;
 
 - (OperationsRunner *)operationsRunner;				// get the current instance (or create it)
 - (void)runOperation:(FECWF_RUN_OPERATION_TYPE *)op withMsg:(NSString *)msg;	// to submit an operation
-- (BOOL)runOperations:(NSSet *)operations;			// Set of FECWF_CONCURRENT_OPERATION objects with their runMessage set (or not)
+- (BOOL)runOperations:(NSOrderedSet *)operations;	// Set of FECWF_CONCURRENT_OPERATION objects with their runMessage set (or not)
 - (NSUInteger)operationsCount;						// returns the total number of outstanding operations
 - (BOOL)cancelOperations;							// stop all work, will not get any more delegate calls after it returns, returns YES if everything torn down properly
 - (BOOL)restartOperations;							// restart things
@@ -132,23 +135,38 @@ static NSUInteger lastPriority;
 	[self disable:NO control:cancel];
 	[self disable:YES control:operationCount];
 	[self disable:YES control:fetch];
-		
-	[spinner startAnimating];
 
-	NSUInteger count = lrintf([operationCount value]);
-	operationsLeft.text = [NSString stringWithFormat:@"%d", count];
-	for(int i=0; i<count; ++i) {
-		NSString *msg = [NSString stringWithFormat:@"URfetcher #%d", i];
-		URfetcher *fetcher = [URfetcher new];
-		fetcher.urlStr = @"http://dl.dropboxusercontent.com/u/60414145/Shed.jpg";
-		fetcher.runMessage = msg;
-		
-		[self runOperation:fetcher withMsg:msg];
-	}
+	dispatch_async(dispatch_get_main_queue(), ^
+		{
+			[spinner startAnimating];
+
+			NSUInteger count = lrintf([operationCount value]);
+			operationsLeft.text = [NSString stringWithFormat:@"%d", count];
+			
+#if 1
+			for(int i=0; i<count; ++i) {
+				NSString *msg = [NSString stringWithFormat:@"URfetcher #%d", i];
+				URfetcher *fetcher = [URfetcher new];
+				fetcher.urlStr = URL;
+				[self runOperation:fetcher withMsg:msg];
+			}
+#else
+			NSMutableOrderedSet *set = [NSMutableOrderedSet orderedSetWithCapacity:count];
+			for(int i=0; i<count; ++i) {
+				NSString *msg = [NSString stringWithFormat:@"URfetcher #%d", i];
+				URfetcher *fetcher = [URfetcher new];
+				fetcher.urlStr = URL;
+				fetcher.runMessage = msg;
+				[set addObject:fetcher];
+			}
+			[self runOperations:set];
+#endif
+		} );
 }
 - (IBAction)cancelAction:(id)sender
 {
 	[self cancelOperations];
+	[self restartOperations];
 	
 	[self defaultButtons];
 }

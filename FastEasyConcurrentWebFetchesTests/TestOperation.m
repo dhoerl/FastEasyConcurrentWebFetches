@@ -6,6 +6,8 @@
 //  Copyright (c) 2013 dhoerl. All rights reserved.
 //
 
+#include <math.h>
+
 #import "TestOperationProtocol.h"
 #import "TestOperation.h"
 
@@ -14,22 +16,10 @@
 @end
 
 @implementation TestOperation
-{
-	//NSTimer *t;
-	//NSUInteger timerMax;
-}
 
 #if __IPHONE_OS_VERSION_MIN_REQUIRED < 60000
 - (void)main
 {
-	// Idea is to artificially create some startup delay
-	for(int i=0; i<100 && !self.isCancelled && self.delayInMain; ++i) {
-		usleep(self.delayInMain/100.0);
-	}
-	if(self.isCancelled) return;
-
-	[self.delegate register:self atStage:atMain];
-
 	[super main];
 
 	[self.delegate register:self atStage:atExit];
@@ -38,6 +28,12 @@
 
 - (id)setup
 {
+	// Idea is to artificially create some startup delay
+	for(int i=0; i<100 && !self.isCancelled && isnormal(self.delayInMain); ++i) {
+		usleep(self.delayInMain/100.0);
+	}
+	if(self.isCancelled) return nil;
+
 	[self.delegate register:self atStage:atSetup];
 	
 	id foo = [super setup];
@@ -60,13 +56,24 @@
 
 - (void)completed
 {
+	self.succeeded = 1;	// race condition - must do first
+
 	[super completed];
-	
-	self.succeeded = 1;
 }
 
 - (void)finish
 {
+#if __IPHONE_OS_VERSION_MIN_REQUIRED >= 60000
+	finishBlock b = self.finalBlock;
+	__weak __typeof__(self) weakSelf = self;
+	self.finalBlock = ^(FECWF_WEBFETCHER *op)
+						{
+							__typeof__(self) strongSelf = weakSelf;
+							[strongSelf.delegate register:strongSelf atStage:atExit];
+							if(b) b(op);
+						};
+#endif
+
 	[super finish];
 
 	++self.finishedMsg;
@@ -76,9 +83,9 @@
 
 - (void)failed
 {
+	self.succeeded = -1;	// race condition
+	
 	[super failed];
-
-	self.succeeded = -1;
 }
 
 - (void)cancel

@@ -39,7 +39,6 @@ typedef void(^finishBlock)(FECWF_WEBFETCHER *op);
 @property (atomic, assign, readonly) BOOL isFinished;
 @property (atomic, strong, strong) finishBlock finalBlock;
 @property (atomic, strong, readonly) NSURLConnection *connection;
-// Your responsibility
 @property (nonatomic, copy) NSString *runMessage;		// debugging
 @property (nonatomic, copy) NSString *urlStr;
 @property (nonatomic, strong, readonly) NSMutableData *webData;

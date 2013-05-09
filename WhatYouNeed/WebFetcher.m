@@ -97,7 +97,6 @@
 				weakSelf.htmlStatus = 200;
 				weakSelf.webData = [NSMutableData dataWithCapacity:256];
 				[weakSelf performSelector:@selector(completed) onThread:self.thread withObject:nil waitUntilDone:NO];
-				//[weakSelf performBlock:^(FECWF_CONCURRENT_OPERATION *op) { [op completed]; }];
 			} );
 		return YES;
 	}	break;
@@ -109,7 +108,6 @@
 			{
 				weakSelf.htmlStatus = 400;
 				[weakSelf performSelector:@selector(failed) onThread:weakSelf.thread withObject:nil waitUntilDone:NO];
-				//[weakSelf performBlock:^(FECWF_CONCURRENT_OPERATION *op) { [op failed]; }];
 			} );
 		return YES;
 	} break;
@@ -122,7 +120,6 @@
 				weakSelf.error = [NSError errorWithDomain:@"NSURLErrorDomain" code:-1001 userInfo:@{ NSLocalizedDescriptionKey : @"timed out" }];	// Timeout
 				weakSelf.errorMessage = @"Forced Failure";
 				[weakSelf performSelector:@selector(failed) onThread:weakSelf.thread withObject:nil waitUntilDone:NO];
-				//[weakSelf performBlock:^(FECWF_CONCURRENT_OPERATION *op) { [op failed]; }];
 			} );
 		return YES;
 	} break;
@@ -174,7 +171,7 @@
 
 	[super finish];
 
-	[_connection cancel];	// rare condition where we failed in startup
+	[_connection cancel];	// rare condition where we failed in startup (or unit testing)
 }
 
 - (void)dealloc
@@ -225,7 +222,7 @@
 	responseLength = response.expectedContentLength == NSURLResponseUnknownLength ? 1024 : (NSUInteger)response.expectedContentLength;
 #ifndef NDEBUG
 	if([[self class] printDebugging]) LOG(@"Connection:didReceiveResponse: response=%@ len=%u", response, responseLength);
-	if(_webData) LOG(@"YIKES: already created a _webData object!!! ?!?!?!?!?!??!?!?!??!?!?!?!?!?!??!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?");
+	if(_webData) LOG(@"YIKES: already created a _webData object!!!");
 #endif
 	_webData = [NSMutableData dataWithCapacity:responseLength];
 }

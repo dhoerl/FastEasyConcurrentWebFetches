@@ -1,7 +1,9 @@
 FastEasyConcurrentWebFetches (TM)
 ============================
 
-An infrastructure of three classes to manage pools of web operations; elegant, simple, and quickly cancelable. Based on an earlier project that predated GCD (NSOperation-WebFetches-MadeEasy), it provides a lightweight framework for running multiple NSURLConnections (or other operations that require a delegate [iOS5 code]), while providing the ability to cancel and cleanup when, for say, a user taps the Back button.
+An infrastructure of three classes to manage pools of web operations; elegant, simple, and quickly cancelable. Based on an earlier project that predated GCD (NSOperation-WebFetches-MadeEasy), it provides a lightweight framework for running multiple NSURLConnections (or other operations that require a delegate [iOS5 code only]), while providing the ability to cancel and cleanup when, for say, a user taps the Back button.
+
+Users create new instances of a WebFetcher (or subclass), set its properties, then submit them individually or in batches using "[self runOperation:op runMsg:@"Some message to assist in debugging"]". When the operation finishes, you get it back on a delegate call "- (void)operationFinished:op count:remaininggCount", where you can see if it succeeded or failed, what the htmlStatus return was, retrieve and data or see if you had an error (NSError). The "remainingCount" is mostly to advise you when all outstanding operations have completed, to turn off spinners and say reenable the UI. At Lot18, I created about a dozen subclasses of WebFetchers, each for a specific type of REST interaction. Subclasses are often no more than tens of lines long, and build on the core infastructure.
 
 This project includes a GUI test harness that uses hard wired web fetchers, which use HTTP GET to download an image from a public DropBox folder. The three core classes are found in the WhatYouNeed folder, and the OperationsRunner.h header file lists the handful of instructions required to adopt them into a project.
 
@@ -11,9 +13,10 @@ This code, migrated from NSOperation-WebFetches-MadeEasy, was the basis of the L
 
 UPDATES:
 
-
-  2.0 (5/??/2013): ** IN PROGRESS **
+  2.1 (5/9/2013): Unit tests passing thousands of time over hours
+    - continue to refine so that all 8 tests pass for thousands of test iterations, for both iOS5 and iOS6  
     - Provide MACRO names for all classes (poor man's namespace) to avoid potential name conflicts, better support Library use
+    - Test App now enables dealloc testing, to insure that no matter whether operations finish or get cancelled, that in the end they all get released
   
   2.0 (5/6/2013): Massive re-write with Unit Tests
     - Created two folders of needed files, one for iOS5 the other for iOS6
@@ -33,15 +36,13 @@ UPDATES:
 
 INTRO
 
-Most of the complexity involved in managing a pool of concurrent NSURLConnections is moved to a helper class, OperationsRunner. By adding two methods to one of your classes, using a few of its methods, and implementing one protocol method, you can get all the benefits of background web fetches with just a small amount of effort. When each finishes, it messages your calling class in the sole protocol method, and supplies the number of remianing operations. When that value goes to zero, everything is done and you can then stop any spinner or other indicator you may be using. The reply message defaults to the main thread, but you can specify that a specific thread should be use, any thread, or supply a dispatch serial queue.
+Most of the complexity involved in managing a pool of concurrent NSURLConnections is moved to a helper class, OperationsRunner. By adding two methods to one of your classes, using a few of its methods, and implementing one protocol method, you can get all the benefits of background web fetches with just a small amount of effort. When each finishes, it messages your calling class in the sole protocol method, and supplies the number of remianing operations. When that value goes to zero, everything is done and you can then stop any spinner or other indicator you may be using. The reply message defaults to the main thread, but you can specify a specific thread, permit any thread, or supply a dispatch serial queue (and optional group).
 
-This project also supplies the FECWF_CONCURRENT_OPERATION base class, which deals with all the complexities of a concurrent operation. FECWF_WEBFETCHER, a subclass of that, is provided to download web content. The final subclass of that, URfetcher, is similar to what you would write.
-
-You can also build on FECWF_CONCURRENT_OPERATION to do other features like sequencers that need to run in their own thread.
+This project also supplies the base class, which deals with all the complexities of a web interaction. The final subclass of that, URfetcher, is similar to what you would write.
 
 DEMO
 
-Run the enclosed project, which downloads three files from my DropBox Public folder concurrently.
+Run the enclosed project, which downloads a file from my DropBox Public folder concurrently.
 
 USAGE
 
@@ -51,11 +52,11 @@ USAGE
 
 OPERATION
 
-When you want to fetch some data, you create a new FECWF_CONCURRENT_OPERATION object, provide the URL of a resource (such as an image), and then message your class as:
+When you want to fetch some data, you create a new WebFetcher object, provide the URL of a resource (such as an image), and then message your class as:
 
-    [myClass runOperation:op withMsg:@"Tracking string"];
+    [self runOperation:op withMsg:@"Tracking string"];
 
-The message parameter can take an arbitrary string or nil, however I strongly suggest you use a unique descriptive value. With debugging enabled, this string can get logged when the operation runs, when it completes, and the NSThread that runs the message is also tagged with it (did you know you can name NSThreads?)
+The message parameter can take an arbitrary string or nil, however I strongly suggest you use a unique descriptive value. With debugging enabled, this string can get logged when the operation runs.
 
 When the operation completes, it messages your class on the main thread (unless you've configured it otherwise) as follows:
 
@@ -69,4 +70,12 @@ Suppose you need to cancel all operations, perhaps due to the user tapping the "
 
 You don't even need to do this! If you have active operations, when your class' dealloc is called, the OperationsRunner is also dealloced, and it properly tears down active operations.
 
-The "operationFinished:count" method returns the remaining operation count, you can retire a spinner when it goes to zero. 
+The "operationFinished:count" method returns the remaining operation count, you can retire a spinner when it goes to zero.
+
+NOTES:
+
+1) the reason for the 'forwardingTargetForSelector' design is that you can easily incorporate this into a UIVIewController base subclass, and subclasses have total access to the functionality using "self".
+
+2) adding this to a base class consumes no resources, as the object is not created until used.
+
+3) by adding the category interface definitions to a class' interface file, other objects can also send operations to it directly.

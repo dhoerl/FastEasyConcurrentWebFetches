@@ -30,17 +30,18 @@
 + (NSUInteger)timeout { return 60; }
 + (BOOL)printDebugging { return YES; }
 
+#if 0	// Not really needed, maybe to just monitor what's happening
 - (NSURLRequest *)setup
 {
 	NSMutableURLRequest *request = [super setup];
 	return request;
 }
 
-// Not really needed, maybe to just monitor what's happening
 - (BOOL)start:(NSMutableURLRequest *)request
 {
 	BOOL ok = [super start:request];
 	return ok;
 }
+#endif
 
 @end

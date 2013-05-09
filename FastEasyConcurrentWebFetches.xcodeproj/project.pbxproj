@@ -84,7 +84,7 @@
 		DE956F4E1729E1E70026179D /* TestOperationProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TestOperationProtocol.h; sourceTree = "<group>"; };
 		DE956F4F1729E2700026179D /* TestOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestOperation.m; sourceTree = "<group>"; };
 		DE956F501729E2700026179D /* TestOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = TestOperation.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
-		DECB1FF51733F9B40050C8F4 /* FECW For iOS5 copy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "FECW For iOS5 copy.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		DECB1FF51733F9B40050C8F4 /* FECW For iOS6.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "FECW For iOS6.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DECB200B1733F9C70050C8F4 /* FECW iOS6 Tests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "FECW iOS6 Tests.octest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DECB201017340DC90050C8F4 /* OperationsRunner6.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = OperationsRunner6.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		DECB201117340DC90050C8F4 /* OperationsRunner6.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = OperationsRunner6.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
@@ -222,7 +222,7 @@
 			children = (
 				DEE9159A1722DE520085F570 /* FECWF For iOS5.app */,
 				DEE915C01722DE520085F570 /* FastEasyConcurrentWebFetchesTests.octest */,
-				DECB1FF51733F9B40050C8F4 /* FECW For iOS5 copy.app */,
+				DECB1FF51733F9B40050C8F4 /* FECW For iOS6.app */,
 				DECB200B1733F9C70050C8F4 /* FECW iOS6 Tests.octest */,
 			);
 			name = Products;
@@ -313,7 +313,7 @@
 			);
 			name = "FECWF For iOS6";
 			productName = FastEasyConcurrentWebFetches;
-			productReference = DECB1FF51733F9B40050C8F4 /* FECW For iOS5 copy.app */;
+			productReference = DECB1FF51733F9B40050C8F4 /* FECW For iOS6.app */;
 			productType = "com.apple.product-type.application";
 		};
 		DECB1FF71733F9C70050C8F4 /* FECWF iOS6 Tests */ = {
@@ -888,7 +888,10 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = c99;
-				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					VERIFY_DEALLOC,
+				);
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;

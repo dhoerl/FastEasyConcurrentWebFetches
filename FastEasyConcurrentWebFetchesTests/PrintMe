@@ -1,0 +1,44 @@
+iOS6:
+2013-05-08 18:32:07.946 otest[29808:303] Unknown Device Type. Using UIUserInterfaceIdiomPhone based on screen size
+Test Suite '/Volumes/Data/Users/dhoerl/Library/Developer/Xcode/DerivedData/FastEasyConcurrentWebFetches-boxnrunwktmbzzgqptzhuzoaqxcx/Build/Products/ReleaseWithAssertsUnitTests-iphonesimulator/FECW iOS6 Tests.octest(Tests)' started at 2013-05-08 22:32:08 +0000
+Test Suite 'FECWF_Tests' started at 2013-05-08 22:32:08 +0000
+Test Case '-[FECWF_Tests test0]' started.
+Test Case '-[FECWF_Tests test0]' passed (515.106 seconds).
+Test Case '-[FECWF_Tests test1]' started.
+Test Case '-[FECWF_Tests test1]' passed (513.566 seconds).
+Test Case '-[FECWF_Tests test2]' started.
+Test Case '-[FECWF_Tests test2]' passed (4.396 seconds).
+Test Case '-[FECWF_Tests test3]' started.
+Test Case '-[FECWF_Tests test3]' passed (1018.471 seconds).
+Test Case '-[FECWF_Tests test4]' started.
+2013-05-08 19:06:21.866 otest[29808:303] FAILED ON LOOP 8 UNTIL 1
+2013-05-08 19:06:21.867 otest[29808:303] OperationsCount        = 4
+2013-05-08 19:06:21.867 otest[29808:303] opFailed               = 0
+2013-05-08 19:06:21.868 otest[29808:303] opSucceeded            = 0
+2013-05-08 19:06:21.869 otest[29808:303] opNeverRan             = 16
+2013-05-08 19:06:21.870 otest[29808:303] stageCounters[setup]   = 16
+2013-05-08 19:06:21.870 otest[29808:303] stageCounters[started] = 0
+2013-05-08 19:06:21.870 otest[29808:303] stageCounters[finish]  = 0
+2013-05-08 19:06:21.871 otest[29808:303] stageCounters[exit]    = 0
+/Volumes/Data/git/FastEasyConcurrentWebFetches/FastEasyConcurrentWebFetchesTests/FECWF_Tests.m:258: error: -[FECWF_Tests test4] : "([self operationsCount] == 0)" should be true. Some operation did not cancel
+Test Case '-[FECWF_Tests test4]' failed (2.270 seconds).
+Test Case '-[FECWF_Tests test5]' started.
+2013-05-08 19:06:29.099 otest[29808:303] FAILED ON LOOP 442 UNTIL 1
+2013-05-08 19:06:29.100 otest[29808:303] OperationsCount        = 4
+2013-05-08 19:06:29.100 otest[29808:303] opFailed               = 0
+2013-05-08 19:06:29.100 otest[29808:303] opSucceeded            = 0
+2013-05-08 19:06:29.101 otest[29808:303] opNeverRan             = 16
+2013-05-08 19:06:29.101 otest[29808:303] stageCounters[setup]   = 16
+2013-05-08 19:06:29.101 otest[29808:303] stageCounters[started] = 16
+2013-05-08 19:06:29.102 otest[29808:303] stageCounters[finish]  = 16
+2013-05-08 19:06:29.102 otest[29808:303] stageCounters[exit]    = 16
+/Volumes/Data/git/FastEasyConcurrentWebFetches/FastEasyConcurrentWebFetchesTests/FECWF_Tests.m:280: error: -[FECWF_Tests test5] : "([self operationsCount] == 0)" should be true. Some operation did not cancel
+Test Case '-[FECWF_Tests test5]' failed (7.232 seconds).
+Test Case '-[FECWF_Tests test6]' started.
+Test Case '-[FECWF_Tests test6]' passed (513.730 seconds).
+Test Case '-[FECWF_Tests test7]' started.
+Test Case '-[FECWF_Tests test7]' passed (515.776 seconds).
+Test Suite 'FECWF_Tests' finished at 2013-05-08 23:23:38 +0000.
+Executed 8 tests, with 2 failures (0 unexpected) in 3090.546 (3090.563) seconds
+Test Suite '/Volumes/Data/Users/dhoerl/Library/Developer/Xcode/DerivedData/FastEasyConcurrentWebFetches-boxnrunwktmbzzgqptzhuzoaqxcx/Build/Products/ReleaseWithAssertsUnitTests-iphonesimulator/FECW iOS6 Tests.octest(Tests)' finished at 2013-05-08 23:23:38 +0000.
+Executed 8 tests, with 2 failures (0 unexpected) in 3090.546 (3090.564) seconds

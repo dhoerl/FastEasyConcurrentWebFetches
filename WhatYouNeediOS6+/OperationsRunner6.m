@@ -282,12 +282,6 @@
 - (NSUInteger)operationsCount
 {
 /***/dispatch_semaphore_wait(_dataSema, DISPATCH_TIME_FOREVER);
-static NSUInteger opCount, holdCount;
-NSUInteger oc = [_operations count];
-NSUInteger hc = [_operationsOnHold count];
-//if(opCount != oc || hc != holdCount) NSLog(@"COUNT ops=%u hold=%u",  oc, hc);
-opCount = oc;
-holdCount = hc;
 	NSUInteger count = [_operations count] + [_operationsOnHold count];
 /***/dispatch_semaphore_signal(_dataSema);
 	
@@ -361,17 +355,13 @@ holdCount = hc;
 
 	dispatch_group_wait(_opRunnerGroup, DISPATCH_TIME_FOREVER);
 
-	long ret = 0;;
-	//long ret = dispatch_group_wait(_opRunnerGroup, dispatch_time(DISPATCH_TIME_NOW, 1*NSEC_PER_SEC));
-	//assert(!ret && "Wait for operations release");
-
 #ifdef VERIFY_DEALLOC
 	LOG(@"WAIT FOR DEALLOC TEST...");
 	[self testIfAllDealloced];
 	LOG(@"...TEST DONE");
 #endif
 
-	return (ret || cancelFailures) ? NO : YES;
+	return cancelFailures ? NO : YES;
 }
 
 - (BOOL)restartOperations
@@ -444,7 +434,7 @@ holdCount = hc;
 	}
 }
 
-- (void)operationFinished:(FECWF_WEBFETCHER *)op // excutes from multiple possible threads
+- (void)operationFinished:(FECWF_WEBFETCHER *)op // excutes from multiple possible threads/queues
 {
 	// Could have been queued on a thread and gotten cancelled. Once past this test the operation will be delivered
 	if(op.isCancelled || self.cancelled) {

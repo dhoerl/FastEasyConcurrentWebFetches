@@ -178,7 +178,14 @@
 
 - (void)finish
 {
+#ifndef NDEBUG
+	if([[self class] printDebugging]) LOG(@"WF: finish");
+#endif
 	self.isFinished = YES;
+
+	[_connection cancel];	// rare condition where we failed in startup (or unit testing)
+
+	assert(_finalBlock);
 	_finalBlock(self);
 }
 
@@ -243,7 +250,7 @@
 	responseLength = response.expectedContentLength == NSURLResponseUnknownLength ? 1024 : (NSUInteger)response.expectedContentLength;
 #ifndef NDEBUG
 	if([[self class] printDebugging]) LOG(@"Connection:didReceiveResponse: response=%@ len=%u", response, responseLength);
-	if(_webData) LOG(@"YIKES: already created a _webData object!!! ?!?!?!?!?!??!?!?!??!?!?!?!?!?!??!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?");
+	if(_webData) LOG(@"YIKES: already created a _webData object!!!");
 #endif
 	_webData = [NSMutableData dataWithCapacity:responseLength];
 }

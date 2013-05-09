@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 dhoerl. All rights reserved.
 //
 
-typedef enum { atMain, atSetup, atStart, atFinish, atExit, atEnd } registrationStage;
+typedef enum { atSetup, atStart, atFinish, atExit, atEnd } registrationStage;
 
 @protocol TestOperationProtocol <NSObject>
 
