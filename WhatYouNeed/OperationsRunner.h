@@ -56,8 +56,8 @@ typedef enum { msgDelOnMainThread=0, msgDelOnAnyThread, msgOnSpecificThread, msg
 // 1) Add these (with your prefix) to your .pch file, or skip to just get these as defaults
 	#define FECWF_CONCURRENT_OPERATION		ConcurrentOperation
 	#define FECWF_WEBFETCHER				WebFetcher
-	#define FECWF_OPERATIONSRUNNER			OperationRunner
-	#define FECWF_OPSRUNNER_PROTOCOL		OperationRunnerProtocol
+	#define FECWF_OPERATIONSRUNNER			OperationsRunner
+	#define FECWF_OPSRUNNER_PROTOCOL		OperationsRunnerProtocol
 
 // 2) Add the protocol to the class extension interface (often in the interface file)
 @interface MyClass () <FECWF_OPSRUNNER_PROTOCOL>

@@ -118,9 +118,10 @@
 		__weak __typeof__(self) weakSelf = self;
 		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 100 * NSEC_PER_MSEC), dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^
 			{
-				weakSelf.htmlStatus = 200;
-				weakSelf.webData = [NSMutableData dataWithCapacity:256];
-				[self completed];
+				__typeof__(self) strongSelf = weakSelf;
+				strongSelf.htmlStatus = 200;
+				strongSelf.webData = [NSMutableData dataWithCapacity:256];
+				[strongSelf connectionDidFinishLoading:self.connection];
 			} );
 		return YES;
 	}	break;
@@ -130,8 +131,9 @@
 		__weak __typeof__(self) weakSelf = self;
 		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 100 * NSEC_PER_MSEC), dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^
 			{
-				weakSelf.htmlStatus = 400;
-				[self failed];
+				__typeof__(self) strongSelf = weakSelf;
+				strongSelf.htmlStatus = 400;
+				[strongSelf connection:self.connection didFailWithError:nil];
 			} );
 		return YES;
 	} break;
@@ -141,9 +143,11 @@
 		__weak __typeof__(self) weakSelf = self;
 		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 100 * NSEC_PER_MSEC), dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^
 			{
-				weakSelf.error = [NSError errorWithDomain:@"NSURLErrorDomain" code:-1001 userInfo:@{ NSLocalizedDescriptionKey : @"timed out" }];	// Timeout
-				weakSelf.errorMessage = @"Forced Failure";
-				[self failed];
+				__typeof__(self) strongSelf = weakSelf;
+				strongSelf.htmlStatus = 400;
+				strongSelf.errorMessage = @"Forced Failure";
+				NSError *err = [NSError errorWithDomain:@"NSURLErrorDomain" code:-1001 userInfo:@{ NSLocalizedDescriptionKey : @"timed out" }];	// Timeout
+				[strongSelf connection:self.connection didFailWithError:err];
 			} );
 		return YES;
 	} break;
@@ -184,9 +188,6 @@
 	self.isFinished = YES;
 
 	[_connection cancel];	// rare condition where we failed in startup (or unit testing)
-
-	assert(_finalBlock);
-	_finalBlock(self);
 }
 
 - (void)dealloc
@@ -273,9 +274,16 @@
 	//if([[self class] printDebugging])
 	LOG(@"Connection: %@ didFailWithError: %@", _urlStr, [err description]);
 #endif
-	_error = err;
 
-	[self failed];
+	if(self.isCancelled) {
+		[conn cancel];
+		return;
+	}
+
+	self.error = err;
+
+	assert(_finalBlock);
+	self.finalBlock(self, NO);
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)conn
@@ -289,7 +297,8 @@
 		return;
 	}
 
-	[self completed];
+	assert(_finalBlock);
+	self.finalBlock(self, YES);
 }
 
 #if 0

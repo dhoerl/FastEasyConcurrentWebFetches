@@ -26,18 +26,17 @@
 #endif
 
 // Unit Testing
-#if defined(UNIT_TESTING)
+#if defined(UNIT_TESTING) && !defined(FORCE_MODE)
 typedef enum { forcingOff=0, failAtSetup, failAtStartup, forceSuccess, forceFailure, forceRetry } forceMode;
 #endif
 
 @class FECWF_WEBFETCHER;
-typedef void(^finishBlock)(FECWF_WEBFETCHER *op);
+typedef void(^finishBlock)(FECWF_WEBFETCHER *op, BOOL succeeded);
 
 @interface FECWF_WEBFETCHER : NSObject
 @property (atomic, assign, readonly) BOOL isCancelled;
 @property (atomic, assign, readonly) BOOL isExecuting;
 @property (atomic, assign, readonly) BOOL isFinished;
-@property (atomic, strong, strong) finishBlock finalBlock;
 @property (atomic, strong, readonly) NSURLConnection *connection;
 @property (nonatomic, copy) NSString *runMessage;		// debugging
 @property (nonatomic, copy) NSString *urlStr;
@@ -63,10 +62,14 @@ typedef void(^finishBlock)(FECWF_WEBFETCHER *op);
 
 - (BOOL)start:(id)setupObject;				// called after setup has succeeded with the setup's returned value
 - (void)completed;							// subclasses to override, call super
-- (void)failed;								// subclasses to override then finally call super
+- (void)failed;								// subclasses to override, call super
 - (void)finish;								// subclasses to override for cleanup, call super, only called if the operation successfully starts
 - (void)cancel;								// for subclasses, called on operation's thread
 
+@end
+
+@interface FECWF_WEBFETCHER () // Internal Use
+@property (atomic, strong, strong) finishBlock finalBlock;
 @end
 
 @interface FECWF_WEBFETCHER (NSURLConnectionDelegate) <NSURLConnectionDelegate, NSURLConnectionDataDelegate>

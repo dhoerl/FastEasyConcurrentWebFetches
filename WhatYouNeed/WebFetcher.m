@@ -245,6 +245,11 @@
 	//if([[self class] printDebugging])
 	LOG(@"Connection: %@ didFailWithError: %@", _urlStr, [err description]);
 #endif
+	if([super isCancelled]) {
+		[_connection cancel];
+		return;
+	}
+
 	_error = err;
 
 	[self failed];

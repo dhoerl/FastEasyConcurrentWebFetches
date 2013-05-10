@@ -179,11 +179,11 @@
 		DECB200D1733FE620050C8F4 /* WhatYouNeediOS6+ */ = {
 			isa = PBXGroup;
 			children = (
-				DECB201517340DC90050C8F4 /* WebFetcher6.h */,
-				DECB201617340DC90050C8F4 /* WebFetcher6.m */,
+				DECB201217340DC90050C8F4 /* OperationsRunnerProtocol6.h */,
 				DECB201017340DC90050C8F4 /* OperationsRunner6.h */,
 				DECB201117340DC90050C8F4 /* OperationsRunner6.m */,
-				DECB201217340DC90050C8F4 /* OperationsRunnerProtocol6.h */,
+				DECB201517340DC90050C8F4 /* WebFetcher6.h */,
+				DECB201617340DC90050C8F4 /* WebFetcher6.m */,
 				DECB201317340DC90050C8F4 /* URfetcher6.h */,
 				DECB201417340DC90050C8F4 /* URfetcher6.m */,
 			);

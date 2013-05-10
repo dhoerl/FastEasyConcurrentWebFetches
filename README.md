@@ -13,6 +13,9 @@ This code, migrated from NSOperation-WebFetches-MadeEasy, was the basis of the L
 
 UPDATES:
 
+  2.2 (5/10/2013): Fix Race Condition
+    - the finalBlock could get run before the operation finished completed/failed + finish. Now these are serialized.
+  
   2.1 (5/9/2013): Unit tests passing thousands of time over hours
     - continue to refine so that all 8 tests pass for thousands of test iterations, for both iOS5 and iOS6  
     - Provide MACRO names for all classes (poor man's namespace) to avoid potential name conflicts, better support Library use

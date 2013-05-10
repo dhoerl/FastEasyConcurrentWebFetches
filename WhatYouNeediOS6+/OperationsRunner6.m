@@ -303,20 +303,27 @@
 	BOOL started;
 	NSMutableURLRequest *req = [op setup];
 	if(req) {
+		// Adding the final block here makes unit testing easier (can override it)
+		__weak __typeof__(self) weakSelf = self;
+		// Without the completion block, the user's subclasses have to call the superclass last, to avoid race conditions. This serializes the completion message and the final block.
+		op.finalBlock = ^(FECWF_WEBFETCHER *op, BOOL succeeded)
+							{
+								__typeof__(self) strongSelf = weakSelf;
+								if(strongSelf) {
+									dispatch_group_async(strongSelf.opRunnerGroup, strongSelf.opRunnerQueue, ^
+										{
+											if(succeeded) {
+												[op completed];
+											} else {
+												[op failed];
+											}
+											[strongSelf _operationFinished:op];
+										} );
+									}
+							};
+
 		started = [op start:req];
-		if(started) {
-			__weak __typeof__(self) weakSelf = self;
-			op.finalBlock = ^(FECWF_WEBFETCHER *op)
-								{
-									__typeof__(self) strongSelf = weakSelf;
-									if(strongSelf) {
-										dispatch_group_async(strongSelf.opRunnerGroup, strongSelf.opRunnerQueue, ^
-											{
-												[weakSelf _operationFinished:op];
-											} );
-										}
-								};
-								
+		if(started) {								
 			[op.connection setDelegateQueue:_operationsQueue];
 #ifndef UNIT_TESTING
 			[op.connection start];

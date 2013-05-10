@@ -32,7 +32,7 @@
 #define MAX_OPS		4				// OperationQueue max, Apple suggests this be close to the number of cores but less than 64 for sure
 #define NUM_OPS		(5*MAX_OPS)		// loops per test
 
-#define iCount		10			// loops per test
+#define iCount		100			// loops per test
 
 #if 0	// 0 == no debug, 1 == lots of mesages
 #define TLOG(...) NSLog(__VA_ARGS__)

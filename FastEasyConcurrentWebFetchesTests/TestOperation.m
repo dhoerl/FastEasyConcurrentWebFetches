@@ -8,6 +8,10 @@
 
 #include <math.h>
 
+#ifndef UNIT_TESTING
+#define UNIT_TESTING 1
+#endif
+
 #import "TestOperationProtocol.h"
 #import "TestOperation.h"
 
@@ -51,29 +55,32 @@
 	if(!ret2 && ret) {
 		[self finish];
 	}
+#if __IPHONE_OS_VERSION_MIN_REQUIRED >= 60000
+	{
+		finishBlock b = self.finalBlock;
+		__weak __typeof__(self) weakSelf = self;
+		self.finalBlock = ^(FECWF_WEBFETCHER *op, BOOL succeeded)
+							{
+								__typeof__(self) strongSelf = weakSelf;
+								[strongSelf.delegate register:strongSelf atStage:atExit];
+								if(b) b(op, succeeded);
+							};
+	}
+#endif
+
 	return ret2;
 }
 
 - (void)completed
 {
-	self.succeeded = 1;	// race condition - must do first
-
 	[super completed];
+
+	self.succeeded = 1;
+
 }
 
 - (void)finish
 {
-#if __IPHONE_OS_VERSION_MIN_REQUIRED >= 60000
-	finishBlock b = self.finalBlock;
-	__weak __typeof__(self) weakSelf = self;
-	self.finalBlock = ^(FECWF_WEBFETCHER *op)
-						{
-							__typeof__(self) strongSelf = weakSelf;
-							[strongSelf.delegate register:strongSelf atStage:atExit];
-							if(b) b(op);
-						};
-#endif
-
 	[super finish];
 
 	++self.finishedMsg;
@@ -83,9 +90,9 @@
 
 - (void)failed
 {
-	self.succeeded = -1;	// race condition
-	
 	[super failed];
+	
+	self.succeeded = -1;
 }
 
 - (void)cancel
