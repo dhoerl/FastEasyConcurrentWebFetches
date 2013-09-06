@@ -11,7 +11,13 @@
 
 #import "FECWF_Tests.h"
 
-#if __IPHONE_OS_VERSION_MIN_REQUIRED >= 60000
+#if __IPHONE_OS_VERSION_MIN_REQUIRED >= 70000
+#import "OperationsRunner7.h"
+#import "OperationsRunnerProtocol7.h"
+#define FECWF_RUN_OPERATION_TYPE		FECWF_WEBFETCHER
+#import "URfetcher7.h"
+#import "URSessionDelegate.h"
+#elif __IPHONE_OS_VERSION_MIN_REQUIRED >= 60000
 #import "OperationsRunner6.h"
 #import "OperationsRunnerProtocol6.h"
 #define FECWF_RUN_OPERATION_TYPE		FECWF_WEBFETCHER
@@ -27,12 +33,12 @@
 #import "TestOperation.h"
 
 #define MIN_TEST	0				// Starting test #
-#define MAX_TEST	8				// Last test # to run
+#define MAX_TEST	8				// Last test # to run (7 now)
 
-#define MAX_OPS		4				// OperationQueue max, Apple suggests this be close to the number of cores but less than 64 for sure
-#define NUM_OPS		(5*MAX_OPS)		// loops per test
+#define MAX_OPS		4				// OperationQueue max, Apple suggests this be close to the number of cores but less than 64 for sure (4)
+#define NUM_OPS		(5*MAX_OPS)		// Ops per test
 
-#define iCount		100			// loops per test
+#define iCount		100				// loops per test - (100)
 
 #if 0	// 0 == no debug, 1 == lots of mesages
 #define TLOG(...) NSLog(__VA_ARGS__)
@@ -111,7 +117,20 @@ static void myAlrm(int sig)
 {
     [super setUp];
 
+#if __IPHONE_OS_VERSION_MIN_REQUIRED >= 70000
+	URSessionDelegate *del = [URSessionDelegate new];
+	
+	NSURLSessionConfiguration *config = [NSURLSessionConfiguration defaultSessionConfiguration];
+	config.URLCache = nil;
+assert(config.HTTPShouldSetCookies);
+	config.HTTPShouldSetCookies = YES;
+	config.HTTPShouldUsePipelining = YES;
+	
+	[OperationsRunner createSharedSessionWithConfiguration:config delegate:del];
+#endif
+
 	OperationsRunner *operationsRunner = [self operationsRunner];
+
 	if(!operationsRunner.delegateQueue) {
 		// re-using it should be more stressful than getting a new one each time
 		queue = dispatch_queue_create("com.fecw.test", DISPATCH_QUEUE_SERIAL);
@@ -188,7 +207,7 @@ static void myAlrm(int sig)
 
 		WAIT_UNTIL(count == (opFailed+opSucceeded+opNeverRan), 2, @"All ops did not complete");
 		if(opFailed != count) [self dump];
-		STAssertEquals(opFailed, count, @"All ops should have succeeded");
+		STAssertEquals(opFailed, count, @"All ops should have failed");
 
 	}
 }
@@ -237,7 +256,7 @@ static void myAlrm(int sig)
 		
 		WAIT_UNTIL([self operationsCount] == 0, 1, @"Some operation did not cancel");
 
-		STAssertTrue([self adjustOperationsCount:0 atStage:atFinish] == 0, @"Should never reach setup");
+		STAssertTrue([self adjustOperationsCount:0 atStage:atFinish] == 0, @"Should never reach finish");
 		STAssertEquals(opFailed+opSucceeded+opNeverRan, 0, @"Nothing should completed or failed");
 		//[self dump];
 	}
@@ -481,7 +500,6 @@ static void myAlrm(int sig)
 				// OperationsRunner *operationsRunner = (OperationsRunner *)obj;
 				// operationsRunner.priority = DISPATCH_QUEUE_PRIORITY_BACKGROUND;	// for example
 				// operationsRunner.maxOps = 4;										// for example
-				// operationsRunner.mSecCancelDelay = 10;							// for example
 			}
 		}
 		return obj;

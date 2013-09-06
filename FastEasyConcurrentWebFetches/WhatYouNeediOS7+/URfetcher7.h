@@ -1,6 +1,7 @@
-
-// FastEasyConcurrentWebFetches (TM)
-// Copyright (C) 2012-2013 by David Hoerl
+//
+// URfetcher.h
+// FastEasyConcurrentWebFetches
+// Copyright (C) 2013 by David Hoerl
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -21,53 +22,8 @@
 // THE SOFTWARE.
 //
 
-#import "ViewController.h"
+#import "WebFetcher7.h"
 
-#import "MyViewController.h"
-
-#if __IPHONE_OS_VERSION_MIN_REQUIRED >= 70000
-#define MY_NIB @"MyViewController7"
-#else
-#define MY_NIB @"MyViewController"
-#endif
-
-
-@interface ViewController ()
-
-@end
-
-@implementation ViewController
-{
-	IBOutlet UIButton *testButton;
-}
-
-- (IBAction)test:(id)sender
-{
-	MyViewController *vc = [[MyViewController alloc] initWithNibName:MY_NIB bundle:nil];
-
-	[self presentViewController:vc animated:YES completion:NULL];
-}
-- (void)XdismissViewControllerAnimated:(BOOL)flag completion:(void (^)(void))completion
-{
-
-}
-
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-	// Do any additional setup after loading the view, typically from a nib.
-}
-
-- (void)viewDidUnload
-{
-	testButton = nil;
-    [super viewDidUnload];
-    // Release any retained subviews of the main view.
-}
-
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-{
-	return (interfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);
-}
+@interface URfetcher : FECWF_WEBFETCHER
 
 @end

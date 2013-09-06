@@ -22,7 +22,7 @@
 // THE SOFTWARE.
 //
 
-#import "URfetcher.h"
+#import "URfetcher6.h"
 
 @implementation URfetcher
 

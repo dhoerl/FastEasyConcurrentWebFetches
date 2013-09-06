@@ -7,6 +7,32 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		DE3BE70F17D67344006345BC /* MyViewController7.xib in Resources */ = {isa = PBXBuildFile; fileRef = DE3BE70E17D67344006345BC /* MyViewController7.xib */; };
+		DE52ACF617CE6D1000858FA4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = DEE915A91722DE520085F570 /* main.m */; };
+		DE52ACF717CE6D1000858FA4 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = DEE915AD1722DE520085F570 /* AppDelegate.m */; };
+		DE52ACF817CE6D1000858FA4 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DEE915B61722DE520085F570 /* ViewController.m */; };
+		DE52ACF917CE6D1000858FA4 /* MyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DEE915DA1722DEB20085F570 /* MyViewController.m */; };
+		DE52ACFE17CE6D1000858FA4 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DEE9159D1722DE520085F570 /* UIKit.framework */; };
+		DE52ACFF17CE6D1000858FA4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DEE9159F1722DE520085F570 /* Foundation.framework */; };
+		DE52AD0017CE6D1000858FA4 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DEE915A11722DE520085F570 /* CoreGraphics.framework */; };
+		DE52AD0217CE6D1000858FA4 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = DEE915A61722DE520085F570 /* InfoPlist.strings */; };
+		DE52AD0317CE6D1000858FA4 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = DEE915AF1722DE520085F570 /* Default.png */; };
+		DE52AD0417CE6D1000858FA4 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DEE915B11722DE520085F570 /* Default@2x.png */; };
+		DE52AD0517CE6D1000858FA4 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DEE915B31722DE520085F570 /* Default-568h@2x.png */; };
+		DE52AD0817CE6D1000858FA4 /* LICENSE.md in Resources */ = {isa = PBXBuildFile; fileRef = DEE915F41722EF380085F570 /* LICENSE.md */; };
+		DE52AD0917CE6D1000858FA4 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = DEE915F51722EF380085F570 /* README.md */; };
+		DE5D470D17CE6F0D00CD0FD5 /* OperationsRunner7.m in Sources */ = {isa = PBXBuildFile; fileRef = DE5D470717CE6F0D00CD0FD5 /* OperationsRunner7.m */; };
+		DE5D470E17CE6F0D00CD0FD5 /* URfetcher7.m in Sources */ = {isa = PBXBuildFile; fileRef = DE5D470A17CE6F0D00CD0FD5 /* URfetcher7.m */; };
+		DE5D475917D0E3CB00CD0FD5 /* ORSessionDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = DE5D475817D0E3CB00CD0FD5 /* ORSessionDelegate.m */; };
+		DE5D475C17D0E3ED00CD0FD5 /* URSessionDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = DE5D475B17D0E3ED00CD0FD5 /* URSessionDelegate.m */; };
+		DE5D476317D12D6300CD0FD5 /* TestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = DE956F4F1729E2700026179D /* TestOperation.m */; };
+		DE5D476417D12D6300CD0FD5 /* FECWF_Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = DEE915CE1722DE520085F570 /* FECWF_Tests.m */; };
+		DE5D476617D12D6300CD0FD5 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DEE915C11722DE520085F570 /* SenTestingKit.framework */; };
+		DE5D476717D12D6300CD0FD5 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DEE9159D1722DE520085F570 /* UIKit.framework */; };
+		DE5D476817D12D6300CD0FD5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DEE9159F1722DE520085F570 /* Foundation.framework */; };
+		DE5D476A17D12D6300CD0FD5 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = DEE915CA1722DE520085F570 /* InfoPlist.strings */; };
+		DE5D477617D1316200CD0FD5 /* ORSessionDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = DE5D475817D0E3CB00CD0FD5 /* ORSessionDelegate.m */; };
+		DE5D477717D1413200CD0FD5 /* OperationsRunner7.m in Sources */ = {isa = PBXBuildFile; fileRef = DE5D470717CE6F0D00CD0FD5 /* OperationsRunner7.m */; };
 		DE63B8201738477C00CCFACC /* URfetcher.m in Sources */ = {isa = PBXBuildFile; fileRef = DECB2024173415570050C8F4 /* URfetcher.m */; };
 		DE63B821173847A900CCFACC /* TestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = DE956F4F1729E2700026179D /* TestOperation.m */; };
 		DE63B822173847F200CCFACC /* WebFetcher.m in Sources */ = {isa = PBXBuildFile; fileRef = DECB2026173415570050C8F4 /* WebFetcher.m */; };
@@ -41,6 +67,11 @@
 		DECB202A173415570050C8F4 /* WebFetcher.m in Sources */ = {isa = PBXBuildFile; fileRef = DECB2026173415570050C8F4 /* WebFetcher.m */; };
 		DECB202B173416470050C8F4 /* ConcurrentOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = DECB201F173415570050C8F4 /* ConcurrentOperation.m */; };
 		DECB202C1734164B0050C8F4 /* OperationsRunner.m in Sources */ = {isa = PBXBuildFile; fileRef = DECB2021173415570050C8F4 /* OperationsRunner.m */; };
+		DED5400317D92747005698F0 /* Tracker.m in Sources */ = {isa = PBXBuildFile; fileRef = DED5400117D9273C005698F0 /* Tracker.m */; };
+		DED5400417D9274F005698F0 /* Tracker.m in Sources */ = {isa = PBXBuildFile; fileRef = DED5400117D9273C005698F0 /* Tracker.m */; };
+		DED5400517D92750005698F0 /* Tracker.m in Sources */ = {isa = PBXBuildFile; fileRef = DED5400117D9273C005698F0 /* Tracker.m */; };
+		DED5400617DA3417005698F0 /* WebFetcher7.m in Sources */ = {isa = PBXBuildFile; fileRef = DE5D470C17CE6F0D00CD0FD5 /* WebFetcher7.m */; };
+		DED5400717DA341A005698F0 /* WebFetcher7.m in Sources */ = {isa = PBXBuildFile; fileRef = DE5D470C17CE6F0D00CD0FD5 /* WebFetcher7.m */; };
 		DEE9159E1722DE520085F570 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DEE9159D1722DE520085F570 /* UIKit.framework */; };
 		DEE915A01722DE520085F570 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DEE9159F1722DE520085F570 /* Foundation.framework */; };
 		DEE915A21722DE520085F570 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DEE915A11722DE520085F570 /* CoreGraphics.framework */; };
@@ -61,9 +92,18 @@
 		DEE915DE1722DEB20085F570 /* MyViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DEE915DB1722DEB20085F570 /* MyViewController.xib */; };
 		DEE915F61722EF380085F570 /* LICENSE.md in Resources */ = {isa = PBXBuildFile; fileRef = DEE915F41722EF380085F570 /* LICENSE.md */; };
 		DEE915F71722EF380085F570 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = DEE915F51722EF380085F570 /* README.md */; };
+		DEEFF6E617D67278001D7C6B /* ViewController7.xib in Resources */ = {isa = PBXBuildFile; fileRef = DEEFF6E417D67278001D7C6B /* ViewController7.xib */; };
+		DEF12A5617D7CDD60050C55C /* URSessionDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = DE5D475B17D0E3ED00CD0FD5 /* URSessionDelegate.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		DE5D475F17D12D6300CD0FD5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DEE915921722DE520085F570 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = DEE915991722DE520085F570;
+			remoteInfo = FastEasyConcurrentWebFetches;
+		};
 		DECB1FF91733F9C70050C8F4 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = DEE915921722DE520085F570 /* Project object */;
@@ -81,11 +121,25 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		DE3BE70E17D67344006345BC /* MyViewController7.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MyViewController7.xib; sourceTree = "<group>"; };
+		DE52AD0F17CE6D1000858FA4 /* FECWF For iO7.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = "FECWF For iO7.app"; path = "FECWF For iOS7.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		DE5D470617CE6F0D00CD0FD5 /* OperationsRunner7.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OperationsRunner7.h; sourceTree = "<group>"; };
+		DE5D470717CE6F0D00CD0FD5 /* OperationsRunner7.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OperationsRunner7.m; sourceTree = "<group>"; };
+		DE5D470817CE6F0D00CD0FD5 /* OperationsRunnerProtocol7.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OperationsRunnerProtocol7.h; sourceTree = "<group>"; };
+		DE5D470917CE6F0D00CD0FD5 /* URfetcher7.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = URfetcher7.h; sourceTree = "<group>"; };
+		DE5D470A17CE6F0D00CD0FD5 /* URfetcher7.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = URfetcher7.m; sourceTree = "<group>"; };
+		DE5D470B17CE6F0D00CD0FD5 /* WebFetcher7.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebFetcher7.h; sourceTree = "<group>"; };
+		DE5D470C17CE6F0D00CD0FD5 /* WebFetcher7.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebFetcher7.m; sourceTree = "<group>"; };
+		DE5D475717D0E3CB00CD0FD5 /* ORSessionDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ORSessionDelegate.h; sourceTree = "<group>"; };
+		DE5D475817D0E3CB00CD0FD5 /* ORSessionDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ORSessionDelegate.m; sourceTree = "<group>"; };
+		DE5D475A17D0E3ED00CD0FD5 /* URSessionDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = URSessionDelegate.h; sourceTree = "<group>"; };
+		DE5D475B17D0E3ED00CD0FD5 /* URSessionDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = URSessionDelegate.m; sourceTree = "<group>"; };
+		DE5D477117D12D6300CD0FD5 /* FECWF iOS7.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = "FECWF iOS7.octest"; path = "FECWF iOS7 Tests.octest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DE956F4E1729E1E70026179D /* TestOperationProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TestOperationProtocol.h; sourceTree = "<group>"; };
 		DE956F4F1729E2700026179D /* TestOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestOperation.m; sourceTree = "<group>"; };
 		DE956F501729E2700026179D /* TestOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = TestOperation.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
-		DECB1FF51733F9B40050C8F4 /* FECW For iOS6.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "FECW For iOS6.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		DECB200B1733F9C70050C8F4 /* FECW iOS6 Tests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "FECW iOS6 Tests.octest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		DECB1FF51733F9B40050C8F4 /* FECWF For iOS6.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "FECWF For iOS6.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		DECB200B1733F9C70050C8F4 /* FECWF iOS6 Tests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "FECWF iOS6 Tests.octest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DECB201017340DC90050C8F4 /* OperationsRunner6.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = OperationsRunner6.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		DECB201117340DC90050C8F4 /* OperationsRunner6.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = OperationsRunner6.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		DECB201217340DC90050C8F4 /* OperationsRunnerProtocol6.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = OperationsRunnerProtocol6.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
@@ -103,6 +157,8 @@
 		DECB2025173415570050C8F4 /* WebFetcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = WebFetcher.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		DECB2026173415570050C8F4 /* WebFetcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebFetcher.m; sourceTree = "<group>"; };
 		DECB202D17343EF80050C8F4 /* PrintMe */ = {isa = PBXFileReference; lastKnownFileType = text; path = PrintMe; sourceTree = "<group>"; };
+		DED5400017D9273C005698F0 /* Tracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Tracker.h; sourceTree = "<group>"; };
+		DED5400117D9273C005698F0 /* Tracker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Tracker.m; sourceTree = "<group>"; };
 		DEE9159A1722DE520085F570 /* FECWF For iOS5.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "FECWF For iOS5.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DEE9159D1722DE520085F570 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		DEE9159F1722DE520085F570 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -119,7 +175,7 @@
 		DEE915B51722DE520085F570 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		DEE915B61722DE520085F570 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		DEE915B91722DE520085F570 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/ViewController.xib; sourceTree = "<group>"; };
-		DEE915C01722DE520085F570 /* FastEasyConcurrentWebFetchesTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = FastEasyConcurrentWebFetchesTests.octest; path = "FECWF iOS5 Tests.octest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		DEE915C01722DE520085F570 /* FECWF iOS5 Tests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "FECWF iOS5 Tests.octest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DEE915C11722DE520085F570 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
 		DEE915C91722DE520085F570 /* FastEasyConcurrentWebFetchesTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "FastEasyConcurrentWebFetchesTests-Info.plist"; sourceTree = "<group>"; };
 		DEE915CB1722DE520085F570 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -130,9 +186,30 @@
 		DEE915DB1722DEB20085F570 /* MyViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MyViewController.xib; sourceTree = "<group>"; };
 		DEE915F41722EF380085F570 /* LICENSE.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE.md; sourceTree = SOURCE_ROOT; };
 		DEE915F51722EF380085F570 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; lineEnding = 0; path = README.md; sourceTree = SOURCE_ROOT; };
+		DEEFF6E517D67278001D7C6B /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/ViewController7.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		DE52ACFD17CE6D1000858FA4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DE52ACFE17CE6D1000858FA4 /* UIKit.framework in Frameworks */,
+				DE52ACFF17CE6D1000858FA4 /* Foundation.framework in Frameworks */,
+				DE52AD0017CE6D1000858FA4 /* CoreGraphics.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DE5D476517D12D6300CD0FD5 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DE5D476617D12D6300CD0FD5 /* SenTestingKit.framework in Frameworks */,
+				DE5D476717D12D6300CD0FD5 /* UIKit.framework in Frameworks */,
+				DE5D476817D12D6300CD0FD5 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		DECB1FE31733F9B40050C8F4 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -176,16 +253,34 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		DE5D470517CE6F0D00CD0FD5 /* WhatYouNeediOS7+ */ = {
+			isa = PBXGroup;
+			children = (
+				DE5D470817CE6F0D00CD0FD5 /* OperationsRunnerProtocol7.h */,
+				DE5D470617CE6F0D00CD0FD5 /* OperationsRunner7.h */,
+				DE5D470717CE6F0D00CD0FD5 /* OperationsRunner7.m */,
+				DE5D475717D0E3CB00CD0FD5 /* ORSessionDelegate.h */,
+				DE5D475817D0E3CB00CD0FD5 /* ORSessionDelegate.m */,
+				DE5D470917CE6F0D00CD0FD5 /* URfetcher7.h */,
+				DE5D470A17CE6F0D00CD0FD5 /* URfetcher7.m */,
+				DE5D475A17D0E3ED00CD0FD5 /* URSessionDelegate.h */,
+				DE5D475B17D0E3ED00CD0FD5 /* URSessionDelegate.m */,
+				DE5D470B17CE6F0D00CD0FD5 /* WebFetcher7.h */,
+				DE5D470C17CE6F0D00CD0FD5 /* WebFetcher7.m */,
+			);
+			path = "WhatYouNeediOS7+";
+			sourceTree = "<group>";
+		};
 		DECB200D1733FE620050C8F4 /* WhatYouNeediOS6+ */ = {
 			isa = PBXGroup;
 			children = (
 				DECB201217340DC90050C8F4 /* OperationsRunnerProtocol6.h */,
 				DECB201017340DC90050C8F4 /* OperationsRunner6.h */,
 				DECB201117340DC90050C8F4 /* OperationsRunner6.m */,
-				DECB201517340DC90050C8F4 /* WebFetcher6.h */,
-				DECB201617340DC90050C8F4 /* WebFetcher6.m */,
 				DECB201317340DC90050C8F4 /* URfetcher6.h */,
 				DECB201417340DC90050C8F4 /* URfetcher6.m */,
+				DECB201517340DC90050C8F4 /* WebFetcher6.h */,
+				DECB201617340DC90050C8F4 /* WebFetcher6.m */,
 			);
 			path = "WhatYouNeediOS6+";
 			sourceTree = SOURCE_ROOT;
@@ -221,9 +316,11 @@
 			isa = PBXGroup;
 			children = (
 				DEE9159A1722DE520085F570 /* FECWF For iOS5.app */,
-				DEE915C01722DE520085F570 /* FastEasyConcurrentWebFetchesTests.octest */,
-				DECB1FF51733F9B40050C8F4 /* FECW For iOS6.app */,
-				DECB200B1733F9C70050C8F4 /* FECW iOS6 Tests.octest */,
+				DEE915C01722DE520085F570 /* FECWF iOS5 Tests.octest */,
+				DECB1FF51733F9B40050C8F4 /* FECWF For iOS6.app */,
+				DECB200B1733F9C70050C8F4 /* FECWF iOS6 Tests.octest */,
+				DE52AD0F17CE6D1000858FA4 /* FECWF For iO7.app */,
+				DE5D477117D12D6300CD0FD5 /* FECWF iOS7.octest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -246,14 +343,17 @@
 				DEE915F41722EF380085F570 /* LICENSE.md */,
 				DECB201D173415570050C8F4 /* WhatYouNeediOS5 */,
 				DECB200D1733FE620050C8F4 /* WhatYouNeediOS6+ */,
+				DE5D470517CE6F0D00CD0FD5 /* WhatYouNeediOS7+ */,
 				DEE915D91722DEB20085F570 /* MyViewController.h */,
 				DEE915DA1722DEB20085F570 /* MyViewController.m */,
 				DEE915DB1722DEB20085F570 /* MyViewController.xib */,
+				DE3BE70E17D67344006345BC /* MyViewController7.xib */,
 				DEE915AC1722DE520085F570 /* AppDelegate.h */,
 				DEE915AD1722DE520085F570 /* AppDelegate.m */,
 				DEE915B51722DE520085F570 /* ViewController.h */,
 				DEE915B61722DE520085F570 /* ViewController.m */,
 				DEE915B81722DE520085F570 /* ViewController.xib */,
+				DEEFF6E417D67278001D7C6B /* ViewController7.xib */,
 				DEE915A41722DE520085F570 /* Supporting Files */,
 			);
 			path = FastEasyConcurrentWebFetches;
@@ -262,6 +362,8 @@
 		DEE915A41722DE520085F570 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				DED5400017D9273C005698F0 /* Tracker.h */,
+				DED5400117D9273C005698F0 /* Tracker.m */,
 				DEE915A51722DE520085F570 /* FastEasyConcurrentWebFetches-Info.plist */,
 				DEE915A61722DE520085F570 /* InfoPlist.strings */,
 				DEE915A91722DE520085F570 /* main.m */,
@@ -299,6 +401,42 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		DE52ACF417CE6D1000858FA4 /* FECWF For iOS7 */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DE52AD0A17CE6D1000858FA4 /* Build configuration list for PBXNativeTarget "FECWF For iOS7" */;
+			buildPhases = (
+				DE52ACF517CE6D1000858FA4 /* Sources */,
+				DE52ACFD17CE6D1000858FA4 /* Frameworks */,
+				DE52AD0117CE6D1000858FA4 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "FECWF For iOS7";
+			productName = FastEasyConcurrentWebFetches;
+			productReference = DE52AD0F17CE6D1000858FA4 /* FECWF For iO7.app */;
+			productType = "com.apple.product-type.application";
+		};
+		DE5D475D17D12D6300CD0FD5 /* FECWF iOS7 Tests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DE5D476C17D12D6300CD0FD5 /* Build configuration list for PBXNativeTarget "FECWF iOS7 Tests" */;
+			buildPhases = (
+				DE5D476017D12D6300CD0FD5 /* Sources */,
+				DE5D476517D12D6300CD0FD5 /* Frameworks */,
+				DE5D476917D12D6300CD0FD5 /* Resources */,
+				DE5D476B17D12D6300CD0FD5 /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				DE5D475E17D12D6300CD0FD5 /* PBXTargetDependency */,
+			);
+			name = "FECWF iOS7 Tests";
+			productName = FastEasyConcurrentWebFetchesTests;
+			productReference = DE5D477117D12D6300CD0FD5 /* FECWF iOS7.octest */;
+			productType = "com.apple.product-type.bundle";
+		};
 		DECB1FD91733F9B40050C8F4 /* FECWF For iOS6 */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = DECB1FF01733F9B40050C8F4 /* Build configuration list for PBXNativeTarget "FECWF For iOS6" */;
@@ -313,7 +451,7 @@
 			);
 			name = "FECWF For iOS6";
 			productName = FastEasyConcurrentWebFetches;
-			productReference = DECB1FF51733F9B40050C8F4 /* FECW For iOS6.app */;
+			productReference = DECB1FF51733F9B40050C8F4 /* FECWF For iOS6.app */;
 			productType = "com.apple.product-type.application";
 		};
 		DECB1FF71733F9C70050C8F4 /* FECWF iOS6 Tests */ = {
@@ -332,7 +470,7 @@
 			);
 			name = "FECWF iOS6 Tests";
 			productName = FastEasyConcurrentWebFetchesTests;
-			productReference = DECB200B1733F9C70050C8F4 /* FECW iOS6 Tests.octest */;
+			productReference = DECB200B1733F9C70050C8F4 /* FECWF iOS6 Tests.octest */;
 			productType = "com.apple.product-type.bundle";
 		};
 		DEE915991722DE520085F570 /* FECWF For iOS5 */ = {
@@ -368,7 +506,7 @@
 			);
 			name = "FECWF iOS5 Tests";
 			productName = FastEasyConcurrentWebFetchesTests;
-			productReference = DEE915C01722DE520085F570 /* FastEasyConcurrentWebFetchesTests.octest */;
+			productReference = DEE915C01722DE520085F570 /* FECWF iOS5 Tests.octest */;
 			productType = "com.apple.product-type.bundle";
 		};
 /* End PBXNativeTarget section */
@@ -396,11 +534,36 @@
 				DEE915BF1722DE520085F570 /* FECWF iOS5 Tests */,
 				DECB1FD91733F9B40050C8F4 /* FECWF For iOS6 */,
 				DECB1FF71733F9C70050C8F4 /* FECWF iOS6 Tests */,
+				DE52ACF417CE6D1000858FA4 /* FECWF For iOS7 */,
+				DE5D475D17D12D6300CD0FD5 /* FECWF iOS7 Tests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		DE52AD0117CE6D1000858FA4 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DE52AD0217CE6D1000858FA4 /* InfoPlist.strings in Resources */,
+				DE3BE70F17D67344006345BC /* MyViewController7.xib in Resources */,
+				DE52AD0317CE6D1000858FA4 /* Default.png in Resources */,
+				DE52AD0417CE6D1000858FA4 /* Default@2x.png in Resources */,
+				DE52AD0517CE6D1000858FA4 /* Default-568h@2x.png in Resources */,
+				DE52AD0817CE6D1000858FA4 /* LICENSE.md in Resources */,
+				DE52AD0917CE6D1000858FA4 /* README.md in Resources */,
+				DEEFF6E617D67278001D7C6B /* ViewController7.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DE5D476917D12D6300CD0FD5 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DE5D476A17D12D6300CD0FD5 /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		DECB1FE71733F9B40050C8F4 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -450,6 +613,19 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		DE5D476B17D12D6300CD0FD5 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
+		};
 		DECB20051733F9C70050C8F4 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -479,10 +655,41 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		DE52ACF517CE6D1000858FA4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DE52ACF617CE6D1000858FA4 /* main.m in Sources */,
+				DE52ACF717CE6D1000858FA4 /* AppDelegate.m in Sources */,
+				DED5400317D92747005698F0 /* Tracker.m in Sources */,
+				DE5D470D17CE6F0D00CD0FD5 /* OperationsRunner7.m in Sources */,
+				DED5400617DA3417005698F0 /* WebFetcher7.m in Sources */,
+				DE5D475917D0E3CB00CD0FD5 /* ORSessionDelegate.m in Sources */,
+				DE52ACF817CE6D1000858FA4 /* ViewController.m in Sources */,
+				DE52ACF917CE6D1000858FA4 /* MyViewController.m in Sources */,
+				DE5D475C17D0E3ED00CD0FD5 /* URSessionDelegate.m in Sources */,
+				DE5D470E17CE6F0D00CD0FD5 /* URfetcher7.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DE5D476017D12D6300CD0FD5 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DE5D476417D12D6300CD0FD5 /* FECWF_Tests.m in Sources */,
+				DE5D477717D1413200CD0FD5 /* OperationsRunner7.m in Sources */,
+				DED5400717DA341A005698F0 /* WebFetcher7.m in Sources */,
+				DE5D477617D1316200CD0FD5 /* ORSessionDelegate.m in Sources */,
+				DE5D476317D12D6300CD0FD5 /* TestOperation.m in Sources */,
+				DEF12A5617D7CDD60050C55C /* URSessionDelegate.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		DECB1FDA1733F9B40050C8F4 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DED5400417D9274F005698F0 /* Tracker.m in Sources */,
 				DECB1FDB1733F9B40050C8F4 /* main.m in Sources */,
 				DECB1FDC1733F9B40050C8F4 /* AppDelegate.m in Sources */,
 				DECB1FDD1733F9B40050C8F4 /* ViewController.m in Sources */,
@@ -514,6 +721,7 @@
 				DEE915DD1722DEB20085F570 /* MyViewController.m in Sources */,
 				DECB2027173415570050C8F4 /* ConcurrentOperation.m in Sources */,
 				DECB2028173415570050C8F4 /* OperationsRunner.m in Sources */,
+				DED5400517D92750005698F0 /* Tracker.m in Sources */,
 				DECB202A173415570050C8F4 /* WebFetcher.m in Sources */,
 				DE63B8201738477C00CCFACC /* URfetcher.m in Sources */,
 			);
@@ -534,6 +742,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		DE5D475E17D12D6300CD0FD5 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = DEE915991722DE520085F570 /* FECWF For iOS5 */;
+			targetProxy = DE5D475F17D12D6300CD0FD5 /* PBXContainerItemProxy */;
+		};
 		DECB1FF81733F9C70050C8F4 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = DEE915991722DE520085F570 /* FECWF For iOS5 */;
@@ -571,9 +784,137 @@
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
+		DEEFF6E417D67278001D7C6B /* ViewController7.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				DEEFF6E517D67278001D7C6B /* en */,
+			);
+			name = ViewController7.xib;
+			sourceTree = "<group>";
+		};
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		DE52AD0B17CE6D1000858FA4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "FastEasyConcurrentWebFetches/FastEasyConcurrentWebFetches-Prefix.pch";
+				INFOPLIST_FILE = "FastEasyConcurrentWebFetches/FastEasyConcurrentWebFetches-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				PRODUCT_NAME = "FECWF For iOS7";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		DE52AD0C17CE6D1000858FA4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "FastEasyConcurrentWebFetches/FastEasyConcurrentWebFetches-Prefix.pch";
+				INFOPLIST_FILE = "FastEasyConcurrentWebFetches/FastEasyConcurrentWebFetches-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				PRODUCT_NAME = "FECWF For iOS7";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+		DE52AD0D17CE6D1000858FA4 /* ReleaseWithAsserts */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "FastEasyConcurrentWebFetches/FastEasyConcurrentWebFetches-Prefix.pch";
+				INFOPLIST_FILE = "FastEasyConcurrentWebFetches/FastEasyConcurrentWebFetches-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				PRODUCT_NAME = "FECWF For iOS7";
+				WRAPPER_EXTENSION = app;
+			};
+			name = ReleaseWithAsserts;
+		};
+		DE52AD0E17CE6D1000858FA4 /* ReleaseWithAssertsUnitTests */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "FastEasyConcurrentWebFetches/FastEasyConcurrentWebFetches-Prefix.pch";
+				INFOPLIST_FILE = "FastEasyConcurrentWebFetches/FastEasyConcurrentWebFetches-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				PRODUCT_NAME = "FECWF For iOS7";
+				WRAPPER_EXTENSION = app;
+			};
+			name = ReleaseWithAssertsUnitTests;
+		};
+		DE5D476D17D12D6300CD0FD5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/FECWF For iOS7.app/FECWF For iOS7";
+				FRAMEWORK_SEARCH_PATHS = (
+					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
+					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "FastEasyConcurrentWebFetches/FastEasyConcurrentWebFetches-Prefix.pch";
+				INFOPLIST_FILE = "FastEasyConcurrentWebFetchesTests/FastEasyConcurrentWebFetchesTests-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				PRODUCT_NAME = "FECWF iOS7 Tests";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Debug;
+		};
+		DE5D476E17D12D6300CD0FD5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/FECWF For iOS7.app/FECWF For iOS7";
+				FRAMEWORK_SEARCH_PATHS = (
+					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
+					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "FastEasyConcurrentWebFetches/FastEasyConcurrentWebFetches-Prefix.pch";
+				INFOPLIST_FILE = "FastEasyConcurrentWebFetchesTests/FastEasyConcurrentWebFetchesTests-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				PRODUCT_NAME = "FECWF iOS7 Tests";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Release;
+		};
+		DE5D476F17D12D6300CD0FD5 /* ReleaseWithAsserts */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/FECWF For iOS7.app/FECWF For iOS7";
+				FRAMEWORK_SEARCH_PATHS = (
+					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
+					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "FastEasyConcurrentWebFetches/FastEasyConcurrentWebFetches-Prefix.pch";
+				INFOPLIST_FILE = "FastEasyConcurrentWebFetchesTests/FastEasyConcurrentWebFetchesTests-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				PRODUCT_NAME = "FECWF iOS7 Tests";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = ReleaseWithAsserts;
+		};
+		DE5D477017D12D6300CD0FD5 /* ReleaseWithAssertsUnitTests */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/FECWF For iOS7.app/FECWF For iOS7";
+				FRAMEWORK_SEARCH_PATHS = (
+					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
+					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "FastEasyConcurrentWebFetches/FastEasyConcurrentWebFetches-Prefix.pch";
+				INFOPLIST_FILE = "FastEasyConcurrentWebFetchesTests/FastEasyConcurrentWebFetchesTests-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				PRODUCT_NAME = "FECWF iOS7 Tests";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = ReleaseWithAssertsUnitTests;
+		};
 		DE956F431729C0500026179D /* ReleaseWithAssertsUnitTests */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -618,7 +959,7 @@
 		DE956F451729C0500026179D /* ReleaseWithAssertsUnitTests */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/FastEasyConcurrentWebFetches.app/FastEasyConcurrentWebFetches";
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/FECWF For iOS5.app/FECWF For iOS5";
 				FRAMEWORK_SEARCH_PATHS = (
 					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
 					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
@@ -640,7 +981,7 @@
 				GCC_PREFIX_HEADER = "FastEasyConcurrentWebFetches/FastEasyConcurrentWebFetches-Prefix.pch";
 				INFOPLIST_FILE = "FastEasyConcurrentWebFetches/FastEasyConcurrentWebFetches-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
-				PRODUCT_NAME = "FECW For iOS6";
+				PRODUCT_NAME = "FECWF For iOS6";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -652,7 +993,7 @@
 				GCC_PREFIX_HEADER = "FastEasyConcurrentWebFetches/FastEasyConcurrentWebFetches-Prefix.pch";
 				INFOPLIST_FILE = "FastEasyConcurrentWebFetches/FastEasyConcurrentWebFetches-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
-				PRODUCT_NAME = "FECW For iOS6";
+				PRODUCT_NAME = "FECWF For iOS6";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -664,7 +1005,7 @@
 				GCC_PREFIX_HEADER = "FastEasyConcurrentWebFetches/FastEasyConcurrentWebFetches-Prefix.pch";
 				INFOPLIST_FILE = "FastEasyConcurrentWebFetches/FastEasyConcurrentWebFetches-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
-				PRODUCT_NAME = "FECW For iOS6";
+				PRODUCT_NAME = "FECWF For iOS6";
 				WRAPPER_EXTENSION = app;
 			};
 			name = ReleaseWithAsserts;
@@ -676,7 +1017,7 @@
 				GCC_PREFIX_HEADER = "FastEasyConcurrentWebFetches/FastEasyConcurrentWebFetches-Prefix.pch";
 				INFOPLIST_FILE = "FastEasyConcurrentWebFetches/FastEasyConcurrentWebFetches-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
-				PRODUCT_NAME = "FECW For iOS6";
+				PRODUCT_NAME = "FECWF For iOS6";
 				WRAPPER_EXTENSION = app;
 			};
 			name = ReleaseWithAssertsUnitTests;
@@ -684,7 +1025,7 @@
 		DECB20071733F9C70050C8F4 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/FastEasyConcurrentWebFetches.app/FastEasyConcurrentWebFetches";
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/FECWF For iOS6.app/FECWF For iOS6";
 				FRAMEWORK_SEARCH_PATHS = (
 					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
 					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
@@ -693,7 +1034,7 @@
 				GCC_PREFIX_HEADER = "FastEasyConcurrentWebFetches/FastEasyConcurrentWebFetches-Prefix.pch";
 				INFOPLIST_FILE = "FastEasyConcurrentWebFetchesTests/FastEasyConcurrentWebFetchesTests-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
-				PRODUCT_NAME = "FECW iOS6 Tests";
+				PRODUCT_NAME = "FECWF iOS6 Tests";
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = octest;
 			};
@@ -702,7 +1043,7 @@
 		DECB20081733F9C70050C8F4 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/FastEasyConcurrentWebFetches.app/FastEasyConcurrentWebFetches";
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/FECWF For iOS6.app/FECWF For iOS6";
 				FRAMEWORK_SEARCH_PATHS = (
 					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
 					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
@@ -711,7 +1052,7 @@
 				GCC_PREFIX_HEADER = "FastEasyConcurrentWebFetches/FastEasyConcurrentWebFetches-Prefix.pch";
 				INFOPLIST_FILE = "FastEasyConcurrentWebFetchesTests/FastEasyConcurrentWebFetchesTests-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
-				PRODUCT_NAME = "FECW iOS6 Tests";
+				PRODUCT_NAME = "FECWF iOS6 Tests";
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = octest;
 			};
@@ -720,7 +1061,7 @@
 		DECB20091733F9C70050C8F4 /* ReleaseWithAsserts */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/FastEasyConcurrentWebFetches.app/FastEasyConcurrentWebFetches";
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/FECWF For iOS6.app/FECWF For iOS6";
 				FRAMEWORK_SEARCH_PATHS = (
 					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
 					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
@@ -729,7 +1070,7 @@
 				GCC_PREFIX_HEADER = "FastEasyConcurrentWebFetches/FastEasyConcurrentWebFetches-Prefix.pch";
 				INFOPLIST_FILE = "FastEasyConcurrentWebFetchesTests/FastEasyConcurrentWebFetchesTests-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
-				PRODUCT_NAME = "FECW iOS6 Tests";
+				PRODUCT_NAME = "FECWF iOS6 Tests";
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = octest;
 			};
@@ -738,7 +1079,7 @@
 		DECB200A1733F9C70050C8F4 /* ReleaseWithAssertsUnitTests */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/FastEasyConcurrentWebFetches.app/FastEasyConcurrentWebFetches";
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/FECWF For iOS6.app/FECWF For iOS6";
 				FRAMEWORK_SEARCH_PATHS = (
 					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
 					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
@@ -747,7 +1088,7 @@
 				GCC_PREFIX_HEADER = "FastEasyConcurrentWebFetches/FastEasyConcurrentWebFetches-Prefix.pch";
 				INFOPLIST_FILE = "FastEasyConcurrentWebFetchesTests/FastEasyConcurrentWebFetchesTests-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
-				PRODUCT_NAME = "FECW iOS6 Tests";
+				PRODUCT_NAME = "FECWF iOS6 Tests";
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = octest;
 			};
@@ -840,7 +1181,7 @@
 		DEE915D61722DE520085F570 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/FastEasyConcurrentWebFetches.app/FastEasyConcurrentWebFetches";
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/FECWF For iOS5.app/FECWF For iOS5";
 				FRAMEWORK_SEARCH_PATHS = (
 					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
 					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
@@ -858,7 +1199,7 @@
 		DEE915D71722DE520085F570 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/FastEasyConcurrentWebFetches.app/FastEasyConcurrentWebFetches";
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/FECWF For iOS5.app/FECWF For iOS5";
 				FRAMEWORK_SEARCH_PATHS = (
 					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
 					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
@@ -916,7 +1257,7 @@
 		DEE915EE1722DF480085F570 /* ReleaseWithAsserts */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/FastEasyConcurrentWebFetches.app/FastEasyConcurrentWebFetches";
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/FECWF For iOS5.app/FECWF For iOS5";
 				FRAMEWORK_SEARCH_PATHS = (
 					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
 					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
@@ -934,6 +1275,28 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		DE52AD0A17CE6D1000858FA4 /* Build configuration list for PBXNativeTarget "FECWF For iOS7" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DE52AD0B17CE6D1000858FA4 /* Debug */,
+				DE52AD0C17CE6D1000858FA4 /* Release */,
+				DE52AD0D17CE6D1000858FA4 /* ReleaseWithAsserts */,
+				DE52AD0E17CE6D1000858FA4 /* ReleaseWithAssertsUnitTests */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		DE5D476C17D12D6300CD0FD5 /* Build configuration list for PBXNativeTarget "FECWF iOS7 Tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DE5D476D17D12D6300CD0FD5 /* Debug */,
+				DE5D476E17D12D6300CD0FD5 /* Release */,
+				DE5D476F17D12D6300CD0FD5 /* ReleaseWithAsserts */,
+				DE5D477017D12D6300CD0FD5 /* ReleaseWithAssertsUnitTests */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		DECB1FF01733F9B40050C8F4 /* Build configuration list for PBXNativeTarget "FECWF For iOS6" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

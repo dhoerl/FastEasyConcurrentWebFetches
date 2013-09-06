@@ -24,6 +24,13 @@
 #import "AppDelegate.h"
 
 #import "ViewController.h"
+#import "Tracker.h"
+
+#if __IPHONE_OS_VERSION_MIN_REQUIRED >= 70000
+#define MY_NIB @"ViewController7"
+#else
+#define MY_NIB @"ViewController"
+#endif
 
 @implementation AppDelegate
 
@@ -34,9 +41,30 @@
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
-	self.viewController = [[ViewController alloc] initWithNibName:@"ViewController" bundle:nil];
+	self.viewController = [[ViewController alloc] initWithNibName:MY_NIB bundle:nil];
 	self.window.rootViewController = self.viewController;
     [self.window makeKeyAndVisible];
+
+#if 0
+	dispatch_queue_t q = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+	
+	dispatch_data_t t = dispatch_data_create(NULL, 0, q, ^{});
+
+	for(int i=0; i<5; ++i) {
+		char foo[10];
+		NSData *foop = [[NSData alloc] initWithBytes:foo length:1+10*i];
+		[Tracker trackerWithObject:foop msg:[NSString stringWithFormat:@"Data[%d]", i]];
+		
+		dispatch_data_t d = dispatch_data_create([foop bytes], [foop length], q, ^{ CFDataRef data = CFBridgingRetain(foop); CFRelease(data); NSLog(@"RELEASE!"); } );
+		t = dispatch_data_create_concat(t, d);
+	}
+		
+	[(NSData *)t enumerateByteRangesUsingBlock:^(const void *bytes, NSRange byteRange, BOOL *stop)
+		{
+			NSLog(@"RANGE %@", NSStringFromRange(byteRange));
+		} ];
+#endif
+
     return YES;
 }
 

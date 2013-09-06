@@ -23,11 +23,18 @@
 
 #import "MyViewController.h"
 
-#define URL		@"http://dl.dropboxusercontent.com/u/60414145/Tyco.jpg"
+
+#define URL			@"http://dl.dropboxusercontent.com/u/60414145/Tyco.jpg"
 //#define URL		@@"http:/www.apple.com/"
 
 
-#if __IPHONE_OS_VERSION_MIN_REQUIRED >= 60000
+#if __IPHONE_OS_VERSION_MIN_REQUIRED >= 70000
+#import "OperationsRunner7.h"
+#import "OperationsRunnerProtocol7.h"
+#define FECWF_RUN_OPERATION_TYPE		FECWF_WEBFETCHER
+#import "URfetcher7.h"
+#import "URSessionDelegate.h"
+#elif __IPHONE_OS_VERSION_MIN_REQUIRED >= 60000
 #import "OperationsRunner6.h"
 #import "OperationsRunnerProtocol6.h"
 #define FECWF_RUN_OPERATION_TYPE		FECWF_WEBFETCHER
@@ -82,6 +89,19 @@ static NSUInteger lastPriority;
 	lastOperationsCount	= 4;
 	lastMaxConcurrent	= 2;
 	lastPriority		= 1;
+	
+#if __IPHONE_OS_VERSION_MIN_REQUIRED >= 70000
+
+	URSessionDelegate *del = [URSessionDelegate new];
+	
+	NSURLSessionConfiguration *config = [NSURLSessionConfiguration defaultSessionConfiguration];
+	config.URLCache = nil;
+assert(config.HTTPShouldSetCookies);
+	config.HTTPShouldSetCookies = YES;
+	config.HTTPShouldUsePipelining = YES;
+	
+	[OperationsRunner createSharedSessionWithConfiguration:config delegate:del];
+#endif
 }
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -218,7 +238,8 @@ static NSUInteger lastPriority;
 	control.enabled = !disable;
 	control.alpha	= disable ? 0.50f : 1.0f;
 }
-	
+
+
 - (void)operationFinished:(NSOperation *)op count:(NSUInteger)remainingOps
 {
 	operationsLeft.text = [NSString stringWithFormat:@"%d", (int)remainingOps ];
@@ -226,7 +247,7 @@ static NSUInteger lastPriority;
 	URfetcher *fetcher = (URfetcher *)op;
 	
 	//NSLog(@"Operation %@: %@", (fetcher.webData && !fetcher.error) ? @"Completed" : @"FAILED", fetcher.runMessage);
-	NSLog(@"Operation %@: %@", fetcher.runMessage, [NSString stringWithFormat:@"ERROR=%@ size=%u", fetcher.error, [fetcher.webData length]]);
+	NSLog(@"Operation %@: %@", fetcher.runMessage, [NSString stringWithFormat:@"ERROR=%@ size=%u", fetcher.error, [(NSData *)fetcher.webData length]]);
 	
 	if(!remainingOps) {
 		elapsedTime.text = [NSString stringWithFormat:@"%.2f seconds", -[startDate timeIntervalSinceNow]];

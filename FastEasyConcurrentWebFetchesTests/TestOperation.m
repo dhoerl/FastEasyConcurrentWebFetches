@@ -36,7 +36,9 @@
 	for(int i=0; i<100 && !self.isCancelled && isnormal(self.delayInMain); ++i) {
 		usleep(self.delayInMain/100.0);
 	}
-	if(self.isCancelled) return nil;
+	if(self.isCancelled) {
+		return nil;
+	}
 
 	[self.delegate register:self atStage:atSetup];
 	
@@ -61,6 +63,7 @@
 		__weak __typeof__(self) weakSelf = self;
 		self.finalBlock = ^(FECWF_WEBFETCHER *op, BOOL succeeded)
 							{
+//NSLog(@"B=%@ succeeded=%d", b ? @"YES" : @"NO", succeeded);
 								__typeof__(self) strongSelf = weakSelf;
 								[strongSelf.delegate register:strongSelf atStage:atExit];
 								if(b) b(op, succeeded);
@@ -91,7 +94,7 @@
 - (void)failed
 {
 	[super failed];
-	
+//NSLog(@"FAILED");
 	self.succeeded = -1;
 }
 

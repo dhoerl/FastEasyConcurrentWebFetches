@@ -1,6 +1,7 @@
-
-// FastEasyConcurrentWebFetches (TM)
-// Copyright (C) 2012-2013 by David Hoerl
+//
+// URfetcher.m
+// FastEasyConcurrentWebFetches
+// Copyright (C) 2013 by David Hoerl
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -21,53 +22,26 @@
 // THE SOFTWARE.
 //
 
-#import "ViewController.h"
+#import "URfetcher7.h"
 
-#import "MyViewController.h"
+@implementation URfetcher
 
-#if __IPHONE_OS_VERSION_MIN_REQUIRED >= 70000
-#define MY_NIB @"MyViewController7"
-#else
-#define MY_NIB @"MyViewController"
++ (BOOL)persistentConnection { return YES; }
++ (NSUInteger)timeout { return 60; }
++ (BOOL)printDebugging { return NO; }
+
+#if 0	// Not really needed, maybe to just monitor what's happening
+- (NSURLRequest *)setup
+{
+	NSMutableURLRequest *request = [super setup];
+	return request;
+}
+
+- (BOOL)start:(id)obj
+{
+	BOOL ok = [super start:request];
+	return ok;
+}
 #endif
-
-
-@interface ViewController ()
-
-@end
-
-@implementation ViewController
-{
-	IBOutlet UIButton *testButton;
-}
-
-- (IBAction)test:(id)sender
-{
-	MyViewController *vc = [[MyViewController alloc] initWithNibName:MY_NIB bundle:nil];
-
-	[self presentViewController:vc animated:YES completion:NULL];
-}
-- (void)XdismissViewControllerAnimated:(BOOL)flag completion:(void (^)(void))completion
-{
-
-}
-
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-	// Do any additional setup after loading the view, typically from a nib.
-}
-
-- (void)viewDidUnload
-{
-	testButton = nil;
-    [super viewDidUnload];
-    // Release any retained subviews of the main view.
-}
-
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-{
-	return (interfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);
-}
 
 @end
