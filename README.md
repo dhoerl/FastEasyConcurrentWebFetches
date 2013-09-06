@@ -13,6 +13,11 @@ This code, migrated from NSOperation-WebFetches-MadeEasy, was the basis of the L
 
 UPDATES:
 
+  3.0 (9/6/2013): iOS7 Support
+    - modified the components to use NSURLSession (Data Task mode, no background conversion yet).
+	- the interface to OperationsRunner stayed the same, new class method to create a shared NSURLSession, connection object, delegate, and delegateQueue.
+	- small changes to WebFetcher, it actually gets smaller since many functions moved to a shared delegate (ORSessionDeleage/URSessionDelegate). Lots of NSLogs in the delegates, all implemented in ORSessionDelegate for copy and paste into URSessionDelegate [get it UR == Your].
+  
   2.2 (5/10/2013): Fix Race Condition
     - the finalBlock could get run before the operation finished completed/failed + finish. Now these are serialized.
   
