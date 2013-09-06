@@ -264,7 +264,7 @@ static NSURLSession *sharedSession;
 		[_operationsOnHold addObject:op];
 		ret = FALSE;
 	} else {
-		[self setupOp:op];
+		[_operations addObject:op]; 	// Second we retain and save a reference to the operation
 		ret = YES;
 	}
 /***/dispatch_semaphore_signal(_dataSema);
@@ -281,51 +281,13 @@ static NSURLSession *sharedSession;
 			if([_operations count] >= self.maxOps) {
 				[_operationsOnHold addObject:op];
 			} else {
-				[self setupOp:op];
+				[_operations addObject:op]; 	// Second we retain and save a reference to the operation
 				[rSet addObject:op];
 			}
 		} ];
 /***/dispatch_semaphore_signal(_dataSema);
 
 	return rSet;
-}
-- (void)setupOp:(FECWF_WEBFETCHER *)op
-{
-	NSMutableURLRequest *req = [op setup];
-	if(req) {
-		// Adding the final block here makes unit testing easier (can override it)
-		__weak __typeof__(self) weakSelf = self;
-	
-		op.finalBlock = ^(FECWF_WEBFETCHER *op, BOOL succeeded)
-			{
-				__typeof__(self) strongSelf = weakSelf;
-				if(strongSelf) {
-					dispatch_group_async(strongSelf.opRunnerGroup, strongSelf.opRunnerQueue, ^
-						{
-							if(succeeded) {
-								[op completed];
-							} else {
-								[op failed];
-							}
-							[strongSelf _operationFinished:op];
-						} );
-				}
-			} ;
-
-		// Without the completion block, the user's subclasses have to call the superclass last, to avoid race conditions. This serializes the completion message and the final block.
-		//NSURLSessionDataTask *task = [_urlSession dataTaskWithRequest:req completionHandler:finalBlock];
-		NSURLSessionDataTask *task = [_urlSession dataTaskWithRequest:req];
-			
-		// create two way connections
-		op.task = task;	// weak
-		objc_setAssociatedObject(task, &sharedSession, op, OBJC_ASSOCIATION_RETAIN_NONATOMIC);	// strong
-#if defined(UNIT_TESTING)
-		op.urlSession = _urlSession;
-#endif
-	} else {
-		op.errorMessage = @"WebFetcher failed to generate a URLRequest";
-	}
-	[_operations addObject:op]; 	// Second we retain and save a reference to the operation
 }
 
 - (NSUInteger)cancelAllOps
@@ -369,14 +331,47 @@ static NSURLSession *sharedSession;
 		return;
 	}
 
-#ifndef NDEBUG
-	if(!self.noDebugMsgs) LOG(@"Run Operation: %@", op.runMessage);
+	BOOL started = NO;
+	NSMutableURLRequest *req = [op setup];
+	if(req) {
+		// Adding the final block here makes unit testing easier (can override it)
+		__weak __typeof__(self) weakSelf = self;
+	
+		op.finalBlock = ^(FECWF_WEBFETCHER *op, BOOL succeeded)
+			{
+				__typeof__(self) strongSelf = weakSelf;
+				if(strongSelf) {
+					dispatch_group_async(strongSelf.opRunnerGroup, strongSelf.opRunnerQueue, ^
+						{
+							if(succeeded) {
+								[op completed];
+							} else {
+								[op failed];
+							}
+							[strongSelf _operationFinished:op];
+						} );
+				}
+			} ;
+
+		// Without the completion block, the user's subclasses have to call the superclass last, to avoid race conditions. This serializes the completion message and the final block.
+		//NSURLSessionDataTask *task = [_urlSession dataTaskWithRequest:req completionHandler:finalBlock];
+		NSURLSessionDataTask *task = [_urlSession dataTaskWithRequest:req];
+			
+		// create two way connections
+		op.task = task;	// weak
+		objc_setAssociatedObject(task, &sharedSession, op, OBJC_ASSOCIATION_RETAIN_NONATOMIC);	// strong
+#if defined(UNIT_TESTING)
+		op.urlSession = _urlSession;
 #endif
 
-	BOOL started = NO;
-	if(op.task) {
+#ifndef NDEBUG
+		if(!self.noDebugMsgs) LOG(@"Start Operation: %@", op.runMessage);
+#endif
 		started = [op start:nil];
+	} else {
+		op.errorMessage = @"WebFetcher failed to generate a URLRequest";
 	}
+
 	if(!started) {
 		// probably only hit this in development
 		[self _operationFinished:op];
@@ -506,7 +501,7 @@ static NSURLSession *sharedSession;
 	if(remainingCount) {
 		runOp = [_operationsOnHold objectAtIndex:0];
 		[_operationsOnHold removeObjectAtIndex:0];
-		[self setupOp:runOp];
+		[_operations addObject:runOp]; 	// Second we retain and save a reference to the operation
 		remainingCount -= 1;
 	}
 	remainingCount += [_operations count];

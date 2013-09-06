@@ -52,7 +52,7 @@
 		usleep(10000);								\
 	}												\
 	if(!(x)) {										\
-		NSLog(@"FAILED ON LOOP %d UNTIL " #y , i);	\
+		NSLog(@"FAILED ON LOOP %d UNTIL" #y , i);	\
 		[self dump];								\
 		STAssertTrue((x), (msg));					\
 		return;										\
@@ -250,7 +250,6 @@ assert(config.HTTPShouldSetCookies);
 		[self loopInit];
 
 		[self runOperationsWithForceAction:forcingOff delay:TIMER_DELAY * 10 * 1000000.0 type:(i&1) ? YES : NO];
-
 		BOOL ret = [self cancelOperations];
 		STAssertTrue(ret, @"Cancel failed");
 		
@@ -457,7 +456,7 @@ assert(config.HTTPShouldSetCookies);
 
 - (void)register:(id)op atStage:(registrationStage)stage
 {
-//NSLog(@"register %d", stage);
+	//NSLog(@"register %d", stage);
 	[self adjustOperationsCount:1 atStage:stage];
 }
 
