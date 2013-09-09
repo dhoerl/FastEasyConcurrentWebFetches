@@ -83,7 +83,7 @@ static void myAlrm(int sig)
 
 // //typedef enum {nofailure, failAtSetup, failAtStartup, failAfterFirstMsg, failWithFailureMsg } forceFailure;
 
-@interface FECWF_Tests () <FECWF_OPSRUNNER_PROTOCOL, TestOperationProtocol>
+@interface FECWF_Tests () <OperationsRunnerProtocol, TestOperationProtocol>
 
 @end
 

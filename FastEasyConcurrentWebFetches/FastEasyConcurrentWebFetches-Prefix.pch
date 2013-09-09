@@ -15,8 +15,6 @@
 #if 1
 	#define FECWF_CONCURRENT_OPERATION		MyConcurrentOperation
 	#define FECWF_WEBFETCHER				MyWebFetcher
-	#define FECWF_OPERATIONSRUNNER			MyOperationRunner
-	#define FECWF_OPSRUNNER_PROTOCOL		MyOperationRunnerProtocol
 #endif
 
 #endif

@@ -50,8 +50,8 @@ static NSURLSession *sharedSession;
 @property (nonatomic, strong) dispatch_queue_t			opRunnerQueue;
 @property (nonatomic, strong) dispatch_group_t			opRunnerGroup;
 @property (nonatomic, strong) NSURLSession				*urlSession;
-@property (atomic, weak) id <FECWF_OPSRUNNER_PROTOCOL>	delegate;
-@property (atomic, weak) id <FECWF_OPSRUNNER_PROTOCOL>	savedDelegate;
+@property (atomic, weak) id <OperationsRunnerProtocol>	delegate;
+@property (atomic, weak) id <OperationsRunnerProtocol>	savedDelegate;
 @property (nonatomic, assign) BOOL						usingSharedSession;
 @property (atomic, assign) BOOL							cancelled;
 #ifdef VERIFY_DEALLOC
@@ -91,7 +91,7 @@ static NSURLSession *sharedSession;
 + (BOOL)restartOperations { return NO; }
 + (BOOL)disposeOperations { return NO; }
 
-- (id)initWithDelegate:(id <FECWF_OPSRUNNER_PROTOCOL>)del
+- (id)initWithDelegate:(id <OperationsRunnerProtocol>)del
 {
     if((self = [super init])) {
 		_savedDelegate = _delegate = del;
@@ -474,7 +474,7 @@ static NSURLSession *sharedSession;
 		
 	case msgOnSpecificQueue:
 	{
-		//__weak id <FECWF_OPSRUNNER_PROTOCOL> del = self.delegate;
+		//__weak id <OperationsRunnerProtocol> del = self.delegate;
 		dispatch_block_t b =   ^{
 									[self operationFinished:op];
 								};

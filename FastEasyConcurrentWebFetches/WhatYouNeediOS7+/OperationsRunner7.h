@@ -25,7 +25,7 @@
 
 #import "OperationsRunnerProtocol7.h"
 
-@protocol FECWF_OPSRUNNER_PROTOCOL;
+@protocol OperationsRunnerProtocol;
 @class  ORSessionDelegate;
 
 // DEFAULTS
@@ -53,7 +53,7 @@ typedef enum { msgDelOnMainThread=0, msgDelOnAnyThread, msgOnSpecificThread, msg
 + (FECWF_WEBFETCHER *)fetcherForTask:(NSURLSessionTask *)task;
 
 // These methods are for direct messaging. The reason cancelOperations is here is to prevent the creation of an object, just to cancel it.
-- (id)initWithDelegate:(id <FECWF_OPSRUNNER_PROTOCOL>)del;		// designated initializer
+- (id)initWithDelegate:(id <OperationsRunnerProtocol>)del;		// designated initializer
 
 @end
 
@@ -62,11 +62,9 @@ typedef enum { msgDelOnMainThread=0, msgDelOnAnyThread, msgOnSpecificThread, msg
 // 1) Add these (with your prefix) to your .pch file, or skip to just get these as defaults
 	#define FECWF_CONCURRENT_OPERATION		ConcurrentOperation
 	#define FECWF_WEBFETCHER				WebFetcher
-	#define FECWF_OPERATIONSRUNNER			OperationsRunner
-	#define FECWF_OPSRUNNER_PROTOCOL		OperationsRunnerProtocol
 
 // 2) Add the protocol to the class extension interface (often in the interface file)
-@interface MyClass () <FECWF_OPSRUNNER_PROTOCOL>
+@interface MyClass () <OperationsRunnerProtocol>
 
 // 3) Add the header to the implementation file
 #import "OperationsRunner.h"

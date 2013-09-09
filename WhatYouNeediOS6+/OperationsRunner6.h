@@ -25,8 +25,6 @@
 
 #import "OperationsRunnerProtocol6.h"
 
-@protocol FECWF_OPSRUNNER_PROTOCOL;
-
 // DEFAULTS
 #define DEFAULT_MAX_OPS					4						// Apple suggests a number like 4 for iOS, would not exceed 10, as each is a NSThread
 #define DEFAULT_PRIORITY	DISPATCH_QUEUE_PRIORITY_DEFAULT		// both dispatch queues use this
@@ -46,7 +44,7 @@ typedef enum { msgDelOnMainThread=0, msgDelOnAnyThread, msgOnSpecificThread, msg
 @property (nonatomic, assign) NSUInteger mSecCancelDelay;		// set the NSOperationQueue's maxConcurrentOperationCount
 
 // These methods are for direct messaging. The reason cancelOperations is here is to prevent the creattion of an object, just to cancel it.
-- (id)initWithDelegate:(id <FECWF_OPSRUNNER_PROTOCOL>)del;		// designated initializer
+- (id)initWithDelegate:(id <OperationsRunnerProtocol>)del;		// designated initializer
 
 @end
 
@@ -55,11 +53,9 @@ typedef enum { msgDelOnMainThread=0, msgDelOnAnyThread, msgOnSpecificThread, msg
 // 1) Add these (with your prefix) to your .pch file, or skip to just get these as defaults
 	#define FECWF_CONCURRENT_OPERATION		ConcurrentOperation
 	#define FECWF_WEBFETCHER				WebFetcher
-	#define FECWF_OPERATIONSRUNNER			OperationsRunner
-	#define FECWF_OPSRUNNER_PROTOCOL		OperationsRunnerProtocol
 
 // 2) Add the protocol to the class extension interface (often in the interface file)
-@interface MyClass () <FECWF_OPSRUNNER_PROTOCOL>
+@interface MyClass () <OperationsRunnerProtocol>
 
 // 3) Add the header to the implementation file
 #import "OperationsRunner.h"

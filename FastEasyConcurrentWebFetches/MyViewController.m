@@ -51,7 +51,7 @@ static NSUInteger lastMaxConcurrent;
 static NSUInteger lastPriority;
 
 // 2) Add the protocol to the class extension interface in the implementation
-@interface MyViewController () <FECWF_OPSRUNNER_PROTOCOL>
+@interface MyViewController () <OperationsRunnerProtocol>
 @end
 
 // 4) Declare a category with these methods in the interface file (ie public) (change MyClass to your class)

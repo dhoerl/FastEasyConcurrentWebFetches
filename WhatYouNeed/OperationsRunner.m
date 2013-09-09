@@ -47,8 +47,8 @@
 @property (nonatomic, assign) dispatch_queue_t			operationsQueue;
 @property (nonatomic, assign) dispatch_group_t			opRunnerGroup;
 @property (nonatomic, assign) dispatch_group_t			operationsGroup;
-@property (atomic, weak) id <FECWF_OPSRUNNER_PROTOCOL>	delegate;
-@property (atomic, weak) id <FECWF_OPSRUNNER_PROTOCOL>	savedDelegate;
+@property (atomic, weak) id <OperationsRunnerProtocol>	delegate;
+@property (atomic, weak) id <OperationsRunnerProtocol>	savedDelegate;
 @property (atomic, assign) BOOL							cancelled;
 #ifdef VERIFY_DEALLOC
 @property (nonatomic, assign) dispatch_semaphore_t		deallocs;
@@ -70,7 +70,7 @@
 + (BOOL)restartOperations { return NO; }
 + (BOOL)disposeOperations { return NO; }
 
-- (id)initWithDelegate:(id <FECWF_OPSRUNNER_PROTOCOL>)del
+- (id)initWithDelegate:(id <OperationsRunnerProtocol>)del
 {
     if((self = [super init])) {
 		_savedDelegate = _delegate = del;

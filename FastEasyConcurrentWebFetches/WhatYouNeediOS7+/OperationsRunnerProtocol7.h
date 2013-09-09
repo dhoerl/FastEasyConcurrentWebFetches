@@ -23,13 +23,9 @@
 
 #import "WebFetcher7.h"
 
-#ifndef FECWF_OPSRUNNER_PROTOCOL
-#define FECWF_OPSRUNNER_PROTOCOL OperationsRunnerProtocol
-#endif
-
 @class ORSessionDelegate;
 
-@protocol FECWF_OPSRUNNER_PROTOCOL <NSObject>
+@protocol OperationsRunnerProtocol <NSObject>
 
 // can get this on main thread (default), a specific thread you request, or anyThread
 - (void)operationFinished:(FECWF_WEBFETCHER *)op count:(NSUInteger)remainingOps;
