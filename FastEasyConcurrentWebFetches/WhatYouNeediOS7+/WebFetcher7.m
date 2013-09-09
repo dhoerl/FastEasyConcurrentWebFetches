@@ -96,7 +96,7 @@
 	return request;
 }
 
-- (BOOL)start:(id)obj __attribute__((unused))
+- (BOOL)start:(NSMutableURLRequest *)request __attribute__((unused))
 {
 	self.isExecuting = YES;
 

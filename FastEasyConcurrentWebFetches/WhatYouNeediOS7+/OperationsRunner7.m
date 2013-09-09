@@ -367,7 +367,7 @@ static NSURLSession *sharedSession;
 #ifndef NDEBUG
 		if(!self.noDebugMsgs) LOG(@"Start Operation: %@", op.runMessage);
 #endif
-		started = [op start:nil];
+		started = [op start:req];
 	} else {
 		op.errorMessage = @"WebFetcher failed to generate a URLRequest";
 	}

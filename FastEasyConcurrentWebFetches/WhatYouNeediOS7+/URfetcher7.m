@@ -1,5 +1,4 @@
 //
-// URfetcher.m
 // FastEasyConcurrentWebFetches
 // Copyright (C) 2013 by David Hoerl
 // 

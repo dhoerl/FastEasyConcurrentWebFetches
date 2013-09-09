@@ -67,8 +67,7 @@ typedef void(^finishBlock)(FECWF_WEBFETCHER *op, BOOL succeeded);
 + (NSUInteger)timeout;
 
 - (NSMutableURLRequest *)setup;				// get the app started, object->continue, nil->failed so return
-
-- (BOOL)start:(id)obj __attribute__((unused));
+- (BOOL)start:(NSMutableURLRequest *)request __attribute__((unused));
 - (void)completed;							// subclasses to override, call super
 - (void)failed;								// subclasses to override, call super
 - (void)finish;								// subclasses to override for cleanup, call super, only called if the operation successfully starts
