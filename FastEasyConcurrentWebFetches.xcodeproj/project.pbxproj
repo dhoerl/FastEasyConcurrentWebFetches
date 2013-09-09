@@ -268,7 +268,8 @@
 				DE5D470B17CE6F0D00CD0FD5 /* WebFetcher7.h */,
 				DE5D470C17CE6F0D00CD0FD5 /* WebFetcher7.m */,
 			);
-			path = "WhatYouNeediOS7+";
+			name = "WhatYouNeediOS7+";
+			path = "../WhatYouNeediOS7+";
 			sourceTree = "<group>";
 		};
 		DECB200D1733FE620050C8F4 /* WhatYouNeediOS6+ */ = {
