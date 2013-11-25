@@ -83,13 +83,13 @@ static void myAlrm(int sig)
 
 // //typedef enum {nofailure, failAtSetup, failAtStartup, failAfterFirstMsg, failWithFailureMsg } forceFailure;
 
-@interface FECWF_Tests () <OperationsRunnerProtocol, TestOperationProtocol>
+@interface FECWF_Tests () <FECWF_OPSRUNNER_PROTOCOL, TestOperationProtocol>
 
 @end
 
-@interface FECWF_Tests (OperationsRunner)
+@interface FECWF_Tests (FECWF_OPERATIONSRUNNER)
 
-- (OperationsRunner *)operationsRunner;				// get the current instance (or create it)
+- (FECWF_OPERATIONSRUNNER *)operationsRunner;				// get the current instance (or create it)
 - (void)runOperation:(FECWF_RUN_OPERATION_TYPE *)op withMsg:(NSString *)msg;	// to submit an operation
 - (BOOL)runOperations:(NSOrderedSet *)operations;	// Set of FECWF_CONCURRENT_OPERATION objects with their runMessage set (or not)
 - (NSUInteger)operationsCount;						// returns the total number of outstanding operations
@@ -126,10 +126,10 @@ assert(config.HTTPShouldSetCookies);
 	config.HTTPShouldSetCookies = YES;
 	config.HTTPShouldUsePipelining = YES;
 	
-	[OperationsRunner createSharedSessionWithConfiguration:config delegate:del];
+	[FECWF_OPERATIONSRUNNER createSharedSessionWithConfiguration:config delegate:del];
 #endif
 
-	OperationsRunner *operationsRunner = [self operationsRunner];
+	FECWF_OPERATIONSRUNNER *operationsRunner = [self operationsRunner];
 
 	if(!operationsRunner.delegateQueue) {
 		// re-using it should be more stressful than getting a new one each time
@@ -492,7 +492,7 @@ assert(config.HTTPShouldSetCookies);
 	) {
 		if(!obj) {
 			// Object only created if needed. NOT THREAD SAFE (if you need that use a dispatch semaphone to insure only one object created
-			obj = [[OperationsRunner alloc] initWithDelegate:self];
+			obj = [[FECWF_OPERATIONSRUNNER alloc] initWithDelegate:self];
 			objc_setAssociatedObject(self, &opRunnerKey, obj, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 			{
 				// Set priorities once, or optionally you can ask [self operationsRunner] to get/create the item, and set/change these dynamically
@@ -510,7 +510,7 @@ assert(config.HTTPShouldSetCookies);
 	) {
 		if(!obj) {
 			// cancel sent in say dealloc, don't create an object just to release it
-			obj = [OperationsRunner class];
+			obj = [FECWF_OPERATIONSRUNNER class];
 		} else {
 			if(sel == @selector(disposeOperations)) {
 				objc_setAssociatedObject(self, &opRunnerKey, nil, OBJC_ASSOCIATION_RETAIN_NONATOMIC);

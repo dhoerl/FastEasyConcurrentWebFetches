@@ -29,7 +29,7 @@ typedef enum { forcingOff=0, failAtSetup, failAtStartup, forceSuccess, forceFail
 #endif
 
 #ifndef FECWF_WEBFETCHER
-#define FECWF_WEBFETCHER WebFetcher
+#define FECWF_WEBFETCHER ORWebFetcher
 #endif
 
 @interface FECWF_WEBFETCHER : FECWF_CONCURRENT_OPERATION

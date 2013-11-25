@@ -91,7 +91,7 @@ WTF
                                      newRequest:(NSURLRequest *)request
                               completionHandler:(void (^)(NSURLRequest *))completionHandler
 {
-	FECWF_WEBFETCHER *fetcher = [OperationsRunner fetcherForTask:task];
+	FECWF_WEBFETCHER *fetcher = [FECWF_OPERATIONSRUNNER fetcherForTask:task];
 
 	LOG(@"YIKES: \"URLSession:willPerformHTTPRedirection:\"  resp=%@ newReq=%@ task=%@", response, request, fetcher.runMessage);
 }
@@ -105,7 +105,7 @@ WTF
                             didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge 
                               completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition disposition, NSURLCredential *credential))completionHandler
 {
-	FECWF_WEBFETCHER *fetcher = [OperationsRunner fetcherForTask:task];
+	FECWF_WEBFETCHER *fetcher = [FECWF_OPERATIONSRUNNER fetcherForTask:task];
 	LOG(@"YIKES: \"URLSession:didReceiveChallenge:...\" challenge=%@ fetcher=%@", challenge, fetcher.runMessage);
 }
 
@@ -116,7 +116,7 @@ WTF
 - (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task
                               needNewBodyStream:(void (^)(NSInputStream *bodyStream))completionHandler
 {
-	FECWF_WEBFETCHER *fetcher = [OperationsRunner fetcherForTask:task];
+	FECWF_WEBFETCHER *fetcher = [FECWF_OPERATIONSRUNNER fetcherForTask:task];
 	LOG(@"YIKES: \"URLSession:needNewBodyStream:task:...\" fetcher=%@", fetcher.runMessage);
 }
 
@@ -129,7 +129,7 @@ WTF
                                  totalBytesSent:(int64_t)totalBytesSent
                        totalBytesExpectedToSend:(int64_t)totalBytesExpectedToSend
 {
-	FECWF_WEBFETCHER *fetcher = [OperationsRunner fetcherForTask:task];
+	FECWF_WEBFETCHER *fetcher = [FECWF_OPERATIONSRUNNER fetcherForTask:task];
 	LOG(@"YIKES: \"URLSession:didSendBodyData:task:...\" fetcher=%@", fetcher.runMessage);
 }
 
@@ -140,7 +140,7 @@ WTF
 - (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task
                            didCompleteWithError:(NSError *)error
 {
-	FECWF_WEBFETCHER *fetcher = [OperationsRunner fetcherForTask:task];
+	FECWF_WEBFETCHER *fetcher = [FECWF_OPERATIONSRUNNER fetcherForTask:task];
 	LOG(@"YIKES: \"URLSession:didCompleteWithError:task:...\" fetcher=%@ error=%@", fetcher.runMessage, error);
 }
 
@@ -156,7 +156,7 @@ WTF
                                  didReceiveResponse:(NSURLResponse *)response
                                   completionHandler:(void (^)(NSURLSessionResponseDisposition disposition))completionHandler
 {
-	FECWF_WEBFETCHER *fetcher = [OperationsRunner fetcherForTask:dataTask];
+	FECWF_WEBFETCHER *fetcher = [FECWF_OPERATIONSRUNNER fetcherForTask:dataTask];
 	LOG(@"YIKES: \"URLSession:didReceiveResponse:task:...\" fetcher=%@ response=%@", fetcher.runMessage, response);
 }
 
@@ -166,7 +166,7 @@ WTF
 - (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask
                               didBecomeDownloadTask:(NSURLSessionDownloadTask *)downloadTask
 {
-	FECWF_WEBFETCHER *fetcher = [OperationsRunner fetcherForTask:dataTask];
+	FECWF_WEBFETCHER *fetcher = [FECWF_OPERATIONSRUNNER fetcherForTask:dataTask];
 	LOG(@"YIKES: \"URLSession:didBecomeDownloadTask:task:...\" fetcher=%@", fetcher.runMessage);
 }
 
@@ -179,7 +179,7 @@ WTF
 - (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask
                                      didReceiveData:(NSData *)data
 {
-	FECWF_WEBFETCHER *fetcher = [OperationsRunner fetcherForTask:dataTask];
+	FECWF_WEBFETCHER *fetcher = [FECWF_OPERATIONSRUNNER fetcherForTask:dataTask];
 	LOG(@"YIKES: \"URLSession:didReceiveData:task:...\" fetcher=%@", fetcher.runMessage);
 }
 
@@ -194,7 +194,7 @@ WTF
                                   willCacheResponse:(NSCachedURLResponse *)proposedResponse 
                                   completionHandler:(void (^)(NSCachedURLResponse *cachedResponse))completionHandler
 {
-	FECWF_WEBFETCHER *fetcher = [OperationsRunner fetcherForTask:dataTask];
+	FECWF_WEBFETCHER *fetcher = [FECWF_OPERATIONSRUNNER fetcherForTask:dataTask];
 	LOG(@"YIKES: \"URLSession:willCacheResponse:task:...\" fetcher=%@", fetcher.runMessage);
 }
 
@@ -213,7 +213,7 @@ WTF
 - (void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)downloadTask
                               didFinishDownloadingToURL:(NSURL *)location
 {
-	FECWF_WEBFETCHER *fetcher = [OperationsRunner fetcherForTask:downloadTask];
+	FECWF_WEBFETCHER *fetcher = [FECWF_OPERATIONSRUNNER fetcherForTask:downloadTask];
 	LOG(@"YIKES: \"URLSession:didFinishDownloadingToURL:task:...\" fetcher=%@", fetcher.runMessage);
 }
 
@@ -224,7 +224,7 @@ WTF
                                       totalBytesWritten:(int64_t)totalBytesWritten
                               totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite
 {
-	FECWF_WEBFETCHER *fetcher = [OperationsRunner fetcherForTask:downloadTask];
+	FECWF_WEBFETCHER *fetcher = [FECWF_OPERATIONSRUNNER fetcherForTask:downloadTask];
 	LOG(@"YIKES: \"URLSession:didWriteData:task:...\" fetcher=%@", fetcher.runMessage);
 }
 
@@ -238,7 +238,7 @@ WTF
                                       didResumeAtOffset:(int64_t)fileOffset
                                      expectedTotalBytes:(int64_t)expectedTotalBytes
 {
-	FECWF_WEBFETCHER *fetcher = [OperationsRunner fetcherForTask:downloadTask];
+	FECWF_WEBFETCHER *fetcher = [FECWF_OPERATIONSRUNNER fetcherForTask:downloadTask];
 	LOG(@"YIKES: \"URLSession:didResumeAtOffset:task:...\" fetcher=%@", fetcher.runMessage);
 }
 

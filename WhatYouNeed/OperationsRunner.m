@@ -39,7 +39,7 @@
 - (BOOL)_OR_cancel:(NSUInteger)millisecondDelay;							// for use by OperationsRunner
 @end
 
-@interface OperationsRunner ()
+@interface FECWF_OPERATIONSRUNNER ()
 @property (nonatomic, strong) NSMutableSet				*operations;
 @property (nonatomic, strong) NSMutableOrderedSet		*operationsOnHold;	// output ops in the order they arrived
 @property (nonatomic, assign) dispatch_semaphore_t		dataSema;
@@ -47,8 +47,8 @@
 @property (nonatomic, assign) dispatch_queue_t			operationsQueue;
 @property (nonatomic, assign) dispatch_group_t			opRunnerGroup;
 @property (nonatomic, assign) dispatch_group_t			operationsGroup;
-@property (atomic, weak) id <OperationsRunnerProtocol>	delegate;
-@property (atomic, weak) id <OperationsRunnerProtocol>	savedDelegate;
+@property (atomic, weak) id <FECWF_OPSRUNNER_PROTOCOL>	delegate;
+@property (atomic, weak) id <FECWF_OPSRUNNER_PROTOCOL>	savedDelegate;
 @property (atomic, assign) BOOL							cancelled;
 #ifdef VERIFY_DEALLOC
 @property (nonatomic, assign) dispatch_semaphore_t		deallocs;
@@ -56,7 +56,7 @@
 
 @end
 
-@implementation OperationsRunner
+@implementation FECWF_OPERATIONSRUNNER
 {
 	long		_priority;							// the queue priority      
 #ifdef VERIFY_DEALLOC
@@ -70,7 +70,7 @@
 + (BOOL)restartOperations { return NO; }
 + (BOOL)disposeOperations { return NO; }
 
-- (id)initWithDelegate:(id <OperationsRunnerProtocol>)del
+- (id)initWithDelegate:(id <FECWF_OPSRUNNER_PROTOCOL>)del
 {
     if((self = [super init])) {
 		_savedDelegate = _delegate = del;
@@ -110,7 +110,7 @@
 #endif
 }
 
-- (OperationsRunner *)operationsRunner
+- (FECWF_OPERATIONSRUNNER *)operationsRunner
 {
 	return self;
 }

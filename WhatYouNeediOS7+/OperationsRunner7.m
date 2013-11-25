@@ -43,15 +43,15 @@ static NSURLSession *sharedSession;
 - (BOOL)_OR_cancel:(NSUInteger)millisecondDelay;							// for use by OperationsRunner
 @end
 
-@interface OperationsRunner ()
+@interface FECWF_OPERATIONSRUNNER ()
 @property (nonatomic, strong) NSMutableSet				*operations;
 @property (nonatomic, strong) NSMutableOrderedSet		*operationsOnHold;	// output ops in the order they arrived
 @property (nonatomic, strong) dispatch_semaphore_t		dataSema;
 @property (nonatomic, strong) dispatch_queue_t			opRunnerQueue;
 @property (nonatomic, strong) dispatch_group_t			opRunnerGroup;
 @property (nonatomic, strong) NSURLSession				*urlSession;
-@property (atomic, weak) id <OperationsRunnerProtocol>	delegate;
-@property (atomic, weak) id <OperationsRunnerProtocol>	savedDelegate;
+@property (atomic, weak) id <FECWF_OPSRUNNER_PROTOCOL>	delegate;
+@property (atomic, weak) id <FECWF_OPSRUNNER_PROTOCOL>	savedDelegate;
 @property (nonatomic, assign) BOOL						usingSharedSession;
 @property (atomic, assign) BOOL							cancelled;
 #ifdef VERIFY_DEALLOC
@@ -60,7 +60,7 @@ static NSURLSession *sharedSession;
 
 @end
 
-@implementation OperationsRunner
+@implementation FECWF_OPERATIONSRUNNER
 {
 	long		_priority;							// the queue priority      
 #ifdef VERIFY_DEALLOC
@@ -91,7 +91,7 @@ static NSURLSession *sharedSession;
 + (BOOL)restartOperations { return NO; }
 + (BOOL)disposeOperations { return NO; }
 
-- (id)initWithDelegate:(id <OperationsRunnerProtocol>)del
+- (id)initWithDelegate:(id <FECWF_OPSRUNNER_PROTOCOL>)del
 {
     if((self = [super init])) {
 		_savedDelegate = _delegate = del;
@@ -127,7 +127,7 @@ static NSURLSession *sharedSession;
 	[self cancelOperations];
 }
 
-- (OperationsRunner *)operationsRunner
+- (FECWF_OPERATIONSRUNNER *)operationsRunner
 {
 	return self;
 }
@@ -446,7 +446,7 @@ static NSURLSession *sharedSession;
 			}
 		} );
 
-	//if(completed) NSLog(@"ALL OPS DEALLOCED");
+	//if(completed) NSLog(@"ALL OPS DEALLOCED")
 }
 #endif
 
@@ -474,7 +474,7 @@ static NSURLSession *sharedSession;
 		
 	case msgOnSpecificQueue:
 	{
-		//__weak id <OperationsRunnerProtocol> del = self.delegate;
+		//__weak id <FECWF_OPSRUNNER_PROTOCOL> del = self.delegate;
 		dispatch_block_t b =   ^{
 									[self operationFinished:op];
 								};

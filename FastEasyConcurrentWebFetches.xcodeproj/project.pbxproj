@@ -122,19 +122,19 @@
 
 /* Begin PBXFileReference section */
 		DE3BE70E17D67344006345BC /* MyViewController7.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MyViewController7.xib; sourceTree = "<group>"; };
-		DE52AD0F17CE6D1000858FA4 /* FECWF For iO7.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = "FECWF For iO7.app"; path = "FECWF For iOS7.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		DE5D470617CE6F0D00CD0FD5 /* OperationsRunner7.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OperationsRunner7.h; sourceTree = "<group>"; };
-		DE5D470717CE6F0D00CD0FD5 /* OperationsRunner7.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OperationsRunner7.m; sourceTree = "<group>"; };
-		DE5D470817CE6F0D00CD0FD5 /* OperationsRunnerProtocol7.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OperationsRunnerProtocol7.h; sourceTree = "<group>"; };
+		DE52AD0F17CE6D1000858FA4 /* FECWF For iOS7.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "FECWF For iOS7.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		DE5D470617CE6F0D00CD0FD5 /* OperationsRunner7.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = OperationsRunner7.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		DE5D470717CE6F0D00CD0FD5 /* OperationsRunner7.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = OperationsRunner7.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		DE5D470817CE6F0D00CD0FD5 /* OperationsRunnerProtocol7.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = OperationsRunnerProtocol7.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		DE5D470917CE6F0D00CD0FD5 /* URfetcher7.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = URfetcher7.h; sourceTree = "<group>"; };
 		DE5D470A17CE6F0D00CD0FD5 /* URfetcher7.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = URfetcher7.m; sourceTree = "<group>"; };
 		DE5D470B17CE6F0D00CD0FD5 /* WebFetcher7.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebFetcher7.h; sourceTree = "<group>"; };
-		DE5D470C17CE6F0D00CD0FD5 /* WebFetcher7.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebFetcher7.m; sourceTree = "<group>"; };
+		DE5D470C17CE6F0D00CD0FD5 /* WebFetcher7.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = WebFetcher7.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		DE5D475717D0E3CB00CD0FD5 /* ORSessionDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ORSessionDelegate.h; sourceTree = "<group>"; };
-		DE5D475817D0E3CB00CD0FD5 /* ORSessionDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ORSessionDelegate.m; sourceTree = "<group>"; };
+		DE5D475817D0E3CB00CD0FD5 /* ORSessionDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ORSessionDelegate.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		DE5D475A17D0E3ED00CD0FD5 /* URSessionDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = URSessionDelegate.h; sourceTree = "<group>"; };
-		DE5D475B17D0E3ED00CD0FD5 /* URSessionDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = URSessionDelegate.m; sourceTree = "<group>"; };
-		DE5D477117D12D6300CD0FD5 /* FECWF iOS7.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = "FECWF iOS7.octest"; path = "FECWF iOS7 Tests.octest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		DE5D475B17D0E3ED00CD0FD5 /* URSessionDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = URSessionDelegate.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		DE5D477117D12D6300CD0FD5 /* FECWF iOS7 Tests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "FECWF iOS7 Tests.octest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DE956F4E1729E1E70026179D /* TestOperationProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TestOperationProtocol.h; sourceTree = "<group>"; };
 		DE956F4F1729E2700026179D /* TestOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestOperation.m; sourceTree = "<group>"; };
 		DE956F501729E2700026179D /* TestOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = TestOperation.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
@@ -320,8 +320,8 @@
 				DEE915C01722DE520085F570 /* FECWF iOS5 Tests.octest */,
 				DECB1FF51733F9B40050C8F4 /* FECWF For iOS6.app */,
 				DECB200B1733F9C70050C8F4 /* FECWF iOS6 Tests.octest */,
-				DE52AD0F17CE6D1000858FA4 /* FECWF For iO7.app */,
-				DE5D477117D12D6300CD0FD5 /* FECWF iOS7.octest */,
+				DE52AD0F17CE6D1000858FA4 /* FECWF For iOS7.app */,
+				DE5D477117D12D6300CD0FD5 /* FECWF iOS7 Tests.octest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -416,7 +416,7 @@
 			);
 			name = "FECWF For iOS7";
 			productName = FastEasyConcurrentWebFetches;
-			productReference = DE52AD0F17CE6D1000858FA4 /* FECWF For iO7.app */;
+			productReference = DE52AD0F17CE6D1000858FA4 /* FECWF For iOS7.app */;
 			productType = "com.apple.product-type.application";
 		};
 		DE5D475D17D12D6300CD0FD5 /* FECWF iOS7 Tests */ = {
@@ -435,7 +435,7 @@
 			);
 			name = "FECWF iOS7 Tests";
 			productName = FastEasyConcurrentWebFetchesTests;
-			productReference = DE5D477117D12D6300CD0FD5 /* FECWF iOS7.octest */;
+			productReference = DE5D477117D12D6300CD0FD5 /* FECWF iOS7 Tests.octest */;
 			productType = "com.apple.product-type.bundle";
 		};
 		DECB1FD91733F9B40050C8F4 /* FECWF For iOS6 */ = {

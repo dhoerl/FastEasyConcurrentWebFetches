@@ -66,7 +66,6 @@
 {
 	BOOL ret = !self.isCancelled;
 	if(ret) {
-		self.isCancelled = YES;
 		[self cancel];
 	}
 	return YES;
@@ -76,6 +75,7 @@
 {
 	LOG(@"%@: got CANCEL", self);
 	self.isFinished = YES;
+	self.isCancelled = YES;
 	[self.task cancel], self.task = nil;
 }
 

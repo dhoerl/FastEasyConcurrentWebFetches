@@ -13,8 +13,11 @@
 	#import <Foundation/Foundation.h>
 
 #if 1
+	// needed by libraries that need to prefix the name to avoid conflicts
 	#define FECWF_CONCURRENT_OPERATION		MyConcurrentOperation
 	#define FECWF_WEBFETCHER				MyWebFetcher
+	#define FECWF_OPERATIONSRUNNER			MyOperationsRunner
+	#define FECWF_OPSRUNNER_PROTOCOL		MyOperationsRunnerProtocol
 #endif
 
 #endif

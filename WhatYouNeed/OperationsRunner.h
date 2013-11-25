@@ -34,7 +34,7 @@
 // how do you want the return message delivered
 typedef enum { msgDelOnMainThread=0, msgDelOnAnyThread, msgOnSpecificThread, msgOnSpecificQueue } msgType;
 
-@interface OperationsRunner : NSObject
+@interface FECWF_OPERATIONSRUNNER : NSObject
 @property (nonatomic, assign) msgType msgDelOn;					// how to message delegate, defaults to MainThread
 @property (nonatomic, weak) NSThread *delegateThread;			// where to message delegate, sets msgDelOn->msgOnSpecificThread
 @property (nonatomic, assign) dispatch_queue_t delegateQueue;	// where to message delegate, sets msgDelOn->msgOnSpecificQueue
@@ -45,7 +45,7 @@ typedef enum { msgDelOnMainThread=0, msgDelOnAnyThread, msgOnSpecificThread, msg
 @property (nonatomic, assign) NSUInteger mSecCancelDelay;		// set the milliseconds wait time for operations to respond to the cancel command
 
 // These methods are for direct messaging. The reason cancelOperations is here is to prevent the creattion of an object, just to cancel it.
-- (id)initWithDelegate:(id <OperationsRunnerProtocol>)del;		// designated initializer
+- (id)initWithDelegate:(id <FECWF_OPSRUNNER_PROTOCOL>)del;		// designated initializer
 
 @end
 
@@ -56,7 +56,7 @@ typedef enum { msgDelOnMainThread=0, msgDelOnAnyThread, msgOnSpecificThread, msg
 	#define FECWF_WEBFETCHER				WebFetcher
 
 // 2) Add the protocol to the class extension interface (often in the interface file)
-@interface MyClass () <OperationsRunnerProtocol>
+@interface MyClass () <FECWF_OPSRUNNER_PROTOCOL>
 
 // 3) Add the header to the implementation file
 #import "OperationsRunner.h"
@@ -76,7 +76,7 @@ typedef enum { msgDelOnMainThread=0, msgDelOnAnyThread, msgOnSpecificThread, msg
 	) {
 		if(!obj) {
 			// Object only created if needed. NOT THREAD SAFE (if you need that use a dispatch semaphone to insure only one object created
-			obj = [[OperationsRunner alloc] initWithDelegate:self];
+			obj = [[FECWF_OPERATIONSRUNNER alloc] initWithDelegate:self];
 			objc_setAssociatedObject(self, &opRunnerKey, obj, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 			{
 				// Set priorities once, or optionally you can ask [self operationsRunner] to get/create the item, and set/change these dynamically
@@ -95,7 +95,7 @@ typedef enum { msgDelOnMainThread=0, msgDelOnAnyThread, msgOnSpecificThread, msg
 	) {
 		if(!obj) {
 			// cancel sent in say dealloc, don't create an object just to release it
-			obj = [OperationsRunner class];
+			obj = [FECWF_OPERATIONSRUNNER class];
 		} else {
 			if(sel == @selector(disposeOperations)) {
 				objc_setAssociatedObject(self, &opRunnerKey, nil, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
@@ -114,9 +114,9 @@ typedef enum { msgDelOnMainThread=0, msgDelOnAnyThread, msgOnSpecificThread, msg
 #import "OperationsRunner.h"
 #import "ConcurrentOperation.h"
 
-@interface MyClass (OperationsRunner)
+@interface MyClass (FECWF_OPERATIONSRUNNER)
 
-- (OperationsRunner *)operationsRunner;				// get the current instance (or create it)
+- (FECWF_OPERATIONSRUNNER *)operationsRunner;				// get the current instance (or create it)
 - (void)runOperation:(FECWF_CONCURRENT_OPERATION *)op withMsg:(NSString *)msg;	// to submit an operation
 - (BOOL)runOperations:(NSOrderedSet *)operations;	// Set of FECWF_CONCURRENT_OPERATION objects with their runMessage set (or not)
 - (NSUInteger)operationsCount;						// returns the total number of outstanding operations

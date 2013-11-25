@@ -40,7 +40,7 @@
                                      newRequest:(NSURLRequest *)request
                               completionHandler:(void (^)(NSURLRequest *))completionHandler
 {
-	FECWF_WEBFETCHER *fetcher = [OperationsRunner fetcherForTask:task];
+	FECWF_WEBFETCHER *fetcher = [FECWF_OPERATIONSRUNNER fetcherForTask:task];
 
 	LOG(@"YIKES: \"URLSession:willPerformHTTPRedirection:\"  resp=%@ newReq=%@ task=%@", response, request, fetcher.runMessage);
 
@@ -57,7 +57,7 @@
                                  didReceiveResponse:(NSURLResponse *)response
                                   completionHandler:(void (^)(NSURLSessionResponseDisposition disposition))completionHandler
 {
-	FECWF_WEBFETCHER *fetcher = [OperationsRunner fetcherForTask:dataTask];
+	FECWF_WEBFETCHER *fetcher = [FECWF_OPERATIONSRUNNER fetcherForTask:dataTask];
 LOG(@"YIKES: \"URLSession:didReceiveResponse:task:...\" fetcher=%@ response=%@", fetcher.runMessage, response);
 
 	if(fetcher.isCancelled) {
@@ -101,7 +101,7 @@ LOG(@"YIKES: \"URLSession:didReceiveResponse:task:...\" fetcher=%@ response=%@",
 - (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task
                            didCompleteWithError:(NSError *)error
 {
-	FECWF_WEBFETCHER *fetcher = [OperationsRunner fetcherForTask:task];
+	FECWF_WEBFETCHER *fetcher = [FECWF_OPERATIONSRUNNER fetcherForTask:task];
 	if(fetcher.isCancelled) {
 		return;
 	}
@@ -116,7 +116,7 @@ LOG(@"YIKES: \"URLSession:didReceiveResponse:task:...\" fetcher=%@ response=%@",
 - (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask
                                      didReceiveData:(NSData *)data
 {
-	FECWF_WEBFETCHER *fetcher = [OperationsRunner fetcherForTask:dataTask];
+	FECWF_WEBFETCHER *fetcher = [FECWF_OPERATIONSRUNNER fetcherForTask:dataTask];
 	//LOG(@"YIKES: \"URLSession:didReceiveData:task:...\" fetcher=%@", fetcher.runMessage);
 
 	fetcher.currentReceiveSize += [data length];

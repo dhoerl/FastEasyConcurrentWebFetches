@@ -51,13 +51,13 @@ static NSUInteger lastMaxConcurrent;
 static NSUInteger lastPriority;
 
 // 2) Add the protocol to the class extension interface in the implementation
-@interface MyViewController () <OperationsRunnerProtocol>
+@interface MyViewController () <FECWF_OPSRUNNER_PROTOCOL>
 @end
 
 // 4) Declare a category with these methods in the interface file (ie public) (change MyClass to your class)
-@interface MyViewController (OperationsRunner)
+@interface MyViewController (FECWF_OPERATIONSRUNNER)
 
-- (OperationsRunner *)operationsRunner;				// get the current instance (or create it)
+- (FECWF_OPERATIONSRUNNER *)operationsRunner;				// get the current instance (or create it)
 - (void)runOperation:(FECWF_RUN_OPERATION_TYPE *)op withMsg:(NSString *)msg;	// to submit an operation
 - (BOOL)runOperations:(NSOrderedSet *)operations;	// Set of FECWF_CONCURRENT_OPERATION objects with their runMessage set (or not)
 - (NSUInteger)operationsCount;						// returns the total number of outstanding operations
@@ -100,7 +100,7 @@ assert(config.HTTPShouldSetCookies);
 	config.HTTPShouldSetCookies = YES;
 	config.HTTPShouldUsePipelining = YES;
 	
-	[OperationsRunner createSharedSessionWithConfiguration:config delegate:del];
+	[FECWF_OPERATIONSRUNNER createSharedSessionWithConfiguration:config delegate:del];
 #endif
 }
 
@@ -270,14 +270,14 @@ assert(config.HTTPShouldSetCookies);
 		if(!obj) {
 			if(sel == @selector(cancelOperations)) {
 				// cancel sent in say dealloc, don't create an object just to release it
-				obj = [OperationsRunner class];
+				obj = [FECWF_OPERATIONSRUNNER class];
 			} else {
 				// Object only created if needed. NOT THREAD SAFE (if you need that use a dispatch semaphone to insure only one object created
-				obj = [[OperationsRunner alloc] initWithDelegate:self];
+				obj = [[FECWF_OPERATIONSRUNNER alloc] initWithDelegate:self];
 				objc_setAssociatedObject(self, &opRunnerKey, obj, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 				{
 					// Set priorities once, or optionally you can ask [self operationsRunner] to get/create the item, and set/change these dynamically
-					OperationsRunner *operationsRunner = (OperationsRunner *)obj;
+					FECWF_OPERATIONSRUNNER *operationsRunner = (FECWF_OPERATIONSRUNNER *)obj;
 					operationsRunner.maxOps = lastMaxConcurrent;
 					[self priorityAction:priority];	// sets priority
 				}
@@ -292,7 +292,7 @@ assert(config.HTTPShouldSetCookies);
 	) {
 		if(!obj) {
 			// cancel sent in say dealloc, don't create an object just to release it
-			obj = [OperationsRunner class];
+			obj = [FECWF_OPERATIONSRUNNER class];
 		} else {
 			if(sel == @selector(disposeOperations)) {
 				objc_setAssociatedObject(self, &opRunnerKey, nil, OBJC_ASSOCIATION_RETAIN_NONATOMIC);

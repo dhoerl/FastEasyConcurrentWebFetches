@@ -22,7 +22,7 @@
 //
 
 #ifndef FECWF_WEBFETCHER
-#define FECWF_WEBFETCHER WebFetcher
+#define FECWF_WEBFETCHER ORWebFetcher
 #endif
 
 // Unit Testing
