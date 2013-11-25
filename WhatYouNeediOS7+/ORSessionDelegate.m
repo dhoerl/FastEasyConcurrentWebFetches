@@ -23,12 +23,11 @@
 
 #import "ORSessionDelegate.h"
 
-#define DEBUGGING	1	// 0 == no debug, 1 == lots of mesages
+#define DEBUGGING	0	// 0 == no debug, 1 == lots of mesages
 
 #if DEBUGGING == 1
 #define LOG(...) NSLog(__VA_ARGS__)
 #else
-WTF
 #define LOG(...)
 #endif
 
@@ -132,7 +131,6 @@ WTF
 	FECWF_WEBFETCHER *fetcher = [FECWF_OPERATIONSRUNNER fetcherForTask:task];
 	LOG(@"YIKES: \"URLSession:didSendBodyData:task:...\" fetcher=%@", fetcher.runMessage);
 }
-
 
 /* Sent as the last message related to a specific task.  Error may be
  * nil, which implies that no error occurred and this task is complete. 

@@ -85,15 +85,20 @@ LOG(@"YIKES: \"URLSession:didReceiveResponse:task:...\" fetcher=%@ response=%@",
 #ifndef NDEBUG
 	if([[fetcher class] printDebugging]) LOG(@"Connection:didReceiveResponse: response=%@ len=%u", response, responseLength);
 #endif
-	
+
+	// Must do this here, since we can get an error and still get data!
+	fetcher.totalReceiveSize = responseLength;
+	// NSLog(@"EXPECT SIZE %u", responseLength);
+	fetcher.currentReceiveSize = 0;
+	dispatch_queue_t q	= dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+	fetcher.webData		= (NSData *)dispatch_data_create(NULL, 0, q, ^{});
+
 	if(fetcher.errorMessage) {
+		//LOG(@"Cancel due to error: %@", fetcher.errorMessage);
 		completionHandler(NSURLSessionResponseCancel);
 		fetcher.finalBlock(fetcher, NO);
 	} else {
-		fetcher.totalReceiveSize = responseLength;
-		fetcher.currentReceiveSize = 0;
-		dispatch_queue_t q	= dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
-		fetcher.webData		= (NSData *)dispatch_data_create(NULL, 0, q, ^{});
+		//LOG(@"Proceed no error");
 		completionHandler(NSURLSessionResponseAllow);
 	}
 }
@@ -105,11 +110,13 @@ LOG(@"YIKES: \"URLSession:didReceiveResponse:task:...\" fetcher=%@ response=%@",
 	if(fetcher.isCancelled) {
 		return;
 	}
-	// LOG(@"YIKES: \"URLSession:didCompleteWithError:task:...\" fetcher=%@ error=%@", fetcher.runMessage, error);
+
 	if(!fetcher.error && error) {
 		fetcher.error = error;
 		fetcher.errorMessage = [error localizedDescription];
 	}
+	
+	// LOG(@"YIKES: \"URLSession:didCompleteWithError:task:...\" fetcher=%@ error=%@", fetcher.runMessage, error);
 	fetcher.finalBlock(fetcher, fetcher.errorMessage ? NO : YES);
 }
 
@@ -120,10 +127,7 @@ LOG(@"YIKES: \"URLSession:didReceiveResponse:task:...\" fetcher=%@ response=%@",
 	//LOG(@"YIKES: \"URLSession:didReceiveData:task:...\" fetcher=%@", fetcher.runMessage);
 
 	fetcher.currentReceiveSize += [data length];
-
-	dispatch_queue_t q	= dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
-	dispatch_data_t d	= dispatch_data_create([data bytes], [data length], q, ^{ CFDataRef cfData = CFBridgingRetain(data); CFRelease(cfData);} );
-	fetcher.webData		= (NSData *)dispatch_data_create_concat((dispatch_data_t)fetcher.webData, d);
+	fetcher.webData = (NSData *)dispatch_data_create_concat((dispatch_data_t)fetcher.webData, (dispatch_data_t)data);
 }
 
 @end
