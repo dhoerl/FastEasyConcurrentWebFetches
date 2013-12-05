@@ -23,7 +23,7 @@
 
 #import "URSessionDelegate.h"
 
-#define DEBUGGING	1	// 0 == no debug, 1 == lots of mesages
+#define DEBUGGING	0	// 0 == no debug, 1 == lots of mesages
 
 #if DEBUGGING == 1
 #define LOG(...) NSLog(__VA_ARGS__)

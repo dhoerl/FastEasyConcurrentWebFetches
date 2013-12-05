@@ -26,7 +26,7 @@
 #import "OperationsRunnerProtocol7.h"
 
 @protocol FECWF_OPSRUNNER_PROTOCOL;
-@class  ORSessionDelegate;
+@class  FECWF_SESSION_DELEGATE;
 
 // DEFAULTS
 #define DEFAULT_MAX_OPS					4						// Apple suggests a number like 4 for iOS, would not exceed 10, as each is a NSThread
@@ -47,7 +47,7 @@ typedef enum { msgDelOnMainThread=0, msgDelOnAnyThread, msgOnSpecificThread, msg
 @property (nonatomic, assign) NSUInteger mSecCancelDelay;		// set the NSOperationQueue's maxConcurrentOperationCount
 
 // Optionally share one session between every instance of OperationsRunner (if you create this all future operations will use it
-+ (void)createSharedSessionWithConfiguration:(NSURLSessionConfiguration *)config delegate:(ORSessionDelegate *)delegate;
++ (void)createSharedSessionWithConfiguration:(NSURLSessionConfiguration *)config delegate:(id <NSURLSessionDataDelegate>) delegate;
 
 // Given the task, get the fetcher (needed by the Session Delegate)
 + (FECWF_WEBFETCHER *)fetcherForTask:(NSURLSessionTask *)task;
@@ -63,7 +63,7 @@ typedef enum { msgDelOnMainThread=0, msgDelOnAnyThread, msgOnSpecificThread, msg
 	#define FECWF_CONCURRENT_OPERATION		ConcurrentOperation
 	#define FECWF_WEBFETCHER				WebFetcher
 
-// 2) Add the protocol to the class extension interface (often in the interface file)
+// 2) Add the protocol to the class extension interface (often in the implementation file)
 @interface MyClass () <FECWF_OPSRUNNER_PROTOCOL>
 
 // 3) Add the header to the implementation file

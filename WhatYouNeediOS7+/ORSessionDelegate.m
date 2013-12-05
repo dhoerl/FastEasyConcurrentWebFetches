@@ -31,7 +31,7 @@
 #define LOG(...)
 #endif
 
-@implementation ORSessionDelegate
+@implementation FECWF_SESSION_DELEGATE
 
 #if DEBUGGING == 1
 

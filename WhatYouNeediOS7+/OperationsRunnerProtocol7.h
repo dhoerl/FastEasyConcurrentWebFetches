@@ -22,8 +22,13 @@
 //
 
 #import "WebFetcher7.h"
+#import "ORSessionDelegate.h"	// FECWF_SESSION_DELEGATE
 
-@class ORSessionDelegate;
+@class FECWF_SESSION_DELEGATE;
+
+#ifndef FECWF_OPSRUNNER_PROTOCOL
+#define FECWF_OPSRUNNER_PROTOCOL OperationsRunnerProtocol
+#endif
 
 @protocol FECWF_OPSRUNNER_PROTOCOL <NSObject>
 
@@ -38,6 +43,6 @@
 
 // Object to respond to NSURLSession delegate messages. Sent on the same thread as the first message
 // causing the OperationsRunner to instantiate.
-- (ORSessionDelegate *)urlSessionDelegate;
+- (FECWF_SESSION_DELEGATE *)urlSessionDelegate;
 
 @end

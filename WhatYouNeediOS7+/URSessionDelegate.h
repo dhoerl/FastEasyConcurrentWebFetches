@@ -23,6 +23,6 @@
 
 #import "ORSessionDelegate.h"
 
-@interface URSessionDelegate : ORSessionDelegate <NSURLSessionDataDelegate>
+@interface URSessionDelegate : FECWF_SESSION_DELEGATE <NSURLSessionDataDelegate>
 
 @end

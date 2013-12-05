@@ -21,10 +21,15 @@
 // THE SOFTWARE.
 //
 
-// Neede by subclasses
-#import "WebFetcher7.h"
+// Needed by subclasses
+//#import "WebFetcher7.h"
+
 #import "OperationsRunner7.h"
 
-@interface ORSessionDelegate : NSObject <NSURLSessionDataDelegate>
+#ifndef FECWF_SESSION_DELEGATE
+#define FECWF_SESSION_DELEGATE ORSessionDelegate
+#endif
+
+@interface FECWF_SESSION_DELEGATE : NSObject <NSURLSessionDataDelegate>
 
 @end

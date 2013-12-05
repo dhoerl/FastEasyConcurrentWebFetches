@@ -32,8 +32,7 @@
 #endif
 
 #import "OperationsRunner7.h"
-#import "ORSessionDelegate.h"
-
+#import "URSessionDelegate.h"
 #import "WebFetcher7.h"
 
 static NSURLSession *sharedSession;
@@ -69,7 +68,7 @@ static NSURLSession *sharedSession;
 }
 @dynamic priority;
 
-+ (void)createSharedSessionWithConfiguration:(NSURLSessionConfiguration *)config delegate:(ORSessionDelegate *)delegate
++ (void)createSharedSessionWithConfiguration:(NSURLSessionConfiguration *)config delegate:(id <NSURLSessionDataDelegate>) delegate
 {
 	static dispatch_once_t pred;
 //NSLog(@"CREATE SHARED SESSION!");
@@ -446,7 +445,7 @@ static NSURLSession *sharedSession;
 			}
 		} );
 
-	//if(completed) NSLog(@"ALL OPS DEALLOCED")
+	//if(completed) NSLog(@"ALL OPS DEALLOCED");
 }
 #endif
 
