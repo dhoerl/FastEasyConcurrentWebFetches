@@ -18,6 +18,7 @@
 	#define FECWF_WEBFETCHER				MyWebFetcher
 	#define FECWF_OPERATIONSRUNNER			MyOperationsRunner
 	#define FECWF_OPSRUNNER_PROTOCOL		MyOperationsRunnerProtocol
+	#define FECWF_SESSION_DELEGATE			MyBaseSessionDelegate
 #endif
 
 #endif
