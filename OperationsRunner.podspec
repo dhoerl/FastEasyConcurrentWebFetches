@@ -1,4 +1,4 @@
-Pod::s.new do |s|
+Pod::Spec.new do |s|
   s.name                  = 'OperationsRunner'
   s.platform              = :ios
   s.ios.deployment_target = "7.0"
