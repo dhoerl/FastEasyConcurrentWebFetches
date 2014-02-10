@@ -74,12 +74,12 @@ LOG(@"YIKES: \"URLSession:didReceiveResponse:task:...\" fetcher=%@ response=%@",
 #ifndef NDEBUG
 	if(fetcher.htmlStatus != 200) {
 		LOG(@"Server Response code %i url=%@", fetcher.htmlStatus, fetcher.urlStr);
-		fetcher.errorMessage = [NSString stringWithFormat:@"Network Error %d %@",  fetcher.htmlStatus,[NSHTTPURLResponse localizedStringForStatusCode: fetcher.htmlStatus]];
+		fetcher.errorMessage = [NSString stringWithFormat:@"Network Error %zd %@",  fetcher.htmlStatus,[NSHTTPURLResponse localizedStringForStatusCode: fetcher.htmlStatus]];
 		LOG(@"ERR: %@", fetcher.errorMessage);
 	}
 #endif
 	if (fetcher.htmlStatus >= 500) {
-		fetcher.errorMessage = [NSString stringWithFormat:@"Network Error %d %@", fetcher.htmlStatus,[NSHTTPURLResponse localizedStringForStatusCode:fetcher.htmlStatus]];
+		fetcher.errorMessage = [NSString stringWithFormat:@"Network Error %zd %@", fetcher.htmlStatus,[NSHTTPURLResponse localizedStringForStatusCode:fetcher.htmlStatus]];
 	}
 	NSUInteger responseLength = response.expectedContentLength == NSURLResponseUnknownLength ? 1024 : (NSUInteger)response.expectedContentLength;
 #ifndef NDEBUG
