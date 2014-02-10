@@ -2,7 +2,7 @@ Pod::Spec.new do |s|
   s.name                  = 'OperationsRunner'
   s.platform              = :ios
   s.ios.deployment_target = "7.0"
-  s.version               = '1.0.1'
+  s.version               = Ô1.0.2Õ
   s.license               =  { :type => 'BSD' }
   s.homepage              = 'https://github.com/dhoerl/FastEasyConcurrentWebFetches'
   s.authors               = { 'David Hoerl' => 'david.hoerl+git@gmail.com' }
