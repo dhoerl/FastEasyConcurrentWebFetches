@@ -24,7 +24,6 @@
 		DE5D470D17CE6F0D00CD0FD5 /* OperationsRunner7.m in Sources */ = {isa = PBXBuildFile; fileRef = DE5D470717CE6F0D00CD0FD5 /* OperationsRunner7.m */; };
 		DE5D470E17CE6F0D00CD0FD5 /* URfetcher7.m in Sources */ = {isa = PBXBuildFile; fileRef = DE5D470A17CE6F0D00CD0FD5 /* URfetcher7.m */; };
 		DE5D475917D0E3CB00CD0FD5 /* ORSessionDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = DE5D475817D0E3CB00CD0FD5 /* ORSessionDelegate.m */; };
-		DE5D475C17D0E3ED00CD0FD5 /* URSessionDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = DE5D475B17D0E3ED00CD0FD5 /* URSessionDelegate.m */; };
 		DE5D476317D12D6300CD0FD5 /* TestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = DE956F4F1729E2700026179D /* TestOperation.m */; };
 		DE5D476417D12D6300CD0FD5 /* FECWF_Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = DEE915CE1722DE520085F570 /* FECWF_Tests.m */; };
 		DE5D476617D12D6300CD0FD5 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DEE915C11722DE520085F570 /* SenTestingKit.framework */; };
@@ -93,7 +92,6 @@
 		DEE915F61722EF380085F570 /* LICENSE.md in Resources */ = {isa = PBXBuildFile; fileRef = DEE915F41722EF380085F570 /* LICENSE.md */; };
 		DEE915F71722EF380085F570 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = DEE915F51722EF380085F570 /* README.md */; };
 		DEEFF6E617D67278001D7C6B /* ViewController7.xib in Resources */ = {isa = PBXBuildFile; fileRef = DEEFF6E417D67278001D7C6B /* ViewController7.xib */; };
-		DEF12A5617D7CDD60050C55C /* URSessionDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = DE5D475B17D0E3ED00CD0FD5 /* URSessionDelegate.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -132,8 +130,6 @@
 		DE5D470C17CE6F0D00CD0FD5 /* WebFetcher7.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = WebFetcher7.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		DE5D475717D0E3CB00CD0FD5 /* ORSessionDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ORSessionDelegate.h; sourceTree = "<group>"; };
 		DE5D475817D0E3CB00CD0FD5 /* ORSessionDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ORSessionDelegate.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
-		DE5D475A17D0E3ED00CD0FD5 /* URSessionDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = URSessionDelegate.h; sourceTree = "<group>"; };
-		DE5D475B17D0E3ED00CD0FD5 /* URSessionDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = URSessionDelegate.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		DE5D477117D12D6300CD0FD5 /* FECWF iOS7 Tests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "FECWF iOS7 Tests.octest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DE956F4E1729E1E70026179D /* TestOperationProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TestOperationProtocol.h; sourceTree = "<group>"; };
 		DE956F4F1729E2700026179D /* TestOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestOperation.m; sourceTree = "<group>"; };
@@ -157,6 +153,8 @@
 		DECB2025173415570050C8F4 /* WebFetcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = WebFetcher.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		DECB2026173415570050C8F4 /* WebFetcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebFetcher.m; sourceTree = "<group>"; };
 		DECB202D17343EF80050C8F4 /* PrintMe */ = {isa = PBXFileReference; lastKnownFileType = text; path = PrintMe; sourceTree = "<group>"; };
+		DECBD41B18A95619006602EB /* RefSessionDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RefSessionDelegate.h; sourceTree = "<group>"; };
+		DECBD41C18A95619006602EB /* RefSessionDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RefSessionDelegate.m; sourceTree = "<group>"; };
 		DED5400017D9273C005698F0 /* Tracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Tracker.h; sourceTree = "<group>"; };
 		DED5400117D9273C005698F0 /* Tracker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Tracker.m; sourceTree = "<group>"; };
 		DEE9159A1722DE520085F570 /* FECWF For iOS5.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "FECWF For iOS5.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -261,10 +259,10 @@
 				DE5D470717CE6F0D00CD0FD5 /* OperationsRunner7.m */,
 				DE5D475717D0E3CB00CD0FD5 /* ORSessionDelegate.h */,
 				DE5D475817D0E3CB00CD0FD5 /* ORSessionDelegate.m */,
+				DECBD41B18A95619006602EB /* RefSessionDelegate.h */,
+				DECBD41C18A95619006602EB /* RefSessionDelegate.m */,
 				DE5D470917CE6F0D00CD0FD5 /* URfetcher7.h */,
 				DE5D470A17CE6F0D00CD0FD5 /* URfetcher7.m */,
-				DE5D475A17D0E3ED00CD0FD5 /* URSessionDelegate.h */,
-				DE5D475B17D0E3ED00CD0FD5 /* URSessionDelegate.m */,
 				DE5D470B17CE6F0D00CD0FD5 /* WebFetcher7.h */,
 				DE5D470C17CE6F0D00CD0FD5 /* WebFetcher7.m */,
 			);
@@ -668,7 +666,6 @@
 				DE5D475917D0E3CB00CD0FD5 /* ORSessionDelegate.m in Sources */,
 				DE52ACF817CE6D1000858FA4 /* ViewController.m in Sources */,
 				DE52ACF917CE6D1000858FA4 /* MyViewController.m in Sources */,
-				DE5D475C17D0E3ED00CD0FD5 /* URSessionDelegate.m in Sources */,
 				DE5D470E17CE6F0D00CD0FD5 /* URfetcher7.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -682,7 +679,6 @@
 				DED5400717DA341A005698F0 /* WebFetcher7.m in Sources */,
 				DE5D477617D1316200CD0FD5 /* ORSessionDelegate.m in Sources */,
 				DE5D476317D12D6300CD0FD5 /* TestOperation.m in Sources */,
-				DEF12A5617D7CDD60050C55C /* URSessionDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

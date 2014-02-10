@@ -3,7 +3,7 @@ FastEasyConcurrentWebFetches (TM)
 
 An infrastructure of three classes to manage pools of web operations; elegant, simple, and quickly cancelable. Based on an earlier project that predated GCD (NSOperation-WebFetches-MadeEasy), it provides a lightweight framework for running multiple NSURLConnections (or other operations that require a delegate [iOS5 code only]), while providing the ability to cancel and cleanup when, for say, a user taps the Back button.
 
-Users create new instances of a WebFetcher (or subclass), set its properties, then submit them individually or in batches using "[self runOperation:op runMsg:@"Some message to assist in debugging"]". When the operation finishes, you get it back on a delegate call "- (void)operationFinished:op count:remaininggCount", where you can see if it succeeded or failed, what the htmlStatus return was, retrieve and data or see if you had an error (NSError). The "remainingCount" is mostly to advise you when all outstanding operations have completed, to turn off spinners and say reenable the UI. At Lot18, I created about a dozen subclasses of WebFetchers, each for a specific type of REST interaction. Subclasses are often no more than tens of lines long, and build on the core infastructure.
+Users create new instances of a WebFetcher (or subclass), set its properties, then submits each individually or in batches using "[self runOperation:op runMsg:@"Some message to assist in debugging"]". When the operation finishes, you get it back on a delegate call "- (void)operationFinished:op count:remaininggCount", where you can see if it succeeded or failed, what the htmlStatus return was, retrieve and data or see if you had an error (NSError). The "remainingCount" is mostly to advise you when all outstanding operations have completed, to turn off spinners and say reenable the UI. At Lot18, I created about a dozen subclasses of WebFetchers, each for a specific type of REST interaction. Subclasses are often no more than tens of lines long, and build on the core infastructure.
 
 This project includes a GUI test harness that uses hard wired web fetchers, which use HTTP GET to download an image from a public DropBox folder. The three core classes are found in the WhatYouNeed folder, and the OperationsRunner.h header file lists the handful of instructions required to adopt them into a project.
 
@@ -12,6 +12,14 @@ The demo app offers controls that vary the number of concurrent operations, the 
 This code, migrated from NSOperation-WebFetches-MadeEasy, was the basis of the Lot18 App (5 star rating), which often had hundreds of outstanding fetchers running getting product info, images, and posting user updates.
 
 UPDATES:
+
+  3.1.0 (2/9/2014): Session Restructure
+    - 64bit clean
+    - Moved ORSessionDelegate to RefSessionDelegate and URSessionDelegate to ORSessionDelegate. Your subclasses should use ORSessionDelegate as the base class. The RefSessionDelegate serves to provide method templates for every delegate method in the event you need one.
+	- Several tweaks to make data handling more efficient.
+	- This code now used in many of my projects, including a corporate framework being sent to numerous 3rd parties.
+	- iOS6 code kept around for historical reasons, it's no longer maintained.
+	- Add podspec for CocoaPods
 
   3.0 (9/6/2013): iOS7 Support
     - modified the components to use NSURLSession (Data Task mode, no background conversion yet).

@@ -33,7 +33,7 @@
 #import "OperationsRunnerProtocol7.h"
 #define FECWF_RUN_OPERATION_TYPE		FECWF_WEBFETCHER
 #import "URfetcher7.h"
-#import "URSessionDelegate.h"
+#import "ORSessionDelegate.h"
 #elif __IPHONE_OS_VERSION_MIN_REQUIRED >= 60000
 #import "OperationsRunner6.h"
 #import "OperationsRunnerProtocol6.h"
@@ -92,7 +92,7 @@ static NSUInteger lastPriority;
 	
 #if __IPHONE_OS_VERSION_MIN_REQUIRED >= 70000
 
-	URSessionDelegate *del = [URSessionDelegate new];
+	FECWF_SESSION_DELEGATE *del = [FECWF_SESSION_DELEGATE new];
 	
 	NSURLSessionConfiguration *config = [NSURLSessionConfiguration defaultSessionConfiguration];
 	config.URLCache = nil;
@@ -134,11 +134,11 @@ assert(config.HTTPShouldSetCookies);
 	[spinner stopAnimating];
 
 	operationCount.value = lastOperationsCount;
-	operationsToRun.text = [NSString stringWithFormat:@"%u", lastOperationsCount];
+	operationsToRun.text = [NSString stringWithFormat:@"%tu", lastOperationsCount];
 	operationsLeft.text = @"0";
 
 	maxConcurrent.value = lastMaxConcurrent;
-	maxConcurrentText.text = [NSString stringWithFormat:@"%u", lastMaxConcurrent];
+	maxConcurrentText.text = [NSString stringWithFormat:@"%tu", lastMaxConcurrent];
 
 	priority.selectedSegmentIndex = lastPriority;
 	
@@ -161,19 +161,19 @@ assert(config.HTTPShouldSetCookies);
 			[spinner startAnimating];
 
 			NSUInteger count = lrintf([operationCount value]);
-			operationsLeft.text = [NSString stringWithFormat:@"%d", count];
+			operationsLeft.text = [NSString stringWithFormat:@"%tu", count];
 			
 #if 1
-			for(int i=0; i<count; ++i) {
-				NSString *msg = [NSString stringWithFormat:@"URfetcher #%d", i];
+			for(NSUInteger i=0; i<count; ++i) {
+				NSString *msg = [NSString stringWithFormat:@"URfetcher #%tu", i];
 				URfetcher *fetcher = [URfetcher new];
 				fetcher.urlStr = URL;
 				[self runOperation:fetcher withMsg:msg];
 			}
 #else
 			NSMutableOrderedSet *set = [NSMutableOrderedSet orderedSetWithCapacity:count];
-			for(int i=0; i<count; ++i) {
-				NSString *msg = [NSString stringWithFormat:@"URfetcher #%d", i];
+			for(NSUInteger i=0; i<count; ++i) {
+				NSString *msg = [NSString stringWithFormat:@"URfetcher #%tu", i];
 				URfetcher *fetcher = [URfetcher new];
 				fetcher.urlStr = URL;
 				fetcher.runMessage = msg;
@@ -201,13 +201,13 @@ assert(config.HTTPShouldSetCookies);
 - (IBAction)operationsAction:(id)sender
 {
 	lastOperationsCount = (NSUInteger)lrintf([(UISlider *)sender value]);
-	operationsToRun.text = [NSString stringWithFormat:@"%u", lastOperationsCount];
+	operationsToRun.text = [NSString stringWithFormat:@"%tu", lastOperationsCount];
 }
 
 - (IBAction)concurrentAction:(id)sender
 {
 	lastMaxConcurrent = (NSUInteger)lrintf([(UISlider *)sender value]);
-	maxConcurrentText.text = [NSString stringWithFormat:@"%u", lastMaxConcurrent];
+	maxConcurrentText.text = [NSString stringWithFormat:@"%tu", lastMaxConcurrent];
 	[self operationsRunner].maxOps = lastMaxConcurrent;
 }
 
@@ -247,7 +247,7 @@ assert(config.HTTPShouldSetCookies);
 	URfetcher *fetcher = (URfetcher *)op;
 	
 	//NSLog(@"Operation %@: %@", (fetcher.webData && !fetcher.error) ? @"Completed" : @"FAILED", fetcher.runMessage);
-	NSLog(@"Operation %@: %@", fetcher.runMessage, [NSString stringWithFormat:@"ERROR=%@ size=%u", fetcher.error, [(NSData *)fetcher.webData length]]);
+	NSLog(@"Operation %@: %@", fetcher.runMessage, [NSString stringWithFormat:@"ERROR=%@ size=%tu", fetcher.error, [(NSData *)fetcher.webData length]]);
 	
 	if(!remainingOps) {
 		elapsedTime.text = [NSString stringWithFormat:@"%.2f seconds", -[startDate timeIntervalSinceNow]];
