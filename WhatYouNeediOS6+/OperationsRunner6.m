@@ -482,7 +482,7 @@
 - (NSString *)description
 {
 	NSMutableString *mStr = [NSMutableString stringWithCapacity:256];
-	[mStr appendFormat:@"OpsOnHold=%d OpsRunning=%d\n", [_operationsOnHold count], [_operations count]];
+	[mStr appendFormat:@"OpsOnHold=%tu OpsRunning=%tu\n", [_operationsOnHold count], [_operations count]];
 	[_operations enumerateObjectsUsingBlock:^(FECWF_WEBFETCHER *op, BOOL *stop)
 		{
 			[mStr appendString:[op description]];
