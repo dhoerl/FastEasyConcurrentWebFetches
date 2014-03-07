@@ -241,12 +241,12 @@
 #ifndef NDEBUG
 	if(_htmlStatus != 200) {
 		LOG(@"Server Response code %i url=%@", _htmlStatus, _urlStr);
-		_errorMessage = [NSString stringWithFormat:@"Network Error %d %@", _htmlStatus,[NSHTTPURLResponse localizedStringForStatusCode:_htmlStatus]];
+		_errorMessage = [NSString stringWithFormat:@"Network Error %tu %@", _htmlStatus,[NSHTTPURLResponse localizedStringForStatusCode:_htmlStatus]];
 		LOG(@"ERR: %@", _errorMessage);
 	}
 #endif
 	if (_htmlStatus >= 500) {
-		_errorMessage = [NSString stringWithFormat:@"Network Error %d %@", _htmlStatus,[NSHTTPURLResponse localizedStringForStatusCode:_htmlStatus]];
+		_errorMessage = [NSString stringWithFormat:@"Network Error %tu %@", _htmlStatus,[NSHTTPURLResponse localizedStringForStatusCode:_htmlStatus]];
 	}
 	responseLength = response.expectedContentLength == NSURLResponseUnknownLength ? 1024 : (NSUInteger)response.expectedContentLength;
 #ifndef NDEBUG
