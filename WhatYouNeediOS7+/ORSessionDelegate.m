@@ -47,7 +47,7 @@
 	if([[fetcher class] printDebugging]) LOG(@"Connection:willSendRequest %@ redirect %@", request, response);
 	
 	if(response) {
-		LOG(@"RESP: status=%d headers=%@", [response statusCode], [response allHeaderFields]);
+		LOG(@"RESP: status=%tu headers=%@", [response statusCode], [response allHeaderFields]);
 	}
 	completionHandler(request);
 }
@@ -73,7 +73,7 @@ LOG(@"YIKES: \"URLSession:didReceiveResponse:task:...\" fetcher=%@ response=%@",
 	fetcher.htmlStatus = [httpResponse statusCode];
 #ifndef NDEBUG
 	if(fetcher.htmlStatus != 200) {
-		LOG(@"Server Response code %i url=%@", fetcher.htmlStatus, fetcher.urlStr);
+		LOG(@"Server Response code %tu url=%@", fetcher.htmlStatus, fetcher.urlStr);
 		fetcher.errorMessage = [NSString stringWithFormat:@"Network Error %zd %@",  fetcher.htmlStatus,[NSHTTPURLResponse localizedStringForStatusCode: fetcher.htmlStatus]];
 		LOG(@"ERR: %@", fetcher.errorMessage);
 	}
@@ -83,7 +83,7 @@ LOG(@"YIKES: \"URLSession:didReceiveResponse:task:...\" fetcher=%@ response=%@",
 	}
 	NSUInteger responseLength = response.expectedContentLength == NSURLResponseUnknownLength ? 1024 : (NSUInteger)response.expectedContentLength;
 #ifndef NDEBUG
-	if([[fetcher class] printDebugging]) LOG(@"Connection:didReceiveResponse: response=%@ len=%u", response, responseLength);
+	if([[fetcher class] printDebugging]) LOG(@"Connection:didReceiveResponse: response=%@ len=%tu", response, responseLength);
 #endif
 
 	// Must do this here, since we can get an error and still get data!
@@ -94,9 +94,8 @@ LOG(@"YIKES: \"URLSession:didReceiveResponse:task:...\" fetcher=%@ response=%@",
 	fetcher.webData		= (NSData *)dispatch_data_create(NULL, 0, q, ^{});
 
 	if(fetcher.errorMessage) {
-		//LOG(@"Cancel due to error: %@", fetcher.errorMessage);
+		LOG(@"Cancel due to error: %@", fetcher.errorMessage);
 		completionHandler(NSURLSessionResponseCancel);
-		fetcher.finalBlock(fetcher, NO);
 	} else {
 		//LOG(@"Proceed no error");
 		completionHandler(NSURLSessionResponseAllow);
@@ -116,8 +115,9 @@ LOG(@"YIKES: \"URLSession:didReceiveResponse:task:...\" fetcher=%@ response=%@",
 		fetcher.errorMessage = [error localizedDescription];
 	}
 	
-	// LOG(@"YIKES: \"URLSession:didCompleteWithError:task:...\" fetcher=%@ error=%@", fetcher.runMessage, error);
+	LOG(@"YIKES: \"URLSession:didCompleteWithError:task:...\" fetcher=%@ error=%@", fetcher.runMessage, error);
 	fetcher.finalBlock(fetcher, fetcher.errorMessage ? NO : YES);
+	fetcher.finalBlock = nil;
 }
 
 - (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask
