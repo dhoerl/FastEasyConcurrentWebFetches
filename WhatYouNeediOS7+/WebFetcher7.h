@@ -26,7 +26,7 @@
 #endif
 
 // Unit Testing
-#if defined(UNIT_TESTING) // && !defined(FORCE_MODE)
+#if defined(UNIT_TESTING) && !defined(FORCE_MODE)
 typedef enum { forcingOff=0, failAtSetup, failAtStartup, forceSuccess, forceFailure, forceRetry } forceMode;
 #endif
 

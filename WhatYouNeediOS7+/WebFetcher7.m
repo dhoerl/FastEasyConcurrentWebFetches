@@ -98,17 +98,18 @@
 
 - (BOOL)start:(NSMutableURLRequest *)request __attribute__((unused))
 {
+	NSURLSessionTask *task = _task;	// weak to strong to avoid warnings (and its the right thing to do)
 	self.isExecuting = YES;
 
 #ifndef NDEBUG
 	//LOG(@"%@ Start", self.runMessage);
-	if([[self class] printDebugging]) LOG(@"URLSTRING1=%@", [_task.originalRequest URL]);
+	if([[self class] printDebugging]) LOG(@"URLSTRING1=%@", [task.originalRequest URL]);
 #endif
-	assert(_task.originalRequest);
+	assert(task.originalRequest);
 
 
 #if ! defined(UNIT_TESTING)	// lets us force errors in code
-	[_task resume];
+	[task resume];
 #else
 	switch(self.forceAction) {
 	case forceSuccess:
@@ -131,7 +132,7 @@
 			{
 				__typeof__(self) strongSelf = weakSelf;
 				strongSelf.htmlStatus = 400;
-				strongSelf.errorMessage = [NSString stringWithFormat:@"Network Error %d",  strongSelf.htmlStatus];
+				strongSelf.errorMessage = [NSString stringWithFormat:@"Network Error %tu",  strongSelf.htmlStatus];
 				[(FECWF_SESSION_DELEGATE *)strongSelf.urlSession.delegate URLSession:self.urlSession task:self.task didCompleteWithError:nil];
 			} );
 		return YES;
