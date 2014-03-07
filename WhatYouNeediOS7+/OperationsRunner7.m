@@ -1,6 +1,6 @@
 //
 // FastEasyConcurrentWebFetches (TM)
-// Copyright (C) 2012-2013 by David Hoerl
+// Copyright (C) 2012-2014 by David Hoerl
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -108,8 +108,8 @@ static NSURLSession *sharedSession;
 		_maxOps				= DEFAULT_MAX_OPS;
 		_mSecCancelDelay	= DEFAULT_MILLI_SEC_CANCEL_DELAY;
 
-		_usingSharedSession	= sharedSession && ![_delegate respondsToSelector:@selector(urlSessionConfig)]? YES : NO;
-		_urlSession			= _usingSharedSession ? sharedSession : [NSURLSession sessionWithConfiguration:[_delegate urlSessionConfig] delegate:[_delegate urlSessionDelegate] delegateQueue:[NSOperationQueue new]];
+		_usingSharedSession	= sharedSession && ![del respondsToSelector:@selector(urlSessionConfig)]? YES : NO;
+		_urlSession			= _usingSharedSession ? sharedSession : [NSURLSession sessionWithConfiguration:[del urlSessionConfig] delegate:[del urlSessionDelegate] delegateQueue:[NSOperationQueue new]];
 		if(!_usingSharedSession) {
 			_urlSession.sessionDescription = @"OpRunner Created Session";
 		}
