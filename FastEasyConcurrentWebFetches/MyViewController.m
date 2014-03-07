@@ -280,6 +280,8 @@ assert(config.HTTPShouldSetCookies);
 					FECWF_OPERATIONSRUNNER *operationsRunner = (FECWF_OPERATIONSRUNNER *)obj;
 					operationsRunner.maxOps = lastMaxConcurrent;
 					[self priorityAction:priority];	// sets priority
+					//operationsRunner.priority = DISPATCH_QUEUE_PRIORITY_BACKGROUND;
+					//operationsRunner.delegateQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
 				}
 			}
 		}
