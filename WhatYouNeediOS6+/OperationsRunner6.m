@@ -179,7 +179,7 @@
 		dispatch_group_async(_opRunnerGroup, _opRunnerQueue, ^
 			{
 				[weakSelf _runOperation:op];
-				//NSLog(@"END _run %@", op.runMessage);
+				//LOG(@"END _run %@", op.runMessage);
 			} );
 	}
 }
@@ -272,7 +272,7 @@
 		{
 			BOOL ret = [op _OR_cancel:_mSecCancelDelay];
 			if(!ret) ++cancelFailures;
-			//NSLog(@"SEND CANCEL TO %@", op.runMessage);
+			//LOG(@"SEND CANCEL TO %@", op.runMessage);
 		} ];
 	[_operations removeAllObjects];
 /***/dispatch_semaphore_signal(_dataSema);
@@ -394,12 +394,12 @@
 	for(int32_t i=1; i<=count; ++i) {
 		long ret = dispatch_semaphore_wait(_deallocs, dispatch_time(DISPATCH_TIME_NOW, 1*NSEC_PER_SEC));	// 1 second
 		if(ret) {
-			NSLog(@"+++++++++++++++++++WARNING[%d]: %d OPERATIONS DID NOT DEALLOC", count, count-i+1);
+			LOG(@"+++++++++++++++++++WARNING[%d]: %d OPERATIONS DID NOT DEALLOC", count, count-i+1);
 			completed = NO;
 			break;
 		}
 	}
-	//if(completed) NSLog(@"ALL OPS DEALLOCED");
+	//if(completed) LOG(@"ALL OPS DEALLOCED");
 }
 #endif
 
@@ -410,7 +410,7 @@
 	}
 	assert(!op.isCancelled);
 	
-	//NSLog(@"_operationFinished op=%@", op.runMessage);
+	//LOG(@"_operationFinished op=%@", op.runMessage);
 	//LOG(@"OP RUNNER GOT A MESSAGE %d for thread %@", _msgDelOn, delegateThread);	
 
 	switch(_msgDelOn) {
@@ -473,7 +473,7 @@
 
 #if defined(VERIFY_DEALLOC) && !defined(UNIT_TESTING)
 	if(!remainingCount) {
-		NSLog(@"DEALLOC TEST");
+		LOG(@"DEALLOC TEST");
 		[self testIfAllDealloced];
 	}
 #endif

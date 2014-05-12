@@ -88,7 +88,7 @@ LOG(@"YIKES: \"URLSession:didReceiveResponse:task:...\" fetcher=%@ response=%@",
 
 	// Must do this here, since we can get an error and still get data!
 	fetcher.totalReceiveSize = responseLength;
-	// NSLog(@"EXPECT SIZE %u", responseLength);
+	// LOG(@"EXPECT SIZE %u", responseLength);
 	fetcher.currentReceiveSize = 0;
 	dispatch_queue_t q	= dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
 	fetcher.webData		= (NSData *)dispatch_data_create(NULL, 0, q, ^{});

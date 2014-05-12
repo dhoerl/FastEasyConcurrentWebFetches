@@ -167,7 +167,7 @@
 	if([[self class] printDebugging]) LOG(@"WF: completed");
 #endif
 	// we need a tad delay to let the completed return before the KVO message kicks in
-//NSLog(@"WF: completed");
+//LOG(@"WF: completed");
 	[self finish];
 }
 
@@ -177,7 +177,7 @@
 	if([[self class] printDebugging]) LOG(@"WF: failed");
 #endif
 
-//NSLog(@"WF: failed");
+//LOG(@"WF: failed");
 	[self finish];
 }
 
@@ -186,7 +186,7 @@
 #ifndef NDEBUG
 	if([[self class] printDebugging]) LOG(@"WF: finish");
 #endif
-//NSLog(@"WF: finish");
+//LOG(@"WF: finish");
 	self.isFinished = YES;
 	self.isExecuting = NO;
 }

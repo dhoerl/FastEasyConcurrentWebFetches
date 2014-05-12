@@ -71,7 +71,7 @@ static NSURLSession *sharedSession;
 + (void)createSharedSessionWithConfiguration:(NSURLSessionConfiguration *)config delegate:(id <NSURLSessionDataDelegate>) delegate
 {
 	static dispatch_once_t pred;
-//NSLog(@"CREATE SHARED SESSION!");
+//LOG(@"CREATE SHARED SESSION!");
 	dispatch_once(&pred, ^
 		{
 			sharedSession = [NSURLSession sessionWithConfiguration:config delegate:delegate delegateQueue:[NSOperationQueue new]];
@@ -113,7 +113,7 @@ static NSURLSession *sharedSession;
 		if(!_usingSharedSession) {
 			_urlSession.sessionDescription = @"OpRunner Created Session";
 		}
-//NSLog(@"Session=%@ del=%@", _urlSession.sessionDescription, _urlSession.delegate);
+//LOG(@"Session=%@ del=%@", _urlSession.sessionDescription, _urlSession.delegate);
 
 #ifdef VERIFY_DEALLOC
 		_deallocs			= dispatch_semaphore_create(0);
@@ -206,7 +206,7 @@ static NSURLSession *sharedSession;
 		dispatch_group_async(_opRunnerGroup, _opRunnerQueue, ^
 			{
 				[weakSelf _runOperation:op];
-				//NSLog(@"END _run %@", op.runMessage);
+				//LOG(@"END _run %@", op.runMessage);
 			} );
 	}
 }
@@ -301,7 +301,7 @@ static NSURLSession *sharedSession;
 			BOOL ret = [op _OR_cancel:_mSecCancelDelay];
 			if(!ret) ++cancelFailures;
 			// [op.task cancel], op.task = nil;	// in WebFetcher7, since cancel can be sent by subclass too
-			//NSLog(@"SEND CANCEL TO %@", op.runMessage);
+			//LOG(@"SEND CANCEL TO %@", op.runMessage);
 		} ];
 
 	if(!_usingSharedSession) {
@@ -438,14 +438,14 @@ static NSURLSession *sharedSession;
 			for(int32_t i=1; i<=count; ++i) {
 				long ret = dispatch_semaphore_wait(_deallocs, dispatch_time(DISPATCH_TIME_NOW, 1*NSEC_PER_SEC));	// 1 second
 				if(ret) {
-					NSLog(@"+++++++++++++++++++WARNING[%d]: %d OPERATIONS DID NOT DEALLOC", count, count-i+1);
+					LOG(@"+++++++++++++++++++WARNING[%d]: %d OPERATIONS DID NOT DEALLOC", count, count-i+1);
 					//completed = NO;
 					break;
 				}
 			}
 		} );
 
-	//if(completed) NSLog(@"ALL OPS DEALLOCED");
+	//if(completed) LOG(@"ALL OPS DEALLOCED");
 }
 #endif
 
@@ -455,7 +455,7 @@ static NSURLSession *sharedSession;
 		return;
 	}
 	
-	//NSLog(@"_operationFinished op=%@", op.runMessage);
+	//LOG(@"_operationFinished op=%@", op.runMessage);
 	//LOG(@"OP RUNNER GOT A MESSAGE %d for thread %@", _msgDelOn, delegateThread);	
 
 	switch(_msgDelOn) {
@@ -518,7 +518,7 @@ static NSURLSession *sharedSession;
 
 #if defined(VERIFY_DEALLOC) && !defined(UNIT_TESTING)
 	if(!remainingCount) {
-		NSLog(@"DEALLOC TEST");
+		LOG(@"DEALLOC TEST");
 		[self testIfAllDealloced];
 	}
 #endif
