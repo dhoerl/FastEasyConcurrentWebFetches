@@ -108,7 +108,7 @@ static NSURLSession *sharedSession;
 		_maxOps				= DEFAULT_MAX_OPS;
 		_mSecCancelDelay	= DEFAULT_MILLI_SEC_CANCEL_DELAY;
 
-		_usingSharedSession	= sharedSession;
+		_usingSharedSession	= sharedSession ? YES : NO;
 		assert(_usingSharedSession || ([del respondsToSelector:@selector(urlSessionConfig)] && [del respondsToSelector:@selector(urlSessionDelegate)]));
 		_urlSession			= _usingSharedSession ? sharedSession : [NSURLSession sessionWithConfiguration:[del urlSessionConfig] delegate:[del urlSessionDelegate] delegateQueue:[NSOperationQueue new]];
 		if(!_usingSharedSession) {
