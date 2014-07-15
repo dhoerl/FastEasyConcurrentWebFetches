@@ -132,8 +132,9 @@
 			{
 				__typeof__(self) strongSelf = weakSelf;
 				strongSelf.htmlStatus = 400;
-				strongSelf.errorMessage = [NSString stringWithFormat:@"Network Error %tu",  strongSelf.htmlStatus];
-				[(FECWF_SESSION_DELEGATE *)strongSelf.urlSession.delegate URLSession:self.urlSession task:self.task didCompleteWithError:nil];
+				NSString *msg = [NSString stringWithFormat:@"Network Error %tu",  strongSelf.htmlStatus];
+				NSError *err = = [NSError errorWithDomain:@"com.dfh.orsd" code:strongSelf.htmlStatus userInfo:@{NSLocalizedDescriptionKey : msg}];
+				[(FECWF_SESSION_DELEGATE *)strongSelf.urlSession.delegate URLSession:self.urlSession task:self.task didCompleteWithError:err];
 			} );
 		return YES;
 	} break;
@@ -145,7 +146,6 @@
 			{
 				__typeof__(self) strongSelf = weakSelf;
 				strongSelf.htmlStatus = 400;
-				strongSelf.errorMessage = @"Forced Failure";
 				NSError *err = [NSError errorWithDomain:@"NSURLErrorDomain" code:-1001 userInfo:@{ NSLocalizedDescriptionKey : @"timed out" }];	// Timeout
 				[(FECWF_SESSION_DELEGATE *)strongSelf.urlSession.delegate URLSession:self.urlSession task:self.task didCompleteWithError:err];
 			} );
