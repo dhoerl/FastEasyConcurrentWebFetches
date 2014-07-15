@@ -23,7 +23,12 @@
 
 #import "ORSessionDelegate.h"
 
-#define DEBUGGING	0	// 0 == no debug, 1 == lots of mesages
+#define CANCEL_ON_HTML_STATUS	1	// if not 200, then cancel. When set to 0, cancel only for >= 500.
+									// Set to 0 to see if any data returned
+
+#define DEBUGGING				0	// 0 == no debug, 1 == lots of mesages
+
+
 
 #if DEBUGGING == 1
 #define LOG(...) NSLog(__VA_ARGS__)
@@ -69,18 +74,22 @@ LOG(@"YIKES: \"URLSession:didReceiveResponse:task:...\" fetcher=%@ response=%@",
 	}
 
 	assert([response isKindOfClass:[NSHTTPURLResponse class]]);
-	NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response; 
+	NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
+	
 	fetcher.htmlStatus = [httpResponse statusCode];
-#ifndef NDEBUG
-	if(fetcher.htmlStatus != 200) {
-		LOG(@"Server Response code %tu url=%@", fetcher.htmlStatus, fetcher.urlStr);
-		fetcher.errorMessage = [NSString stringWithFormat:@"Network Error %zd %@",  fetcher.htmlStatus,[NSHTTPURLResponse localizedStringForStatusCode: fetcher.htmlStatus]];
-		LOG(@"ERR: %@", fetcher.errorMessage);
-	}
+	BOOL err;
+#if CANCEL_ON_HTML_STATUS
+	err = fetcher.htmlStatus != 200;
+#else
+	err = fetcher.htmlStatus >= 500;
 #endif
-	if (fetcher.htmlStatus >= 500) {
-		fetcher.errorMessage = [NSString stringWithFormat:@"Network Error %zd %@", fetcher.htmlStatus,[NSHTTPURLResponse localizedStringForStatusCode:fetcher.htmlStatus]];
+	if(err) {
+		LOG(@"ERROR: server Response code %tu url=%@", fetcher.htmlStatus, fetcher.urlStr);
+		NSString *msg = [NSString stringWithFormat:@"Network Error %zd %@",  fetcher.htmlStatus,[NSHTTPURLResponse localizedStringForStatusCode: fetcher.htmlStatus]];
+		fetcher.error = [NSError errorWithDomain:@"com.dfh.orsd" code:fetcher.htmlStatus userInfo:@{NSLocalizedDescriptionKey : msg}];
+		LOG(@"ERR: %@", fetcher.error);
 	}
+
 	NSUInteger responseLength = response.expectedContentLength == NSURLResponseUnknownLength ? 1024 : (NSUInteger)response.expectedContentLength;
 #ifndef NDEBUG
 	if([[fetcher class] printDebugging]) LOG(@"Connection:didReceiveResponse: response=%@ len=%tu", response, responseLength);
@@ -93,8 +102,8 @@ LOG(@"YIKES: \"URLSession:didReceiveResponse:task:...\" fetcher=%@ response=%@",
 	dispatch_queue_t q	= dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
 	fetcher.webData		= (NSData *)dispatch_data_create(NULL, 0, q, ^{});
 
-	if(fetcher.errorMessage) {
-		LOG(@"Cancel due to error: %@", fetcher.errorMessage);
+	if(fetcher.error) {
+		LOG(@"Cancel due to error: %@", fetcher.error);
 		completionHandler(NSURLSessionResponseCancel);
 	} else {
 		//LOG(@"Proceed no error");
@@ -110,12 +119,14 @@ LOG(@"YIKES: \"URLSession:didReceiveResponse:task:...\" fetcher=%@ response=%@",
 		return;
 	}
 
-	if(!fetcher.error && error) {
+	if(error && !fetcher.error) {
 		fetcher.error = error;
+	}
+	if(fetcher.error) {
 		fetcher.errorMessage = [error localizedDescription];
 	}
 	
-	LOG(@"YIKES: \"URLSession:didCompleteWithError:task:...\" fetcher=%@ error=%@", fetcher.runMessage, error);
+	LOG(@"YIKES: \"URLSession:didCompleteWithError:task:...\" fetcher=%@ error=%@", fetcher.runMessage, fetcher.error);
 	fetcher.finalBlock(fetcher, fetcher.errorMessage ? NO : YES);
 	fetcher.finalBlock = nil;
 }
