@@ -22,6 +22,7 @@
 //
 
 #import <objc/runtime.h>
+#import <Foundation/Foundation.h>
 
 #import "OperationsRunnerProtocol7.h"
 

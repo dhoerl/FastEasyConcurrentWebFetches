@@ -21,6 +21,8 @@
 // THE SOFTWARE.
 //
 
+#import <Foundation/Foundation.h>
+
 #ifndef FECWF_WEBFETCHER
 #define FECWF_WEBFETCHER ORWebFetcher
 #endif

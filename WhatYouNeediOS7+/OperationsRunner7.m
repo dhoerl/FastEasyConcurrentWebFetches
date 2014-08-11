@@ -68,7 +68,7 @@ static NSURLSession *sharedSession;
 }
 @dynamic priority;
 
-+ (void)createSharedSessionWithConfiguration:(NSURLSessionConfiguration *)config delegate:(id <NSURLSessionDataDelegate>) delegate
++ (void)createSharedSessionWithConfiguration:(NSURLSessionConfiguration *)config delegate:(id <NSURLSessionDataDelegate>)delegate
 {
 	static dispatch_once_t pred;
 //LOG(@"CREATE SHARED SESSION!");

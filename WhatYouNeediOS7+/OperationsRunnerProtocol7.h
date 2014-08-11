@@ -30,6 +30,11 @@
 #define FECWF_OPSRUNNER_PROTOCOL OperationsRunnerProtocol
 #endif
 
+#ifndef FECWF_OPERATIONSRUNNER
+#define FECWF_OPERATIONSRUNNER OperationsRunner
+#endif
+
+
 @protocol FECWF_OPSRUNNER_PROTOCOL <NSObject>
 
 // can get this on main thread (default), a specific thread you request, or anyThread
