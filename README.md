@@ -13,6 +13,11 @@ This code, migrated from NSOperation-WebFetches-MadeEasy, was the basis of the L
 
 UPDATES:
 
+  4.0.0 (9/2/2014): iOS8 and Swift
+    - Swift usage brought complications to the iOS7 architecture of declaring a category in the interface, then using forwardingTargetForSelector: to redirect messages
+    - Thus the new iOS8+ folder, which now requires you to declare a lazy OperationsRunner ivar, and message it directly
+	- Only the WhatYouNeediOS8+ code base will be supported going forward.
+
   3.1.0 (2/9/2014): Session Restructure
     - 64bit clean
     - Moved ORSessionDelegate to RefSessionDelegate and URSessionDelegate to ORSessionDelegate. Your subclasses should use ORSessionDelegate as the base class. The RefSessionDelegate serves to provide method templates for every delegate method in the event you need one.
