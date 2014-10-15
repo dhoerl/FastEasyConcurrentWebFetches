@@ -38,7 +38,7 @@
 @protocol FECWF_OPSRUNNER_PROTOCOL <NSObject>
 
 // can get this on main thread (default), a specific thread you request, or anyThread
-- (void)operationFinished:(FECWF_WEBFETCHER *)op count:(NSUInteger)remainingOps;
+ - (void)operationFinished:(FECWF_WEBFETCHER *)op count:(NSUInteger)remainingOps;
 
 @optional // Must be provided if you do not use the shared session
 
