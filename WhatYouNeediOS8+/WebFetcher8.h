@@ -38,22 +38,23 @@ typedef void(^finishBlock)(FECWF_WEBFETCHER *op, BOOL succeeded);
 @interface FECWF_WEBFETCHER : NSObject
 // Client defined
 @property (nonatomic, copy) NSString *urlStr;
-@property (nonatomic, copy) NSString *runMessage;		// debugging
+@property (nonatomic, copy) NSString *runMessage;				// debugging
 
 // Clients treat as readonly
 @property (atomic, assign, readonly) BOOL isCancelled;
 @property (atomic, assign, readonly) BOOL isExecuting;
 @property (atomic, assign, readonly) BOOL isFinished;
 @property (atomic, weak) NSURLSessionTask *task;
-@property (nonatomic, strong) NSData *webData;			// actually a dispatch_data_t
+@property (nonatomic, strong) NSData *webData;					// actually a dispatch_data_t
 @property (nonatomic, assign) NSUInteger htmlStatus;
 @property (nonatomic, assign) NSUInteger totalReceiveSize;
 @property (nonatomic, assign) NSUInteger currentReceiveSize;
 @property (nonatomic, strong) finishBlock finalBlock;
+@property (nonatomic, strong) id obj;							// Any object the user wants to store for the duration of this
 
 // Subclasses can set
 @property (nonatomic, strong) NSError *error;
-@property (nonatomic, copy) NSString *errorMessage;		// MUST be non-nil to indicate an error
+@property (nonatomic, copy) NSString *errorMessage;				// MUST be non-nil to indicate an error
 
 #ifdef VERIFY_DEALLOC
 @property (nonatomic, strong) dispatch_block_t deallocBlock;
