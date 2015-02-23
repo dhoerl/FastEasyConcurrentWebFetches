@@ -23,7 +23,7 @@
 
 #import "ORSessionDelegate.h"
 
-#define CANCEL_ON_HTML_STATUS	1	// if not 200, then cancel. When set to 0, cancel only for >= 500.
+#define CANCEL_ON_HTML_STATUS	0	// if not 200, then cancel. When set to 0, cancel only for >= 500.
 									// Set to 0 to see if any data returned
 
 #define DEBUGGING				0	// 0 == no debug, 1 == lots of mesages
