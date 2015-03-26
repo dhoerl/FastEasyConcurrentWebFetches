@@ -320,8 +320,15 @@ static NSURLSession *sharedSession;
 
 - (void)_runOperation:(FECWF_WEBFETCHER *)op	// on queue
 {
+	if(op.finalBlock) {
+		op.errorMessage = @"WebFetcher already was scheduled or run";
+		[self _operationFinished:op];
+		return;
+	}
+
 	if(self.cancelled) {
 		//LOG(@"Cancel Before Running: %@", op);
+		op.errorMessage = @"WebFetcher was cancelled";
 		[self _operationFinished:op];
 		return;
 	}
