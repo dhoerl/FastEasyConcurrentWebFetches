@@ -138,7 +138,12 @@ LOG(@"YIKES: \"URLSession:didReceiveResponse:task:...\" fetcher=%@ response=%@",
 	//LOG(@"YIKES: \"URLSession:didReceiveData:task:...\" fetcher=%@", fetcher.runMessage);
 
 	fetcher.currentReceiveSize += [data length];
-	fetcher.webData = (NSData *)dispatch_data_create_concat((dispatch_data_t)fetcher.webData, (dispatch_data_t)data);
+	// In some cases we want to just consume the data as it arrives, and never concatenate it
+	if(fetcher.webData) {
+		fetcher.webData = (NSData *)dispatch_data_create_concat((dispatch_data_t)fetcher.webData, (dispatch_data_t)data);
+	} else {
+		fetcher.webData = data;
+	}
 }
 
 @end
