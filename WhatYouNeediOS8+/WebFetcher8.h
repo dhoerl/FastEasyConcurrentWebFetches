@@ -40,7 +40,7 @@ typedef void(^finishBlock)(FECWF_WEBFETCHER *op, BOOL succeeded);
 @property (nonatomic, copy) NSString *urlStr;
 @property (nonatomic, copy) NSString *runMessage;				// debugging
 
-// Clients treat as readonly
+// Clients MUST treat as readonly (here since OperationsRunner needs access)
 @property (atomic, assign, readonly) BOOL isCancelled;
 @property (atomic, assign, readonly) BOOL isExecuting;
 @property (atomic, assign, readonly) BOOL isFinished;
