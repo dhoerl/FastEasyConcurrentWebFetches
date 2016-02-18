@@ -161,6 +161,12 @@ static NSURLSession *sharedSession;
 		case DISPATCH_QUEUE_PRIORITY_DEFAULT:
 		case DISPATCH_QUEUE_PRIORITY_LOW:
 		case DISPATCH_QUEUE_PRIORITY_BACKGROUND:
+		case QOS_CLASS_USER_INTERACTIVE:
+		case QOS_CLASS_USER_INITIATED:
+		case QOS_CLASS_DEFAULT:
+		case QOS_CLASS_UTILITY:
+		case QOS_CLASS_BACKGROUND:
+		//case QOS_CLASS_UNSPECIFIED:
 			break;
 		default:
 			assert(!"Invalid Priority Value");
