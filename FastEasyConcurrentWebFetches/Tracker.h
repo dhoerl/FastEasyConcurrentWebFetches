@@ -22,8 +22,10 @@
 // THE SOFTWARE.
 //
 
-
 // Add "import "Tracker.h" to you pch file for easy usage
+
+#import <Foundation/Foundation.h>
+
 
 @interface Tracker : NSObject
 @property (atomic, copy) NSString *msg;					// from factory creation

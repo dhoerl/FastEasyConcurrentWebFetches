@@ -31,7 +31,7 @@
 
 // DEFAULTS
 #define DEFAULT_MAX_OPS					4						// Apple suggests a number like 4 for iOS, would not exceed 10, as each is a NSThread
-#define DEFAULT_PRIORITY	DISPATCH_QUEUE_PRIORITY_DEFAULT		// both dispatch queues use this
+#define DEFAULT_PRIORITY QOS_CLASS_DEFAULT						// both dispatch queues use this
 #define DEFAULT_MILLI_SEC_CANCEL_DELAY	100
 
 // how do you want the return message delivered
@@ -43,7 +43,7 @@ typedef enum { msgDelOnMainThread=0, msgDelOnAnyThread, msgOnSpecificThread, msg
 @property (nonatomic, assign) dispatch_queue_t delegateQueue;	// where to message delegate, sets msgDelOn->msgOnSpecificQueue
 @property (nonatomic, assign) dispatch_group_t delegateGroup;	// if set, use dispatch_group_async()
 @property (nonatomic, assign) BOOL noDebugMsgs;					// suppress debug messages
-@property (nonatomic, assign) long priority;					// targets the internal GCD queue doleing out the operations
+@property (nonatomic, assign) qos_class_t priority;				// targets the internal GCD queue doleing out the operations
 @property (nonatomic, assign) NSUInteger maxOps;				// set the NSOperationQueue's maxConcurrentOperationCount
 @property (nonatomic, assign) NSUInteger mSecCancelDelay;		// set the NSOperationQueue's maxConcurrentOperationCount
 

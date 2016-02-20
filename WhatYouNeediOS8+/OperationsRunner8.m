@@ -61,7 +61,7 @@ static NSURLSession *sharedSession;
 
 @implementation FECWF_OPERATIONSRUNNER
 {
-	long		_priority;							// the queue priority      
+	qos_class_t		_priority;						// the queue priority
 #ifdef VERIFY_DEALLOC
 	int32_t		_DO_NOT_ACCESS_operationsTotal;		// named so as to discourage direct access
 #endif
@@ -151,16 +151,12 @@ static NSURLSession *sharedSession;
 	}
 }
 
-- (void)setPriority:(long)priority
+- (void)setPriority:(qos_class_t)priority
 {	
 	if(_priority != priority) {
 	
 		// keep this around while in development
 		switch(priority) {
-		case DISPATCH_QUEUE_PRIORITY_HIGH:
-		case DISPATCH_QUEUE_PRIORITY_DEFAULT:
-		case DISPATCH_QUEUE_PRIORITY_LOW:
-		case DISPATCH_QUEUE_PRIORITY_BACKGROUND:
 		case QOS_CLASS_USER_INTERACTIVE:
 		case QOS_CLASS_USER_INITIATED:
 		case QOS_CLASS_DEFAULT:
@@ -168,7 +164,6 @@ static NSURLSession *sharedSession;
 		case QOS_CLASS_BACKGROUND:
 		//case QOS_CLASS_UNSPECIFIED:
 			break;
-		default:
 			assert(!"Invalid Priority Value");
 			return;
 		}

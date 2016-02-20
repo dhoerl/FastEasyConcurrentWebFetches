@@ -28,11 +28,11 @@
 //#define URL		@@"http:/www.apple.com/"
 
 
-#if __IPHONE_OS_VERSION_MIN_REQUIRED >= 70000
-#import "OperationsRunner7.h"
-#import "OperationsRunnerProtocol7.h"
+#if __IPHONE_OS_VERSION_MIN_REQUIRED >= 80000
+#import "OperationsRunner8.h"
+#import "OperationsRunnerProtocol8.h"
 #define FECWF_RUN_OPERATION_TYPE		FECWF_WEBFETCHER
-#import "URfetcher7.h"
+#import "URfetcher8.h"
 #import "ORSessionDelegate.h"
 #elif __IPHONE_OS_VERSION_MIN_REQUIRED >= 60000
 #import "OperationsRunner6.h"
@@ -214,16 +214,16 @@ assert(config.HTTPShouldSetCookies);
 - (IBAction)priorityAction:(id)sender
 {
 	lastPriority = [(UISegmentedControl *)sender selectedSegmentIndex];
-	
-	long val;
+
+	qos_class_t val;
 	switch(lastPriority) {
-	case 0:	val = DISPATCH_QUEUE_PRIORITY_HIGH;			break;
-	
+	case 0:	val = QOS_CLASS_USER_INTERACTIVE;	break;
+// QOS_CLASS_USER_INITIATED
 	default:
-	case 1:	val = DISPATCH_QUEUE_PRIORITY_DEFAULT;		break;
+	case 1:	val = QOS_CLASS_DEFAULT;		break;
 	
-	case 2:	val = DISPATCH_QUEUE_PRIORITY_LOW;			break;
-	case 3:	val = DISPATCH_QUEUE_PRIORITY_BACKGROUND;	break;
+	case 2:	val = QOS_CLASS_UTILITY;			break;
+	case 3:	val = QOS_CLASS_BACKGROUND;			break;
 	}
 	[self operationsRunner].priority = val;
 }
