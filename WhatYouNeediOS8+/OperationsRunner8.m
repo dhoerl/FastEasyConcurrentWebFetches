@@ -162,8 +162,9 @@ static NSURLSession *sharedSession;
 		case QOS_CLASS_DEFAULT:
 		case QOS_CLASS_UTILITY:
 		case QOS_CLASS_BACKGROUND:
-		//case QOS_CLASS_UNSPECIFIED:
 			break;
+		//case QOS_CLASS_UNSPECIFIED:
+		default:
 			assert(!"Invalid Priority Value");
 			return;
 		}
