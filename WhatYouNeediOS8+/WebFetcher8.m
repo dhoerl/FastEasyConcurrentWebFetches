@@ -115,7 +115,7 @@
 	case forceSuccess:
 	{
 		__weak __typeof__(self) weakSelf = self;
-		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 100 * NSEC_PER_MSEC), dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^
+		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 100 * NSEC_PER_MSEC), dispatch_get_global_queue(QOS_CLASS_DEFAULT, 0), ^
 			{
 				__typeof__(self) strongSelf = weakSelf;
 				strongSelf.htmlStatus = 200;
@@ -128,7 +128,7 @@
 	case forceFailure:
 	{
 		__weak __typeof__(self) weakSelf = self;
-		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 100 * NSEC_PER_MSEC), dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^
+		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 100 * NSEC_PER_MSEC), dispatch_get_global_queue(QOS_CLASS_DEFAULT, 0), ^
 			{
 				__typeof__(self) strongSelf = weakSelf;
 				strongSelf.htmlStatus = 400;
@@ -142,7 +142,7 @@
 	case forceRetry:
 	{
 		__weak __typeof__(self) weakSelf = self;
-		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 100 * NSEC_PER_MSEC), dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^
+		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 100 * NSEC_PER_MSEC), dispatch_get_global_queue(QOS_CLASS_DEFAULT, 0), ^
 			{
 				__typeof__(self) strongSelf = weakSelf;
 				strongSelf.htmlStatus = 400;

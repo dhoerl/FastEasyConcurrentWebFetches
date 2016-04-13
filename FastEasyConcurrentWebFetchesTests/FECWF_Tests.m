@@ -142,8 +142,8 @@ assert(config.HTTPShouldSetCookies);
 		assert(operationsRunner.msgDelOn == msgOnSpecificQueue);
 		
 		// Having ops run slowly is more likely to cause logic errors to show up in testing
-		operationsRunner.priority = DISPATCH_QUEUE_PRIORITY_BACKGROUND; // DISPATCH_QUEUE_PRIORITY_BACKGROUND;
-		dispatch_set_target_queue(queue, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0));
+		operationsRunner.priority = QOS_CLASS_BACKGROUND; // QOS_CLASS_BACKGROUND;
+		dispatch_set_target_queue(queue, dispatch_get_global_queue(QOS_CLASS_BACKGROUND, 0));
 	}
 	count = NUM_OPS;
 }
@@ -398,10 +398,10 @@ assert(config.HTTPShouldSetCookies);
 {
 	long priority;
 	switch(i % 4) {
-	case 0:	priority = DISPATCH_QUEUE_PRIORITY_HIGH; break;
-	case 1:	priority = DISPATCH_QUEUE_PRIORITY_DEFAULT; break;
-	case 2:	priority = DISPATCH_QUEUE_PRIORITY_LOW; break;
-	case 3:	default: priority = DISPATCH_QUEUE_PRIORITY_BACKGROUND;	break;
+	case 0:	priority = QOS_CLASS_USER_INITIATED; break;
+	case 1:	priority = QOS_CLASS_DEFAULT; break;
+	case 2:	priority = QOS_CLASS_UTILITY; break;
+	case 3:	default: priority = QOS_CLASS_BACKGROUND;	break;
 	}
 	return dispatch_get_global_queue(priority, 0);
 }
@@ -497,7 +497,7 @@ assert(config.HTTPShouldSetCookies);
 			{
 				// Set priorities once, or optionally you can ask [self operationsRunner] to get/create the item, and set/change these dynamically
 				// OperationsRunner *operationsRunner = (OperationsRunner *)obj;
-				// operationsRunner.priority = DISPATCH_QUEUE_PRIORITY_BACKGROUND;	// for example
+				// operationsRunner.priority = QOS_CLASS_BACKGROUND;	// for example
 				// operationsRunner.maxOps = 4;										// for example
 			}
 		}

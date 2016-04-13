@@ -46,7 +46,7 @@
     [self.window makeKeyAndVisible];
 
 #if 0
-	dispatch_queue_t q = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+	dispatch_queue_t q = dispatch_get_global_queue(QOS_CLASS_DEFAULT, 0);
 	
 	dispatch_data_t t = dispatch_data_create(NULL, 0, q, ^{});
 

@@ -121,7 +121,7 @@ static dispatch_semaphore_t	sema;
 	NSLog(@"%@", self);
 
 	NSValue *me = self.me;
-	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^
+	dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0), ^
 		{
 			dispatch_semaphore_wait(sema, DISPATCH_TIME_FOREVER);
 			//NSLog(@"trackerCnt=%d", [trackers count]);
