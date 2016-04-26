@@ -1,7 +1,7 @@
 //
 // FastEasyConcurrentWebFetches (TM)
 // Copyright (C) 2012-2013 by David Hoerl
-//
+// 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
 // in the Software without restriction, including without limitation the rights
@@ -21,33 +21,15 @@
 // THE SOFTWARE.
 //
 
-#import "WebFetcher7.h"
-#import "ORSessionDelegate.h"	// FECWF_SESSION_DELEGATE
+// Needed by subclasses
+//#import "WebFetcher8.h"
 
-@class FECWF_SESSION_DELEGATE;
+#import "OperationsRunner.h"
 
-#ifndef FECWF_OPSRUNNER_PROTOCOL
-#define FECWF_OPSRUNNER_PROTOCOL OperationsRunnerProtocol
+#ifndef FECWF_SESSION_DELEGATE
+#define FECWF_SESSION_DELEGATE ORSessionDelegate
 #endif
 
-#ifndef FECWF_OPERATIONSRUNNER
-#define FECWF_OPERATIONSRUNNER OperationsRunner
-#endif
-
-
-@protocol FECWF_OPSRUNNER_PROTOCOL <NSObject>
-
-// can get this on main thread (default), a specific thread you request, or anyThread
-- (void)operationFinished:(FECWF_WEBFETCHER *)op count:(NSUInteger)remainingOps;
-
-@optional // Must be provided if you do not use the shared session
-
-// Subclass that provides your specific values. Sent on the same thread as the first message
-// causing the OperationsRunner to instantiate.
-- (NSURLSessionConfiguration *)urlSessionConfig;
-
-// Object to respond to NSURLSession delegate messages. Sent on the same thread as the first message
-// causing the OperationsRunner to instantiate.
-- (FECWF_SESSION_DELEGATE *)urlSessionDelegate;
+@interface FECWF_SESSION_DELEGATE : NSObject <NSURLSessionDataDelegate>
 
 @end

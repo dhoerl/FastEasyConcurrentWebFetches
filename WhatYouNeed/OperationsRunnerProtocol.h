@@ -21,11 +21,33 @@
 // THE SOFTWARE.
 //
 
-#import "ConcurrentOperation.h"
+#import "WebFetcher.h"
+#import "ORSessionDelegate.h"	// FECWF_SESSION_DELEGATE
+
+@class FECWF_SESSION_DELEGATE;
+
+#ifndef FECWF_OPSRUNNER_PROTOCOL
+#define FECWF_OPSRUNNER_PROTOCOL OperationsRunnerProtocol
+#endif
+
+#ifndef FECWF_OPERATIONSRUNNER
+#define FECWF_OPERATIONSRUNNER OperationsRunner
+#endif
+
 
 @protocol FECWF_OPSRUNNER_PROTOCOL <NSObject>
 
 // can get this on main thread (default), a specific thread you request, or anyThread
-- (void)operationFinished:(FECWF_CONCURRENT_OPERATION *)op count:(NSUInteger)remainingOps;
+ - (void)operationFinished:(FECWF_WEBFETCHER *)op count:(NSUInteger)remainingOps;
+
+@optional // Must be provided if you do not use the shared session
+
+// Subclass that provides your specific values. Sent on the same thread as the first message
+// causing the OperationsRunner to instantiate. The returned object is retained.
+- (NSURLSessionConfiguration *)urlSessionConfig;
+
+// Object to respond to NSURLSession delegate messages. Sent on the same thread as the first message
+// causing the OperationsRunner to instantiate. The returned object is retained.
+- (FECWF_SESSION_DELEGATE *)urlSessionDelegate;
 
 @end

@@ -1,6 +1,6 @@
 
 // FastEasyConcurrentWebFetches (TM)
-// Copyright (C) 2012-2013 by David Hoerl
+// Copyright (C) 2012-2016 by David Hoerl
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -28,44 +28,18 @@
 //#define URL		@@"http:/www.apple.com/"
 
 
-#if __IPHONE_OS_VERSION_MIN_REQUIRED >= 80000
-#import "OperationsRunner8.h"
-#import "OperationsRunnerProtocol8.h"
-#define FECWF_RUN_OPERATION_TYPE		FECWF_WEBFETCHER
-#import "URfetcher8.h"
-#import "ORSessionDelegate.h"
-#elif __IPHONE_OS_VERSION_MIN_REQUIRED >= 60000
-#import "OperationsRunner6.h"
-#import "OperationsRunnerProtocol6.h"
-#define FECWF_RUN_OPERATION_TYPE		FECWF_WEBFETCHER
-#import "URfetcher6.h"
-#else
 #import "OperationsRunner.h"
 #import "OperationsRunnerProtocol.h"
 #import "URfetcher.h"
-#define FECWF_RUN_OPERATION_TYPE		FECWF_CONCURRENT_OPERATION
-#endif
 
 static NSUInteger lastOperationsCount;
 static NSUInteger lastMaxConcurrent;
 static NSUInteger lastPriority;
 
-// 2) Add the protocol to the class extension interface in the implementation
+// Add the protocol to the class extension interface in the implementation
 @interface MyViewController () <FECWF_OPSRUNNER_PROTOCOL>
 @end
 
-// 4) Declare a category with these methods in the interface file (ie public) (change MyClass to your class)
-@interface MyViewController (FECWF_OPERATIONSRUNNER)
-
-- (FECWF_OPERATIONSRUNNER *)operationsRunner;				// get the current instance (or create it)
-- (void)runOperation:(FECWF_RUN_OPERATION_TYPE *)op withMsg:(NSString *)msg;	// to submit an operation
-- (BOOL)runOperations:(NSOrderedSet *)operations;	// Set of FECWF_CONCURRENT_OPERATION objects with their runMessage set (or not)
-- (NSUInteger)operationsCount;						// returns the total number of outstanding operations
-- (BOOL)cancelOperations;							// stop all work, will not get any more delegate calls after it returns, returns YES if everything torn down properly
-- (BOOL)restartOperations;							// restart things
-- (BOOL)disposeOperations;							// dealloc the OperationsRunner (only needed for special cases where you really want to get rid of all helper objects)
-
-@end
 
 @implementation MyViewController
 {
@@ -82,6 +56,7 @@ static NSUInteger lastPriority;
 	IBOutlet UILabel *elapsedTime;
 
 	NSDate *startDate;
+	OperationsRunner *opRunner;
 }
 
 + (void)initialize
@@ -90,7 +65,6 @@ static NSUInteger lastPriority;
 	lastMaxConcurrent	= 2;
 	lastPriority		= 1;
 	
-#if __IPHONE_OS_VERSION_MIN_REQUIRED >= 70000
 
 	FECWF_SESSION_DELEGATE *del = [FECWF_SESSION_DELEGATE new];
 	
@@ -101,7 +75,6 @@ assert(config.HTTPShouldSetCookies);
 	config.HTTPShouldUsePipelining = YES;
 	
 	[FECWF_OPERATIONSRUNNER createSharedSessionWithConfiguration:config delegate:del];
-#endif
 }
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -109,19 +82,21 @@ assert(config.HTTPShouldSetCookies);
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
+		opRunner = [[OperationsRunner alloc] initWithDelegate:self];
     }
     return self;
 }
 - (void)dealloc
 {
-	[self cancelOperations];
+	[opRunner cancelOperations];
 	// NSLog(@"Dealloc done!");
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	
+
+
 	[self defaultButtons];
 }
 
@@ -168,7 +143,7 @@ assert(config.HTTPShouldSetCookies);
 				NSString *msg = [NSString stringWithFormat:@"URfetcher #%tu", i];
 				URfetcher *fetcher = [URfetcher new];
 				fetcher.urlStr = URL;
-				[self runOperation:fetcher withMsg:msg];
+				[opRunner runOperation:fetcher withMsg:msg];
 			}
 #else
 			NSMutableOrderedSet *set = [NSMutableOrderedSet orderedSetWithCapacity:count];
@@ -185,15 +160,15 @@ assert(config.HTTPShouldSetCookies);
 }
 - (IBAction)cancelAction:(id)sender
 {
-	[self cancelOperations];
-	[self restartOperations];
+	[opRunner cancelOperations];
+	[opRunner restartOperations];
 	
 	[self defaultButtons];
 }
 
 - (IBAction)backAction:(id)sender
 {
-	[self cancelOperations];	// good idea to do as soon as possible
+	[opRunner cancelOperations];	// good idea to do as soon as possible
 
 	[self dismissViewControllerAnimated:YES completion:^{ ; }];
 }
@@ -208,7 +183,7 @@ assert(config.HTTPShouldSetCookies);
 {
 	lastMaxConcurrent = (NSUInteger)lrintf([(UISlider *)sender value]);
 	maxConcurrentText.text = [NSString stringWithFormat:@"%tu", lastMaxConcurrent];
-	[self operationsRunner].maxOps = lastMaxConcurrent;
+	opRunner.maxOps = lastMaxConcurrent;
 }
 
 - (IBAction)priorityAction:(id)sender
@@ -220,12 +195,11 @@ assert(config.HTTPShouldSetCookies);
 	case 0:	val = QOS_CLASS_USER_INTERACTIVE;	break;
 // QOS_CLASS_USER_INITIATED
 	default:
-	case 1:	val = QOS_CLASS_DEFAULT;		break;
-	
+	case 1:	val = QOS_CLASS_DEFAULT;			break;
 	case 2:	val = QOS_CLASS_UTILITY;			break;
 	case 3:	val = QOS_CLASS_BACKGROUND;			break;
 	}
-	[self operationsRunner].priority = val;
+	opRunner.priority = val;
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -238,7 +212,6 @@ assert(config.HTTPShouldSetCookies);
 	control.enabled = !disable;
 	control.alpha	= disable ? 0.50f : 1.0f;
 }
-
 
 - (void)operationFinished:(NSOperation *)op count:(NSUInteger)remainingOps
 {
@@ -253,63 +226,6 @@ assert(config.HTTPShouldSetCookies);
 		elapsedTime.text = [NSString stringWithFormat:@"%.2f seconds", -[startDate timeIntervalSinceNow]];
 		[self defaultButtons];
 	}
-}
-
-// 4) Add this method to the implementation file
-- (id)forwardingTargetForSelector:(SEL)sel
-{
-	static BOOL opRunnerKey;
-	id obj = objc_getAssociatedObject(self, &opRunnerKey);
-	// Look for common selectors first
-	if(
-		sel == @selector(runOperation:withMsg:)	|| 
-		sel == @selector(runOperations:)		||
-		sel == @selector(operationsCount)		||
-		sel == @selector(operationsRunner)
-	) {
-		if(!obj) {
-			if(sel == @selector(cancelOperations)) {
-				// cancel sent in say dealloc, don't create an object just to release it
-				obj = [FECWF_OPERATIONSRUNNER class];
-			} else {
-				// Object only created if needed. NOT THREAD SAFE (if you need that use a dispatch semaphone to insure only one object created
-				obj = [[FECWF_OPERATIONSRUNNER alloc] initWithDelegate:self];
-				objc_setAssociatedObject(self, &opRunnerKey, obj, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-				{
-					// Set priorities once, or optionally you can ask [self operationsRunner] to get/create the item, and set/change these dynamically
-					FECWF_OPERATIONSRUNNER *operationsRunner = (FECWF_OPERATIONSRUNNER *)obj;
-					operationsRunner.maxOps = lastMaxConcurrent;
-					[self priorityAction:priority];	// sets priority
-					//operationsRunner.priority = QOS_CLASS_BACKGROUND;
-					//operationsRunner.delegateQueue = dispatch_get_global_queue(QOS_CLASS_BACKGROUND, 0);
-				}
-			}
-		}
-		return obj;
-	} else
-	if(
-		sel == @selector(cancelOperations)		||
-		sel == @selector(restartOperations)		||
-		sel == @selector(disposeOperations)
-	) {
-		if(!obj) {
-			// cancel sent in say dealloc, don't create an object just to release it
-			obj = [FECWF_OPERATIONSRUNNER class];
-		} else {
-			if(sel == @selector(disposeOperations)) {
-				objc_setAssociatedObject(self, &opRunnerKey, nil, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-				// cancel sent in say dealloc, don't create an object just to release it
-			}
-		}
-		return obj;
-	} else {
-		return [super forwardingTargetForSelector:sel];
-	}
-}
-- (void)viewDidUnload {
-	spinner = nil;
-	elapsedTime = nil;
-	[super viewDidUnload];
 }
 
 @end

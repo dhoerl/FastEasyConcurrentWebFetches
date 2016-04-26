@@ -1,6 +1,6 @@
 
 // FastEasyConcurrentWebFetches (TM)
-// Copyright (C) 2012-2013 by David Hoerl
+// Copyright (C) 2012-2016 by David Hoerl
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -25,11 +25,7 @@
 
 #import "MyViewController.h"
 
-#if __IPHONE_OS_VERSION_MIN_REQUIRED >= 70000
-#define MY_NIB @"MyViewController7"
-#else
 #define MY_NIB @"MyViewController"
-#endif
 
 
 @interface ViewController ()

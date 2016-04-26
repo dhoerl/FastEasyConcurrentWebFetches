@@ -21,36 +21,59 @@
 // THE SOFTWARE.
 //
 
-#import "ConcurrentOperation.h"
+#import <Foundation/Foundation.h>
+
+#ifndef FECWF_WEBFETCHER
+#define FECWF_WEBFETCHER ORWebFetcher
+#endif
 
 // Unit Testing
 #if defined(UNIT_TESTING) && !defined(FORCE_MODE)
 typedef enum { forcingOff=0, failAtSetup, failAtStartup, forceSuccess, forceFailure, forceRetry } forceMode;
 #endif
 
-#ifndef FECWF_WEBFETCHER
-#define FECWF_WEBFETCHER ORWebFetcher
+@class FECWF_WEBFETCHER;
+typedef void(^finishBlock)(FECWF_WEBFETCHER *op, BOOL succeeded);
+
+@interface FECWF_WEBFETCHER : NSObject
+// Client defined
+@property (nonatomic, copy) NSString *urlStr;
+@property (nonatomic, copy) NSString *runMessage;				// debugging
+
+// Clients MUST treat as readonly (here since OperationsRunner needs access)
+@property (atomic, assign, readonly) BOOL isCancelled;
+@property (atomic, assign, readonly) BOOL isExecuting;
+@property (atomic, assign, readonly) BOOL isFinished;
+@property (atomic, weak) NSURLSessionTask *task;
+@property (nonatomic, strong) NSData *webData;					// actually a dispatch_data_t
+@property (nonatomic, assign) NSUInteger htmlStatus;
+@property (nonatomic, assign) NSUInteger totalReceiveSize;
+@property (nonatomic, assign) NSUInteger currentReceiveSize;
+@property (nonatomic, strong) finishBlock finalBlock;
+@property (nonatomic, strong) id obj;							// Any object the user wants to store for the duration of this
+
+// Subclasses can set
+@property (nonatomic, strong) NSError *error;
+@property (nonatomic, copy) NSString *errorMessage;				// MUST be non-nil to indicate an error
+
+#ifdef VERIFY_DEALLOC
+@property (nonatomic, strong) dispatch_block_t deallocBlock;
 #endif
 
-@interface FECWF_WEBFETCHER : FECWF_CONCURRENT_OPERATION
-@property (atomic, strong, readonly) NSMutableData *webData;
-@property (nonatomic, copy) NSString *urlStr;
-@property (nonatomic, strong) NSError *error;
-@property (nonatomic, copy) NSString *errorMessage;
-@property (nonatomic, assign) NSUInteger htmlStatus;
 #if defined(UNIT_TESTING)
 @property (nonatomic, assign) forceMode forceAction;
+@property (atomic, weak) NSURLSession *urlSession;
 #endif
 
 + (BOOL)printDebugging;
 + (BOOL)persistentConnection;
 + (NSUInteger)timeout;
 
-- (NSMutableURLRequest *)setup;
-- (BOOL)connect:(NSURLRequest *)request;
+- (NSMutableURLRequest *)setup;				// get the app started, object->continue, nil->failed so return
+- (BOOL)start:(NSMutableURLRequest *)request __attribute__((unused));
+- (void)completed;							// subclasses to override, call super
+- (void)failed;								// subclasses to override, call super
+- (void)finish;								// subclasses to override for cleanup, call super, only called if the operation successfully starts
+- (void)cancel;								// for subclasses, called on operation's thread
 
-@end
-
-// Advises subclasses
-@interface FECWF_WEBFETCHER (NSURLConnectionDelegate) <NSURLConnectionDelegate, NSURLConnectionDataDelegate>
 @end

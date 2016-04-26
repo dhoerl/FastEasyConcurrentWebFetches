@@ -1,5 +1,4 @@
 //
-// URfetcher.m
 // FastEasyConcurrentWebFetches
 // Copyright (C) 2013 by David Hoerl
 // 
@@ -26,21 +25,22 @@
 
 @implementation URfetcher
 
-+ (BOOL)persistentConnection { return NO; }
++ (BOOL)persistentConnection { return YES; }
 + (NSUInteger)timeout { return 60; }
 + (BOOL)printDebugging { return NO; }
 
+#if 0	// Not really needed, maybe to just monitor what's happening
 - (NSURLRequest *)setup
 {
 	NSMutableURLRequest *request = [super setup];
 	return request;
 }
 
-// Not really needed, maybe to just monitor what's happening
-- (BOOL)start:(NSMutableURLRequest *)request
+- (BOOL)start:(id)obj
 {
 	BOOL ok = [super start:request];
 	return ok;
 }
+#endif
 
 @end

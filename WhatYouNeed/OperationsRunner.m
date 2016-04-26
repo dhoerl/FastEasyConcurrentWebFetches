@@ -1,6 +1,6 @@
 //
 // FastEasyConcurrentWebFetches (TM)
-// Copyright (C) 2012-2013 by David Hoerl
+// Copyright (C) 2012-2014 by David Hoerl
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -32,43 +32,58 @@
 #endif
 
 #import "OperationsRunner.h"
+#import "ORSessionDelegate.h"
+#import "WebFetcher.h"
 
-#import "ConcurrentOperation.h"
+static NSURLSession *sharedSession;
 
-@interface FECWF_CONCURRENT_OPERATION (OperationsRunner)
+
+@interface FECWF_WEBFETCHER (OperationsRunner)
 - (BOOL)_OR_cancel:(NSUInteger)millisecondDelay;							// for use by OperationsRunner
 @end
 
 @interface FECWF_OPERATIONSRUNNER ()
 @property (nonatomic, strong) NSMutableSet				*operations;
 @property (nonatomic, strong) NSMutableOrderedSet		*operationsOnHold;	// output ops in the order they arrived
-@property (nonatomic, assign) dispatch_semaphore_t		dataSema;
-@property (nonatomic, assign) dispatch_queue_t			opRunnerQueue;
-@property (nonatomic, assign) dispatch_queue_t			operationsQueue;
-@property (nonatomic, assign) dispatch_group_t			opRunnerGroup;
-@property (nonatomic, assign) dispatch_group_t			operationsGroup;
+@property (nonatomic, strong) dispatch_semaphore_t		dataSema;
+@property (nonatomic, strong) dispatch_queue_t			opRunnerQueue;
+@property (nonatomic, strong) dispatch_group_t			opRunnerGroup;
+@property (nonatomic, strong) NSURLSession				*urlSession;
 @property (atomic, weak) id <FECWF_OPSRUNNER_PROTOCOL>	delegate;
 @property (atomic, weak) id <FECWF_OPSRUNNER_PROTOCOL>	savedDelegate;
+@property (nonatomic, assign) BOOL						usingSharedSession;
 @property (atomic, assign) BOOL							cancelled;
 #ifdef VERIFY_DEALLOC
-@property (nonatomic, assign) dispatch_semaphore_t		deallocs;
+@property (nonatomic, strong) dispatch_semaphore_t		deallocs;
 #endif
 
 @end
 
 @implementation FECWF_OPERATIONSRUNNER
 {
-	long		_priority;							// the queue priority      
+	qos_class_t		_priority;						// the queue priority
 #ifdef VERIFY_DEALLOC
 	int32_t		_DO_NOT_ACCESS_operationsTotal;		// named so as to discourage direct access
 #endif
 }
 @dynamic priority;
 
-// so forwardingTargetForSelector has something to send to if no operationRunner exists
-+ (BOOL)cancelOperations { return NO; }
-+ (BOOL)restartOperations { return NO; }
-+ (BOOL)disposeOperations { return NO; }
++ (void)createSharedSessionWithConfiguration:(NSURLSessionConfiguration *)config delegate:(id <NSURLSessionDataDelegate>)delegate
+{
+	static dispatch_once_t pred;
+//LOG(@"CREATE SHARED SESSION!");
+	dispatch_once(&pred, ^
+		{
+			sharedSession = [NSURLSession sessionWithConfiguration:config delegate:delegate delegateQueue:[NSOperationQueue new]];
+			sharedSession.sessionDescription = @"OpRunner Shared Session";
+		} );
+}
+
++ (FECWF_WEBFETCHER *)fetcherForTask:(NSURLSessionTask *)task
+{
+	FECWF_WEBFETCHER *fetcher = objc_getAssociatedObject(task, &sharedSession);
+	return fetcher;
+}
 
 - (id)initWithDelegate:(id <FECWF_OPSRUNNER_PROTOCOL>)del
 {
@@ -83,12 +98,18 @@
 #endif
 		_opRunnerQueue		= dispatch_queue_create("com.dfh.opRunnerQueue", DISPATCH_QUEUE_SERIAL);
 		_opRunnerGroup		= dispatch_group_create();
-		_operationsQueue	= dispatch_queue_create("com.dfh.operationsQueue", DISPATCH_QUEUE_CONCURRENT);
-		_operationsGroup	= dispatch_group_create();
 		
 		_priority			= DEFAULT_PRIORITY;
 		_maxOps				= DEFAULT_MAX_OPS;
 		_mSecCancelDelay	= DEFAULT_MILLI_SEC_CANCEL_DELAY;
+
+		_usingSharedSession	= sharedSession ? YES : NO;
+		assert(_usingSharedSession || ([del respondsToSelector:@selector(urlSessionConfig)] && [del respondsToSelector:@selector(urlSessionDelegate)]));
+		_urlSession			= _usingSharedSession ? sharedSession : [NSURLSession sessionWithConfiguration:[del urlSessionConfig] delegate:[del urlSessionDelegate] delegateQueue:[NSOperationQueue new]];
+		if(!_usingSharedSession) {
+			_urlSession.sessionDescription = @"OpRunner Created Session";
+		}
+//LOG(@"Session=%@ del=%@", _urlSession.sessionDescription, _urlSession.delegate);
 
 #ifdef VERIFY_DEALLOC
 		_deallocs			= dispatch_semaphore_create(0);
@@ -99,15 +120,6 @@
 - (void)dealloc
 {
 	[self cancelOperations];
-
-	dispatch_release(_opRunnerQueue);
-	dispatch_release(_opRunnerGroup);
-	dispatch_release(_operationsQueue);
-	dispatch_release(_operationsGroup);
-	dispatch_release(_dataSema);
-#ifdef VERIFY_DEALLOC
-	dispatch_release(_deallocs);
-#endif
 }
 
 - (FECWF_OPERATIONSRUNNER *)operationsRunner
@@ -139,17 +151,19 @@
 	}
 }
 
-- (void)setPriority:(long)priority
+- (void)setPriority:(qos_class_t)priority
 {	
 	if(_priority != priority) {
 	
 		// keep this around while in development
 		switch(priority) {
-		case DISPATCH_QUEUE_PRIORITY_HIGH:
-		case DISPATCH_QUEUE_PRIORITY_DEFAULT:
-		case DISPATCH_QUEUE_PRIORITY_LOW:
-		case DISPATCH_QUEUE_PRIORITY_BACKGROUND:
+		case QOS_CLASS_USER_INTERACTIVE:
+		case QOS_CLASS_USER_INITIATED:
+		case QOS_CLASS_DEFAULT:
+		case QOS_CLASS_UTILITY:
+		case QOS_CLASS_BACKGROUND:
 			break;
+		//case QOS_CLASS_UNSPECIFIED:
 		default:
 			assert(!"Invalid Priority Value");
 			return;
@@ -158,16 +172,16 @@
 		
 		dispatch_queue_t target = dispatch_get_global_queue(priority, 0);
 		dispatch_set_target_queue(_opRunnerQueue, target);
-		dispatch_set_target_queue(_operationsQueue, target);
 	}
 }
 
-- (void)runOperation:(FECWF_CONCURRENT_OPERATION *)op withMsg:(NSString *)msg
+- (void)runOperation:(FECWF_WEBFETCHER *)op withMsg:(NSString *)msg
 {
 	if(self.cancelled) {
 		return;
 	}
 	
+	//[self adjustOperationsCount:1];	// peg immediately
 #ifdef VERIFY_DEALLOC
 	{
 		[self adjustOperationsTotal:1];	// peg immediately
@@ -182,7 +196,7 @@
 #endif
 
 #ifndef NDEBUG
-	((FECWF_CONCURRENT_OPERATION *)op).runMessage = msg;
+	((FECWF_WEBFETCHER *)op).runMessage = msg;
 #endif
 
 	if([self addOp:op]) {
@@ -190,7 +204,7 @@
 		dispatch_group_async(_opRunnerGroup, _opRunnerQueue, ^
 			{
 				[weakSelf _runOperation:op];
-				//NSLog(@"END _run %@", op.runMessage);
+				//LOG(@"END _run %@", op.runMessage);
 			} );
 	}
 }
@@ -205,11 +219,13 @@
 		return NO;
 	}
 
+	//[self adjustOperationsCount:count];	// peg immediately
+
 #ifdef VERIFY_DEALLOC
 	{
 		[self adjustOperationsTotal:count];	// peg immediately
 		__weak __typeof__(self) weakSelf = self;
-		[ops enumerateObjectsUsingBlock:^(FECWF_CONCURRENT_OPERATION *op, NSUInteger idx, BOOL *stop)
+		[ops enumerateObjectsUsingBlock:^(FECWF_WEBFETCHER *op, NSUInteger idx, BOOL *stop)
 			{
 				op.deallocBlock = ^	{
 										__typeof__(self) strongSelf = weakSelf;
@@ -227,7 +243,7 @@
 	__weak __typeof__(self) weakSelf = self;
 	dispatch_group_async(_opRunnerGroup, _opRunnerQueue, ^
 		{
-			[rSet enumerateObjectsUsingBlock:^(FECWF_CONCURRENT_OPERATION *op, BOOL *stop)
+			[rSet enumerateObjectsUsingBlock:^(FECWF_WEBFETCHER *op, BOOL *stop)
 				{
 					[weakSelf _runOperation:op];
 				} ];
@@ -236,7 +252,7 @@
 	return YES;
 }
 
-- (BOOL)addOp:(FECWF_CONCURRENT_OPERATION *)op
+- (BOOL)addOp:(FECWF_WEBFETCHER *)op
 {
 	BOOL ret;
 
@@ -245,11 +261,11 @@
 		[_operationsOnHold addObject:op];
 		ret = FALSE;
 	} else {
-		[_operations addObject:op];	// Second we retain and save a reference to the operation
+		[_operations addObject:op]; 	// Second we retain and save a reference to the operation
 		ret = YES;
-	}	
+	}
 /***/dispatch_semaphore_signal(_dataSema);
-	
+
 	return ret;
 }
 - (NSSet *)addOps:(NSOrderedSet *)ops
@@ -257,12 +273,12 @@
 	NSMutableSet *rSet = [NSMutableSet setWithCapacity:[ops count]];
 
 /***/dispatch_semaphore_wait(_dataSema, DISPATCH_TIME_FOREVER);
-	[ops enumerateObjectsUsingBlock:^(FECWF_CONCURRENT_OPERATION *op, NSUInteger idx, BOOL *stop)
+	[ops enumerateObjectsUsingBlock:^(FECWF_WEBFETCHER *op, NSUInteger idx, BOOL *stop)
 		{
 			if([_operations count] >= self.maxOps) {
 				[_operationsOnHold addObject:op];
 			} else {
-				[_operations addObject:op];	// Second we retain and save a reference to the operation
+				[_operations addObject:op]; 	// Second we retain and save a reference to the operation
 				[rSet addObject:op];
 			}
 		} ];
@@ -270,25 +286,26 @@
 
 	return rSet;
 }
+
 - (NSUInteger)cancelAllOps
 {
 	__block NSUInteger cancelFailures = 0;
 	
 /***/dispatch_semaphore_wait(_dataSema, DISPATCH_TIME_FOREVER);
-#if 0
-	[_operationsOnHold enumerateObjectsUsingBlock:^(FECWF_CONCURRENT_OPERATION *op, NSUInteger idx, BOOL *stop)
-		{
-			[op _OR_cancel:_mSecCancelDelay];
-		} ];
-#endif
 	[_operationsOnHold removeAllObjects];
 
-	[_operations enumerateObjectsUsingBlock:^(FECWF_CONCURRENT_OPERATION *op, BOOL *stop)
+	[_operations enumerateObjectsUsingBlock:^(FECWF_WEBFETCHER *op, BOOL *stop)
 		{
 			BOOL ret = [op _OR_cancel:_mSecCancelDelay];
 			if(!ret) ++cancelFailures;
-			//NSLog(@"SEND CANCEL TO %@", op.runMessage);
+			// [op.task cancel], op.task = nil;	// in WebFetcher8, since cancel can be sent by subclass too
+			//LOG(@"SEND CANCEL TO %@", op.runMessage);
 		} ];
+
+	if(!_usingSharedSession) {
+		[_urlSession invalidateAndCancel];
+		_urlSession = nil;
+	}
 	[_operations removeAllObjects];
 /***/dispatch_semaphore_signal(_dataSema);
 	
@@ -303,43 +320,66 @@
 	return count;
 }
 
-- (void)_runOperation:(FECWF_CONCURRENT_OPERATION *)op	// on queue
+- (void)_runOperation:(FECWF_WEBFETCHER *)op	// on queue
 {
-	if(self.cancelled) {
-		//LOG(@"Cancel Before Running: %@", op);
+	if(op.finalBlock) {
+		op.errorMessage = @"WebFetcher already was scheduled or run";
 		[self _operationFinished:op];
 		return;
 	}
 
-#ifndef NDEBUG
-	if(!self.noDebugMsgs) LOG(@"Run Operation: %@", op.runMessage);
+	if(self.cancelled) {
+		//LOG(@"Cancel Before Running: %@", op);
+		op.errorMessage = @"WebFetcher was cancelled";
+		[self _operationFinished:op];
+		return;
+	}
+
+	BOOL started = NO;
+	NSMutableURLRequest *req = [op setup];
+	if(req) {
+		// Adding the final block here makes unit testing easier (can override it)
+		__weak __typeof__(self) weakSelf = self;
+	
+		op.finalBlock = ^(FECWF_WEBFETCHER *op, BOOL succeeded)
+			{
+				__typeof__(self) strongSelf = weakSelf;
+				if(strongSelf) {
+					dispatch_group_async(strongSelf.opRunnerGroup, strongSelf.opRunnerQueue, ^
+						{
+							if(succeeded) {
+								[op completed];
+							} else {
+								[op failed];
+							}
+							[strongSelf _operationFinished:op];
+						} );
+				}
+			} ;
+
+		// Without the completion block, the user's subclasses have to call the superclass last, to avoid race conditions. This serializes the completion message and the final block.
+		//NSURLSessionDataTask *task = [_urlSession dataTaskWithRequest:req completionHandler:finalBlock];
+		NSURLSessionDataTask *task = [_urlSession dataTaskWithRequest:req];
+			
+		// create two way connections
+		op.task = task;	// weak
+		objc_setAssociatedObject(task, &sharedSession, op, OBJC_ASSOCIATION_RETAIN_NONATOMIC);	// strong
+#if defined(UNIT_TESTING)
+		op.urlSession = _urlSession;
 #endif
 
-	__weak __typeof__(self) weakSelf = self;
-	dispatch_group_async(_operationsGroup, _operationsQueue, ^
-		{
-			__typeof__(self) strongSelf = weakSelf;
+#ifndef NDEBUG
+		if(!self.noDebugMsgs) LOG(@"Start Operation: %@", op.runMessage);
+#endif
+		started = [op start:req];
+	} else {
+		op.errorMessage = @"WebFetcher failed to generate a URLRequest";
+	}
 
-			if(!op.isCancelled) {
-				// Run the operation
-				[op main];
-				//NSLog(@"LEAVE MAIN %@", op.runMessage);
-			}
-
-			// Completion block
-			if(strongSelf && !op.isCancelled) {
-				__weak __typeof__(op) weakOp = op;
-				dispatch_group_async(strongSelf.opRunnerGroup, strongSelf.opRunnerQueue, ^
-					{
-						__typeof__(op) strongOp = weakOp;
-						if(strongOp)
-						{
-//NSLog(@"SEND FINISH %@", op.runMessage);
-							[strongSelf _operationFinished:op];
-						}
-					} );
-			}
-		} );
+	if(!started) {
+		// probably only hit this in development
+		[self _operationFinished:op];
+	}
 }
 
 - (BOOL)cancelOperations
@@ -355,22 +395,26 @@
 
 	LOG(@"CANCEL ALL OPS");
 
+	// got to let anything on the queue run
+	dispatch_group_wait(_opRunnerGroup, DISPATCH_TIME_FOREVER);
+
 	NSUInteger cancelFailures = [self cancelAllOps];
 	assert(!cancelFailures);
 	
-	LOG(@"WAIT FOR OPS GROUP TO COMPLETE");
-	long ret = dispatch_group_wait(_operationsGroup, dispatch_time(DISPATCH_TIME_NOW, 1*NSEC_PER_SEC));
-	if(ret) dispatch_debug(_operationsGroup, "Howdie");
-	assert(!ret && "Run Ops");
+	if(!_usingSharedSession) {
+		LOG(@"WAIT FOR OPS GROUP TO COMPLETE");
+		[_urlSession.delegateQueue waitUntilAllOperationsAreFinished];
+	}
 
-	ret += dispatch_group_wait(_opRunnerGroup, dispatch_time(DISPATCH_TIME_NOW, 1*NSEC_PER_SEC));
-	assert(!ret && "Wait for operations release");
+	dispatch_group_wait(_opRunnerGroup, DISPATCH_TIME_FOREVER);
 
 #ifdef VERIFY_DEALLOC
+	LOG(@"WAIT FOR DEALLOC TEST...");
 	[self testIfAllDealloced];
+	LOG(@"...TEST DONE");
 #endif
 
-	return (ret || cancelFailures) ? NO : YES;
+	return cancelFailures ? NO : YES;
 }
 
 - (BOOL)restartOperations
@@ -392,26 +436,31 @@
 	int32_t count = [self adjustOperationsTotal:0];
 	[self adjustOperationsTotal:-count];
 
-	BOOL completed = YES;
-	for(int32_t i=1; i<=count; ++i) {
-		long ret = dispatch_semaphore_wait(_deallocs, dispatch_time(DISPATCH_TIME_NOW, 1*NSEC_PER_SEC));	// 1 second
-		if(ret) {
-			NSLog(@"+++++++++++++++++++WARNING[%d]: %d OPERATIONS DID NOT DEALLOC", count, count-i+1);		// always print this!
-			completed = NO;
-			break;
-		}
-	}
+	
+	dispatch_async(dispatch_get_main_queue(), ^
+		{
+			//BOOL completed = YES;
+			for(int32_t i=1; i<=count; ++i) {
+				long ret = dispatch_semaphore_wait(_deallocs, dispatch_time(DISPATCH_TIME_NOW, 1*NSEC_PER_SEC));	// 1 second
+				if(ret) {
+					LOG(@"+++++++++++++++++++WARNING[%d]: %d OPERATIONS DID NOT DEALLOC", count, count-i+1);
+					//completed = NO;
+					break;
+				}
+			}
+		} );
+
+	//if(completed) LOG(@"ALL OPS DEALLOCED");
 }
 #endif
 
-- (void)_operationFinished:(FECWF_CONCURRENT_OPERATION *)op	// excutes in opRunnerQueue
+- (void)_operationFinished:(FECWF_WEBFETCHER *)op	// excutes in opRunnerQueue
 {
-	if(self.cancelled) {
+	if(self.cancelled || op.isCancelled) {
 		return;
 	}
-	assert(!op.isCancelled);
 	
-	//NSLog(@"_operationFinished op=%@", op.runMessage);
+	//LOG(@"_operationFinished op=%@", op.runMessage);
 	//LOG(@"OP RUNNER GOT A MESSAGE %d for thread %@", _msgDelOn, delegateThread);	
 
 	switch(_msgDelOn) {
@@ -429,6 +478,7 @@
 		
 	case msgOnSpecificQueue:
 	{
+		//__weak id <FECWF_OPSRUNNER_PROTOCOL> del = self.delegate;
 		dispatch_block_t b =   ^{
 									[self operationFinished:op];
 								};
@@ -441,7 +491,7 @@
 	}
 }
 
-- (void)operationFinished:(FECWF_CONCURRENT_OPERATION *)op // excutes from multiple possible threads
+- (void)operationFinished:(FECWF_WEBFETCHER *)op // excutes from multiple possible threads/queues
 {
 	// Could have been queued on a thread and gotten cancelled. Once past this test the operation will be delivered
 	if(op.isCancelled || self.cancelled) {
@@ -451,11 +501,11 @@
 /***/dispatch_semaphore_wait(_dataSema, DISPATCH_TIME_FOREVER);
 	[_operations removeObject:op];
 	NSUInteger remainingCount = [_operationsOnHold count];
-	FECWF_CONCURRENT_OPERATION *runOp;
+	FECWF_WEBFETCHER *runOp;
 	if(remainingCount) {
 		runOp = [_operationsOnHold objectAtIndex:0];
 		[_operationsOnHold removeObjectAtIndex:0];
-		[_operations addObject:runOp];
+		[_operations addObject:runOp]; 	// Second we retain and save a reference to the operation
 		remainingCount -= 1;
 	}
 	remainingCount += [_operations count];
@@ -473,7 +523,7 @@
 
 #if defined(VERIFY_DEALLOC) && !defined(UNIT_TESTING)
 	if(!remainingCount) {
-		NSLog(@"DEALLOC TEST");
+		LOG(@"DEALLOC TEST");
 		[self testIfAllDealloced];
 	}
 #endif
@@ -482,8 +532,8 @@
 - (NSString *)description
 {
 	NSMutableString *mStr = [NSMutableString stringWithCapacity:256];
-	[mStr appendFormat:@"OpsOnHold=%d OpsRunning=%d\n", [_operationsOnHold count], [_operations count]];
-	[_operations enumerateObjectsUsingBlock:^(FECWF_CONCURRENT_OPERATION *op, BOOL *stop)
+	[mStr appendFormat:@"OpsOnHold=%zd OpsRunning=%zd\n", [_operationsOnHold count], [_operations count]];
+	[_operations enumerateObjectsUsingBlock:^(FECWF_WEBFETCHER *op, BOOL *stop)
 		{
 			[mStr appendString:[op description]];
 			[mStr appendString:@"\n"];

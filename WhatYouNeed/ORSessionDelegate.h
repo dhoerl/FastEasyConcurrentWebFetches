@@ -1,7 +1,6 @@
 //
-// URfetcher.h
-// FastEasyConcurrentWebFetches
-// Copyright (C) 2013 by David Hoerl
+// FastEasyConcurrentWebFetches (TM)
+// Copyright (C) 2012-2013 by David Hoerl
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -22,8 +21,15 @@
 // THE SOFTWARE.
 //
 
-#import "WebFetcher6.h"
+// Needed by subclasses
+//#import "WebFetcher8.h"
 
-@interface URfetcher : FECWF_WEBFETCHER
+#import "OperationsRunner.h"
+
+#ifndef FECWF_SESSION_DELEGATE
+#define FECWF_SESSION_DELEGATE ORSessionDelegate
+#endif
+
+@interface FECWF_SESSION_DELEGATE : NSObject <NSURLSessionDataDelegate>
 
 @end

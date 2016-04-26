@@ -6,13 +6,7 @@
 //  Copyright (c) 2013 dhoerl. All rights reserved.
 //
 
-#if __IPHONE_OS_VERSION_MIN_REQUIRED >= 70000
-#import "WebFetcher7.h"
-#elif __IPHONE_OS_VERSION_MIN_REQUIRED >= 60000
-#import "WebFetcher6.h"
-#else
 #import "WebFetcher.h"
-#endif
 
 #define TIMER_DELAY 0.1
 

@@ -11,23 +11,8 @@
 
 #import "FECWF_Tests.h"
 
-#if __IPHONE_OS_VERSION_MIN_REQUIRED >= 70000
-#import "OperationsRunner7.h"
-#import "OperationsRunnerProtocol7.h"
-#define FECWF_RUN_OPERATION_TYPE		FECWF_WEBFETCHER
-#import "URfetcher7.h"
-#import "URSessionDelegate.h"
-#elif __IPHONE_OS_VERSION_MIN_REQUIRED >= 60000
-#import "OperationsRunner6.h"
-#import "OperationsRunnerProtocol6.h"
-#define FECWF_RUN_OPERATION_TYPE		FECWF_WEBFETCHER
-#import "URfetcher6.h"
-#else
 #import "OperationsRunner.h"
 #import "OperationsRunnerProtocol.h"
-#import "URfetcher.h"
-#define FECWF_RUN_OPERATION_TYPE		FECWF_CONCURRENT_OPERATION
-#endif
 
 #import "TestOperationProtocol.h"
 #import "TestOperation.h"

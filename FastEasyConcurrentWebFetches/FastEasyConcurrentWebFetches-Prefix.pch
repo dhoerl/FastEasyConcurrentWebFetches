@@ -4,8 +4,8 @@
 
 #import <Availability.h>
 
-#ifndef __IPHONE_5_1
-#warning "This project uses features only available in iOS SDK 5.1 and later."
+#ifndef __IPHONE_9
+#warning "This project uses features only available in iOS SDK 9 and later."
 #endif
 
 #ifdef __OBJC__
@@ -18,7 +18,7 @@
 	#define FECWF_WEBFETCHER				MyWebFetcher
 	#define FECWF_OPERATIONSRUNNER			MyOperationsRunner
 	#define FECWF_OPSRUNNER_PROTOCOL		MyOperationsRunnerProtocol
-	#define FECWF_SESSION_DELEGATE			MyBaseSessionDelegate
+	//#define FECWF_SESSION_DELEGATE			MyBaseSessionDelegate
 #endif
 
 #endif

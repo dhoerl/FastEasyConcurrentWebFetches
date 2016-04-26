@@ -7,48 +7,35 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		DE6D445219B623C100159316 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = DEE915A91722DE520085F570 /* main.m */; };
-		DE6D445319B623C100159316 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = DEE915AD1722DE520085F570 /* AppDelegate.m */; };
-		DE6D445419B623C100159316 /* Tracker.m in Sources */ = {isa = PBXBuildFile; fileRef = DED5400117D9273C005698F0 /* Tracker.m */; };
-		DE6D445819B623C100159316 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DEE915B61722DE520085F570 /* ViewController.m */; };
-		DE6D445919B623C100159316 /* MyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DEE915DA1722DEB20085F570 /* MyViewController.m */; };
-		DE6D445C19B623C100159316 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DEE9159D1722DE520085F570 /* UIKit.framework */; };
-		DE6D445D19B623C100159316 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DEE9159F1722DE520085F570 /* Foundation.framework */; };
-		DE6D445E19B623C100159316 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DEE915A11722DE520085F570 /* CoreGraphics.framework */; };
-		DE6D446019B623C100159316 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = DEE915A61722DE520085F570 /* InfoPlist.strings */; };
-		DE6D446119B623C100159316 /* MyViewController7.xib in Resources */ = {isa = PBXBuildFile; fileRef = DE3BE70E17D67344006345BC /* MyViewController7.xib */; };
-		DE6D446219B623C100159316 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = DEE915AF1722DE520085F570 /* Default.png */; };
-		DE6D446319B623C100159316 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DEE915B11722DE520085F570 /* Default@2x.png */; };
-		DE6D446419B623C100159316 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DEE915B31722DE520085F570 /* Default-568h@2x.png */; };
-		DE6D446519B623C100159316 /* LICENSE.md in Resources */ = {isa = PBXBuildFile; fileRef = DEE915F41722EF380085F570 /* LICENSE.md */; };
-		DE6D446619B623C100159316 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = DEE915F51722EF380085F570 /* README.md */; };
-		DE6D446719B623C100159316 /* ViewController7.xib in Resources */ = {isa = PBXBuildFile; fileRef = DEEFF6E417D67278001D7C6B /* ViewController7.xib */; };
-		DE6D447319B623D600159316 /* FECWF_Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = DEE915CE1722DE520085F570 /* FECWF_Tests.m */; };
-		DE6D447719B623D600159316 /* TestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = DE956F4F1729E2700026179D /* TestOperation.m */; };
-		DE6D447A19B623D600159316 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DEE9159D1722DE520085F570 /* UIKit.framework */; };
-		DE6D447B19B623D600159316 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DEE9159F1722DE520085F570 /* Foundation.framework */; };
-		DE6D447D19B623D600159316 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = DEE915CA1722DE520085F570 /* InfoPlist.strings */; };
-		DE6D449319B6254000159316 /* OperationsRunner8.m in Sources */ = {isa = PBXBuildFile; fileRef = DE6D448819B6254000159316 /* OperationsRunner8.m */; };
-		DE6D449519B6254000159316 /* ORSessionDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = DE6D448B19B6254000159316 /* ORSessionDelegate.m */; };
-		DE6D449919B6254000159316 /* URfetcher8.m in Sources */ = {isa = PBXBuildFile; fileRef = DE6D448F19B6254000159316 /* URfetcher8.m */; };
-		DE6D449B19B6254000159316 /* WebFetcher8.m in Sources */ = {isa = PBXBuildFile; fileRef = DE6D449119B6254000159316 /* WebFetcher8.m */; };
+		DEF18A6E1CCFAB61008DC1C6 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = DEE915A91722DE520085F570 /* main.m */; };
+		DEF18A701CCFAB61008DC1C6 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = DEE915AD1722DE520085F570 /* AppDelegate.m */; };
+		DEF18A721CCFAB61008DC1C6 /* MyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DEE915DA1722DEB20085F570 /* MyViewController.m */; };
+		DEF18A751CCFAB61008DC1C6 /* Tracker.m in Sources */ = {isa = PBXBuildFile; fileRef = DED5400117D9273C005698F0 /* Tracker.m */; };
+		DEF18A761CCFAB61008DC1C6 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DEE915B61722DE520085F570 /* ViewController.m */; };
+		DEF18A781CCFAB61008DC1C6 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DEE9159D1722DE520085F570 /* UIKit.framework */; };
+		DEF18A791CCFAB61008DC1C6 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DEE9159F1722DE520085F570 /* Foundation.framework */; };
+		DEF18A7A1CCFAB61008DC1C6 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DEE915A11722DE520085F570 /* CoreGraphics.framework */; };
+		DEF18A7C1CCFAB61008DC1C6 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = DEE915A61722DE520085F570 /* InfoPlist.strings */; };
+		DEF18A7D1CCFAB61008DC1C6 /* MyViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DE3BE70E17D67344006345BC /* MyViewController.xib */; };
+		DEF18A7E1CCFAB61008DC1C6 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = DEE915AF1722DE520085F570 /* Default.png */; };
+		DEF18A7F1CCFAB61008DC1C6 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DEE915B11722DE520085F570 /* Default@2x.png */; };
+		DEF18A801CCFAB61008DC1C6 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DEE915B31722DE520085F570 /* Default-568h@2x.png */; };
+		DEF18A811CCFAB61008DC1C6 /* LICENSE.md in Resources */ = {isa = PBXBuildFile; fileRef = DEE915F41722EF380085F570 /* LICENSE.md */; };
+		DEF18A821CCFAB61008DC1C6 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = DEE915F51722EF380085F570 /* README.md */; };
+		DEF18A831CCFAB61008DC1C6 /* ViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DEEFF6E417D67278001D7C6B /* ViewController.xib */; };
+		DEF18A8D1CCFAB72008DC1C6 /* FECWF_Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = DEE915CE1722DE520085F570 /* FECWF_Tests.m */; };
+		DEF18A8E1CCFAB72008DC1C6 /* TestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = DE956F4F1729E2700026179D /* TestOperation.m */; };
+		DEF18A901CCFAB72008DC1C6 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DEE9159D1722DE520085F570 /* UIKit.framework */; };
+		DEF18A911CCFAB72008DC1C6 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DEE9159F1722DE520085F570 /* Foundation.framework */; };
+		DEF18A931CCFAB72008DC1C6 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = DEE915CA1722DE520085F570 /* InfoPlist.strings */; };
+		DEF18ABE1CCFBBD7008DC1C6 /* OperationsRunner.m in Sources */ = {isa = PBXBuildFile; fileRef = DEF18AB41CCFBBD7008DC1C6 /* OperationsRunner.m */; };
+		DEF18ABF1CCFBBD7008DC1C6 /* ORSessionDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = DEF18AB71CCFBBD7008DC1C6 /* ORSessionDelegate.m */; };
+		DEF18AC11CCFBBD7008DC1C6 /* URfetcher.m in Sources */ = {isa = PBXBuildFile; fileRef = DEF18ABB1CCFBBD7008DC1C6 /* URfetcher.m */; };
+		DEF18AC21CCFBBD7008DC1C6 /* WebFetcher.m in Sources */ = {isa = PBXBuildFile; fileRef = DEF18ABD1CCFBBD7008DC1C6 /* WebFetcher.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		DE3BE70E17D67344006345BC /* MyViewController7.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MyViewController7.xib; sourceTree = "<group>"; };
-		DE6D446D19B623C100159316 /* FECWF For iOS8.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "FECWF For iOS8.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		DE6D448419B623D600159316 /* FECWF iOS7 Tests copy.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "FECWF iOS7 Tests copy.octest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		DE6D448719B6254000159316 /* OperationsRunner8.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OperationsRunner8.h; sourceTree = "<group>"; };
-		DE6D448819B6254000159316 /* OperationsRunner8.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OperationsRunner8.m; sourceTree = "<group>"; };
-		DE6D448919B6254000159316 /* OperationsRunnerProtocol8.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OperationsRunnerProtocol8.h; sourceTree = "<group>"; };
-		DE6D448A19B6254000159316 /* ORSessionDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ORSessionDelegate.h; sourceTree = "<group>"; };
-		DE6D448B19B6254000159316 /* ORSessionDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ORSessionDelegate.m; sourceTree = "<group>"; };
-		DE6D448C19B6254000159316 /* RefSessionDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RefSessionDelegate.h; sourceTree = "<group>"; };
-		DE6D448D19B6254000159316 /* RefSessionDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RefSessionDelegate.m; sourceTree = "<group>"; };
-		DE6D448E19B6254000159316 /* URfetcher8.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = URfetcher8.h; sourceTree = "<group>"; };
-		DE6D448F19B6254000159316 /* URfetcher8.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = URfetcher8.m; sourceTree = "<group>"; };
-		DE6D449019B6254000159316 /* WebFetcher8.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebFetcher8.h; sourceTree = "<group>"; };
-		DE6D449119B6254000159316 /* WebFetcher8.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebFetcher8.m; sourceTree = "<group>"; };
+		DE3BE70E17D67344006345BC /* MyViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MyViewController.xib; sourceTree = "<group>"; };
 		DE956F4E1729E1E70026179D /* TestOperationProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TestOperationProtocol.h; sourceTree = "<group>"; };
 		DE956F4F1729E2700026179D /* TestOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestOperation.m; sourceTree = "<group>"; };
 		DE956F501729E2700026179D /* TestOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = TestOperation.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
@@ -69,60 +56,53 @@
 		DEE915B31722DE520085F570 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		DEE915B51722DE520085F570 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		DEE915B61722DE520085F570 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
-		DEE915B91722DE520085F570 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/ViewController.xib; sourceTree = "<group>"; };
 		DEE915C91722DE520085F570 /* FastEasyConcurrentWebFetchesTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "FastEasyConcurrentWebFetchesTests-Info.plist"; sourceTree = "<group>"; };
 		DEE915CB1722DE520085F570 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		DEE915CD1722DE520085F570 /* FECWF_Tests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FECWF_Tests.h; sourceTree = "<group>"; };
 		DEE915CE1722DE520085F570 /* FECWF_Tests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = FECWF_Tests.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		DEE915D91722DEB20085F570 /* MyViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyViewController.h; sourceTree = "<group>"; };
 		DEE915DA1722DEB20085F570 /* MyViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = MyViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
-		DEE915DB1722DEB20085F570 /* MyViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MyViewController.xib; sourceTree = "<group>"; };
 		DEE915F41722EF380085F570 /* LICENSE.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE.md; sourceTree = SOURCE_ROOT; };
 		DEE915F51722EF380085F570 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; lineEnding = 0; path = README.md; sourceTree = SOURCE_ROOT; };
 		DEEFF6E517D67278001D7C6B /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/ViewController7.xib; sourceTree = "<group>"; };
+		DEF18A891CCFAB61008DC1C6 /* FECWF For iOS9.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "FECWF For iOS9.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		DEF18A9A1CCFAB72008DC1C6 /* FECWF iOS9 Tests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "FECWF iOS9 Tests.octest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		DEF18AB31CCFBBD7008DC1C6 /* OperationsRunner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OperationsRunner.h; sourceTree = "<group>"; };
+		DEF18AB41CCFBBD7008DC1C6 /* OperationsRunner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OperationsRunner.m; sourceTree = "<group>"; };
+		DEF18AB51CCFBBD7008DC1C6 /* OperationsRunnerProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OperationsRunnerProtocol.h; sourceTree = "<group>"; };
+		DEF18AB61CCFBBD7008DC1C6 /* ORSessionDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ORSessionDelegate.h; sourceTree = "<group>"; };
+		DEF18AB71CCFBBD7008DC1C6 /* ORSessionDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ORSessionDelegate.m; sourceTree = "<group>"; };
+		DEF18AB81CCFBBD7008DC1C6 /* RefSessionDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RefSessionDelegate.h; sourceTree = "<group>"; };
+		DEF18AB91CCFBBD7008DC1C6 /* RefSessionDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RefSessionDelegate.m; sourceTree = "<group>"; };
+		DEF18ABA1CCFBBD7008DC1C6 /* URfetcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = URfetcher.h; sourceTree = "<group>"; };
+		DEF18ABB1CCFBBD7008DC1C6 /* URfetcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = URfetcher.m; sourceTree = "<group>"; };
+		DEF18ABC1CCFBBD7008DC1C6 /* WebFetcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebFetcher.h; sourceTree = "<group>"; };
+		DEF18ABD1CCFBBD7008DC1C6 /* WebFetcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebFetcher.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		DE6D445B19B623C100159316 /* Frameworks */ = {
+		DEF18A771CCFAB61008DC1C6 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DE6D445C19B623C100159316 /* UIKit.framework in Frameworks */,
-				DE6D445D19B623C100159316 /* Foundation.framework in Frameworks */,
-				DE6D445E19B623C100159316 /* CoreGraphics.framework in Frameworks */,
+				DEF18A781CCFAB61008DC1C6 /* UIKit.framework in Frameworks */,
+				DEF18A791CCFAB61008DC1C6 /* Foundation.framework in Frameworks */,
+				DEF18A7A1CCFAB61008DC1C6 /* CoreGraphics.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		DE6D447819B623D600159316 /* Frameworks */ = {
+		DEF18A8F1CCFAB72008DC1C6 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DE6D447A19B623D600159316 /* UIKit.framework in Frameworks */,
-				DE6D447B19B623D600159316 /* Foundation.framework in Frameworks */,
+				DEF18A901CCFAB72008DC1C6 /* UIKit.framework in Frameworks */,
+				DEF18A911CCFAB72008DC1C6 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		DE6D448619B6253F00159316 /* WhatYouNeediOS8+ */ = {
-			isa = PBXGroup;
-			children = (
-				DE6D448919B6254000159316 /* OperationsRunnerProtocol8.h */,
-				DE6D448719B6254000159316 /* OperationsRunner8.h */,
-				DE6D448819B6254000159316 /* OperationsRunner8.m */,
-				DE6D448A19B6254000159316 /* ORSessionDelegate.h */,
-				DE6D448B19B6254000159316 /* ORSessionDelegate.m */,
-				DE6D448C19B6254000159316 /* RefSessionDelegate.h */,
-				DE6D448D19B6254000159316 /* RefSessionDelegate.m */,
-				DE6D448E19B6254000159316 /* URfetcher8.h */,
-				DE6D448F19B6254000159316 /* URfetcher8.m */,
-				DE6D449019B6254000159316 /* WebFetcher8.h */,
-				DE6D449119B6254000159316 /* WebFetcher8.m */,
-			);
-			path = "WhatYouNeediOS8+";
-			sourceTree = SOURCE_ROOT;
-		};
 		DEE915911722DE520085F570 = {
 			isa = PBXGroup;
 			children = (
@@ -136,8 +116,8 @@
 		DEE9159B1722DE520085F570 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				DE6D446D19B623C100159316 /* FECWF For iOS8.app */,
-				DE6D448419B623D600159316 /* FECWF iOS7 Tests copy.octest */,
+				DEF18A891CCFAB61008DC1C6 /* FECWF For iOS9.app */,
+				DEF18A9A1CCFAB72008DC1C6 /* FECWF iOS9 Tests.octest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -157,17 +137,15 @@
 			children = (
 				DEE915F51722EF380085F570 /* README.md */,
 				DEE915F41722EF380085F570 /* LICENSE.md */,
-				DE6D448619B6253F00159316 /* WhatYouNeediOS8+ */,
+				DEF18AB21CCFBBD7008DC1C6 /* WhatYouNeed */,
 				DEE915D91722DEB20085F570 /* MyViewController.h */,
 				DEE915DA1722DEB20085F570 /* MyViewController.m */,
-				DEE915DB1722DEB20085F570 /* MyViewController.xib */,
-				DE3BE70E17D67344006345BC /* MyViewController7.xib */,
+				DE3BE70E17D67344006345BC /* MyViewController.xib */,
 				DEE915AC1722DE520085F570 /* AppDelegate.h */,
 				DEE915AD1722DE520085F570 /* AppDelegate.m */,
 				DEE915B51722DE520085F570 /* ViewController.h */,
 				DEE915B61722DE520085F570 /* ViewController.m */,
-				DEE915B81722DE520085F570 /* ViewController.xib */,
-				DEEFF6E417D67278001D7C6B /* ViewController7.xib */,
+				DEEFF6E417D67278001D7C6B /* ViewController.xib */,
 				DEE915A41722DE520085F570 /* Supporting Files */,
 			);
 			path = FastEasyConcurrentWebFetches;
@@ -212,42 +190,60 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		DEF18AB21CCFBBD7008DC1C6 /* WhatYouNeed */ = {
+			isa = PBXGroup;
+			children = (
+				DEF18AB31CCFBBD7008DC1C6 /* OperationsRunner.h */,
+				DEF18AB41CCFBBD7008DC1C6 /* OperationsRunner.m */,
+				DEF18AB51CCFBBD7008DC1C6 /* OperationsRunnerProtocol.h */,
+				DEF18AB61CCFBBD7008DC1C6 /* ORSessionDelegate.h */,
+				DEF18AB71CCFBBD7008DC1C6 /* ORSessionDelegate.m */,
+				DEF18AB81CCFBBD7008DC1C6 /* RefSessionDelegate.h */,
+				DEF18AB91CCFBBD7008DC1C6 /* RefSessionDelegate.m */,
+				DEF18ABA1CCFBBD7008DC1C6 /* URfetcher.h */,
+				DEF18ABB1CCFBBD7008DC1C6 /* URfetcher.m */,
+				DEF18ABC1CCFBBD7008DC1C6 /* WebFetcher.h */,
+				DEF18ABD1CCFBBD7008DC1C6 /* WebFetcher.m */,
+			);
+			path = WhatYouNeed;
+			sourceTree = SOURCE_ROOT;
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		DE6D445019B623C100159316 /* FECWF For iOS8 */ = {
+		DEF18A6C1CCFAB61008DC1C6 /* FECWF For iOS9 */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = DE6D446819B623C100159316 /* Build configuration list for PBXNativeTarget "FECWF For iOS8" */;
+			buildConfigurationList = DEF18A841CCFAB61008DC1C6 /* Build configuration list for PBXNativeTarget "FECWF For iOS9" */;
 			buildPhases = (
-				DE6D445119B623C100159316 /* Sources */,
-				DE6D445B19B623C100159316 /* Frameworks */,
-				DE6D445F19B623C100159316 /* Resources */,
+				DEF18A6D1CCFAB61008DC1C6 /* Sources */,
+				DEF18A771CCFAB61008DC1C6 /* Frameworks */,
+				DEF18A7B1CCFAB61008DC1C6 /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
-			name = "FECWF For iOS8";
+			name = "FECWF For iOS9";
 			productName = FastEasyConcurrentWebFetches;
-			productReference = DE6D446D19B623C100159316 /* FECWF For iOS8.app */;
+			productReference = DEF18A891CCFAB61008DC1C6 /* FECWF For iOS9.app */;
 			productType = "com.apple.product-type.application";
 		};
-		DE6D446F19B623D600159316 /* FECWF iOS8 Tests */ = {
+		DEF18A8B1CCFAB72008DC1C6 /* FECWF iOS9 Tests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = DE6D447F19B623D600159316 /* Build configuration list for PBXNativeTarget "FECWF iOS8 Tests" */;
+			buildConfigurationList = DEF18A951CCFAB72008DC1C6 /* Build configuration list for PBXNativeTarget "FECWF iOS9 Tests" */;
 			buildPhases = (
-				DE6D447219B623D600159316 /* Sources */,
-				DE6D447819B623D600159316 /* Frameworks */,
-				DE6D447C19B623D600159316 /* Resources */,
-				DE6D447E19B623D600159316 /* ShellScript */,
+				DEF18A8C1CCFAB72008DC1C6 /* Sources */,
+				DEF18A8F1CCFAB72008DC1C6 /* Frameworks */,
+				DEF18A921CCFAB72008DC1C6 /* Resources */,
+				DEF18A941CCFAB72008DC1C6 /* ShellScript */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
-			name = "FECWF iOS8 Tests";
+			name = "FECWF iOS9 Tests";
 			productName = FastEasyConcurrentWebFetchesTests;
-			productReference = DE6D448419B623D600159316 /* FECWF iOS7 Tests copy.octest */;
+			productReference = DEF18A9A1CCFAB72008DC1C6 /* FECWF iOS9 Tests.octest */;
 			productType = "com.apple.product-type.bundle.ocunit-test";
 		};
 /* End PBXNativeTarget section */
@@ -271,40 +267,40 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				DE6D445019B623C100159316 /* FECWF For iOS8 */,
-				DE6D446F19B623D600159316 /* FECWF iOS8 Tests */,
+				DEF18A6C1CCFAB61008DC1C6 /* FECWF For iOS9 */,
+				DEF18A8B1CCFAB72008DC1C6 /* FECWF iOS9 Tests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		DE6D445F19B623C100159316 /* Resources */ = {
+		DEF18A7B1CCFAB61008DC1C6 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DE6D446019B623C100159316 /* InfoPlist.strings in Resources */,
-				DE6D446119B623C100159316 /* MyViewController7.xib in Resources */,
-				DE6D446219B623C100159316 /* Default.png in Resources */,
-				DE6D446319B623C100159316 /* Default@2x.png in Resources */,
-				DE6D446419B623C100159316 /* Default-568h@2x.png in Resources */,
-				DE6D446519B623C100159316 /* LICENSE.md in Resources */,
-				DE6D446619B623C100159316 /* README.md in Resources */,
-				DE6D446719B623C100159316 /* ViewController7.xib in Resources */,
+				DEF18A7C1CCFAB61008DC1C6 /* InfoPlist.strings in Resources */,
+				DEF18A7D1CCFAB61008DC1C6 /* MyViewController.xib in Resources */,
+				DEF18A7E1CCFAB61008DC1C6 /* Default.png in Resources */,
+				DEF18A7F1CCFAB61008DC1C6 /* Default@2x.png in Resources */,
+				DEF18A801CCFAB61008DC1C6 /* Default-568h@2x.png in Resources */,
+				DEF18A811CCFAB61008DC1C6 /* LICENSE.md in Resources */,
+				DEF18A821CCFAB61008DC1C6 /* README.md in Resources */,
+				DEF18A831CCFAB61008DC1C6 /* ViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		DE6D447C19B623D600159316 /* Resources */ = {
+		DEF18A921CCFAB72008DC1C6 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DE6D447D19B623D600159316 /* InfoPlist.strings in Resources */,
+				DEF18A931CCFAB72008DC1C6 /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		DE6D447E19B623D600159316 /* ShellScript */ = {
+		DEF18A941CCFAB72008DC1C6 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -320,28 +316,28 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		DE6D445119B623C100159316 /* Sources */ = {
+		DEF18A6D1CCFAB61008DC1C6 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DE6D445219B623C100159316 /* main.m in Sources */,
-				DE6D445319B623C100159316 /* AppDelegate.m in Sources */,
-				DE6D445919B623C100159316 /* MyViewController.m in Sources */,
-				DE6D449319B6254000159316 /* OperationsRunner8.m in Sources */,
-				DE6D449519B6254000159316 /* ORSessionDelegate.m in Sources */,
-				DE6D445419B623C100159316 /* Tracker.m in Sources */,
-				DE6D449919B6254000159316 /* URfetcher8.m in Sources */,
-				DE6D445819B623C100159316 /* ViewController.m in Sources */,
-				DE6D449B19B6254000159316 /* WebFetcher8.m in Sources */,
+				DEF18A6E1CCFAB61008DC1C6 /* main.m in Sources */,
+				DEF18A701CCFAB61008DC1C6 /* AppDelegate.m in Sources */,
+				DEF18ABF1CCFBBD7008DC1C6 /* ORSessionDelegate.m in Sources */,
+				DEF18A721CCFAB61008DC1C6 /* MyViewController.m in Sources */,
+				DEF18AC11CCFBBD7008DC1C6 /* URfetcher.m in Sources */,
+				DEF18AC21CCFBBD7008DC1C6 /* WebFetcher.m in Sources */,
+				DEF18A751CCFAB61008DC1C6 /* Tracker.m in Sources */,
+				DEF18A761CCFAB61008DC1C6 /* ViewController.m in Sources */,
+				DEF18ABE1CCFBBD7008DC1C6 /* OperationsRunner.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		DE6D447219B623D600159316 /* Sources */ = {
+		DEF18A8C1CCFAB72008DC1C6 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DE6D447319B623D600159316 /* FECWF_Tests.m in Sources */,
-				DE6D447719B623D600159316 /* TestOperation.m in Sources */,
+				DEF18A8D1CCFAB72008DC1C6 /* FECWF_Tests.m in Sources */,
+				DEF18A8E1CCFAB72008DC1C6 /* TestOperation.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -356,14 +352,6 @@
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
-		DEE915B81722DE520085F570 /* ViewController.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				DEE915B91722DE520085F570 /* en */,
-			);
-			name = ViewController.xib;
-			sourceTree = "<group>";
-		};
 		DEE915CA1722DE520085F570 /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -372,145 +360,17 @@
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
-		DEEFF6E417D67278001D7C6B /* ViewController7.xib */ = {
+		DEEFF6E417D67278001D7C6B /* ViewController.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
 				DEEFF6E517D67278001D7C6B /* en */,
 			);
-			name = ViewController7.xib;
+			name = ViewController.xib;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
-		DE6D446919B623C100159316 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				GCC_PRECOMPILE_PREFIX_HEADER = NO;
-				GCC_PREFIX_HEADER = "";
-				INFOPLIST_FILE = "FastEasyConcurrentWebFetches/FastEasyConcurrentWebFetches-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
-				PRODUCT_BUNDLE_IDENTIFIER = "company.dfh.${PRODUCT_NAME:rfc1034identifier}";
-				PRODUCT_NAME = "FECWF For iOS8";
-				WRAPPER_EXTENSION = app;
-			};
-			name = Debug;
-		};
-		DE6D446A19B623C100159316 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				GCC_PRECOMPILE_PREFIX_HEADER = NO;
-				GCC_PREFIX_HEADER = "";
-				INFOPLIST_FILE = "FastEasyConcurrentWebFetches/FastEasyConcurrentWebFetches-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
-				PRODUCT_BUNDLE_IDENTIFIER = "company.dfh.${PRODUCT_NAME:rfc1034identifier}";
-				PRODUCT_NAME = "FECWF For iOS8";
-				WRAPPER_EXTENSION = app;
-			};
-			name = Release;
-		};
-		DE6D446B19B623C100159316 /* ReleaseWithAsserts */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				GCC_PRECOMPILE_PREFIX_HEADER = NO;
-				GCC_PREFIX_HEADER = "";
-				INFOPLIST_FILE = "FastEasyConcurrentWebFetches/FastEasyConcurrentWebFetches-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
-				PRODUCT_BUNDLE_IDENTIFIER = "company.dfh.${PRODUCT_NAME:rfc1034identifier}";
-				PRODUCT_NAME = "FECWF For iOS8";
-				WRAPPER_EXTENSION = app;
-			};
-			name = ReleaseWithAsserts;
-		};
-		DE6D446C19B623C100159316 /* ReleaseWithAssertsUnitTests */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				GCC_PRECOMPILE_PREFIX_HEADER = NO;
-				GCC_PREFIX_HEADER = "";
-				INFOPLIST_FILE = "FastEasyConcurrentWebFetches/FastEasyConcurrentWebFetches-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
-				PRODUCT_BUNDLE_IDENTIFIER = "company.dfh.${PRODUCT_NAME:rfc1034identifier}";
-				PRODUCT_NAME = "FECWF For iOS8";
-				WRAPPER_EXTENSION = app;
-			};
-			name = ReleaseWithAssertsUnitTests;
-		};
-		DE6D448019B623D600159316 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/FECWF For iOS7.app/FECWF For iOS7";
-				FRAMEWORK_SEARCH_PATHS = (
-					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
-					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
-				);
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "FastEasyConcurrentWebFetches/FastEasyConcurrentWebFetches-Prefix.pch";
-				INFOPLIST_FILE = "FECWF iOS7 Tests copy-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.dhoerl.operations-runner.${PRODUCT_NAME:rfc1034identifier}";
-				PRODUCT_NAME = "FECWF iOS7 Tests copy";
-				TEST_HOST = "$(BUNDLE_LOADER)";
-				WRAPPER_EXTENSION = octest;
-			};
-			name = Debug;
-		};
-		DE6D448119B623D600159316 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/FECWF For iOS7.app/FECWF For iOS7";
-				FRAMEWORK_SEARCH_PATHS = (
-					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
-					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
-				);
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "FastEasyConcurrentWebFetches/FastEasyConcurrentWebFetches-Prefix.pch";
-				INFOPLIST_FILE = "FECWF iOS7 Tests copy-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.dhoerl.operations-runner.${PRODUCT_NAME:rfc1034identifier}";
-				PRODUCT_NAME = "FECWF iOS7 Tests copy";
-				TEST_HOST = "$(BUNDLE_LOADER)";
-				WRAPPER_EXTENSION = octest;
-			};
-			name = Release;
-		};
-		DE6D448219B623D600159316 /* ReleaseWithAsserts */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/FECWF For iOS7.app/FECWF For iOS7";
-				FRAMEWORK_SEARCH_PATHS = (
-					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
-					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
-				);
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "FastEasyConcurrentWebFetches/FastEasyConcurrentWebFetches-Prefix.pch";
-				INFOPLIST_FILE = "FECWF iOS7 Tests copy-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.dhoerl.operations-runner.${PRODUCT_NAME:rfc1034identifier}";
-				PRODUCT_NAME = "FECWF iOS7 Tests copy";
-				TEST_HOST = "$(BUNDLE_LOADER)";
-				WRAPPER_EXTENSION = octest;
-			};
-			name = ReleaseWithAsserts;
-		};
-		DE6D448319B623D600159316 /* ReleaseWithAssertsUnitTests */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/FECWF For iOS7.app/FECWF For iOS7";
-				FRAMEWORK_SEARCH_PATHS = (
-					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
-					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
-				);
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "FastEasyConcurrentWebFetches/FastEasyConcurrentWebFetches-Prefix.pch";
-				INFOPLIST_FILE = "FECWF iOS7 Tests copy-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.dhoerl.operations-runner.${PRODUCT_NAME:rfc1034identifier}";
-				PRODUCT_NAME = "FECWF iOS7 Tests copy";
-				TEST_HOST = "$(BUNDLE_LOADER)";
-				WRAPPER_EXTENSION = octest;
-			};
-			name = ReleaseWithAssertsUnitTests;
-		};
 		DE956F431729C0500026179D /* ReleaseWithAssertsUnitTests */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -629,31 +489,137 @@
 			};
 			name = ReleaseWithAsserts;
 		};
+		DEF18A851CCFAB61008DC1C6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = NO;
+				GCC_PREFIX_HEADER = "";
+				INFOPLIST_FILE = "FastEasyConcurrentWebFetches/FastEasyConcurrentWebFetches-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "company.dfh.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		DEF18A861CCFAB61008DC1C6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = NO;
+				GCC_PREFIX_HEADER = "";
+				INFOPLIST_FILE = "FastEasyConcurrentWebFetches/FastEasyConcurrentWebFetches-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "company.dfh.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+		DEF18A871CCFAB61008DC1C6 /* ReleaseWithAsserts */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = NO;
+				GCC_PREFIX_HEADER = "";
+				INFOPLIST_FILE = "FastEasyConcurrentWebFetches/FastEasyConcurrentWebFetches-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "company.dfh.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = ReleaseWithAsserts;
+		};
+		DEF18A881CCFAB61008DC1C6 /* ReleaseWithAssertsUnitTests */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = NO;
+				GCC_PREFIX_HEADER = "";
+				INFOPLIST_FILE = "FastEasyConcurrentWebFetches/FastEasyConcurrentWebFetches-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "company.dfh.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = ReleaseWithAssertsUnitTests;
+		};
+		DEF18A961CCFAB72008DC1C6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/FECWF For iOS7.app/FECWF For iOS7";
+				FRAMEWORK_SEARCH_PATHS = (
+					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
+					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "FastEasyConcurrentWebFetches/FastEasyConcurrentWebFetches-Prefix.pch";
+				INFOPLIST_FILE = "FECWF iOS8 Tests copy-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.dhoerl.operations-runner.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Debug;
+		};
+		DEF18A971CCFAB72008DC1C6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/FECWF For iOS7.app/FECWF For iOS7";
+				FRAMEWORK_SEARCH_PATHS = (
+					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
+					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "FastEasyConcurrentWebFetches/FastEasyConcurrentWebFetches-Prefix.pch";
+				INFOPLIST_FILE = "FECWF iOS8 Tests copy-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.dhoerl.operations-runner.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Release;
+		};
+		DEF18A981CCFAB72008DC1C6 /* ReleaseWithAsserts */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/FECWF For iOS7.app/FECWF For iOS7";
+				FRAMEWORK_SEARCH_PATHS = (
+					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
+					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "FastEasyConcurrentWebFetches/FastEasyConcurrentWebFetches-Prefix.pch";
+				INFOPLIST_FILE = "FECWF iOS8 Tests copy-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.dhoerl.operations-runner.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = ReleaseWithAsserts;
+		};
+		DEF18A991CCFAB72008DC1C6 /* ReleaseWithAssertsUnitTests */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/FECWF For iOS7.app/FECWF For iOS7";
+				FRAMEWORK_SEARCH_PATHS = (
+					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
+					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "FastEasyConcurrentWebFetches/FastEasyConcurrentWebFetches-Prefix.pch";
+				INFOPLIST_FILE = "FECWF iOS8 Tests copy-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.dhoerl.operations-runner.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = ReleaseWithAssertsUnitTests;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		DE6D446819B623C100159316 /* Build configuration list for PBXNativeTarget "FECWF For iOS8" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				DE6D446919B623C100159316 /* Debug */,
-				DE6D446A19B623C100159316 /* Release */,
-				DE6D446B19B623C100159316 /* ReleaseWithAsserts */,
-				DE6D446C19B623C100159316 /* ReleaseWithAssertsUnitTests */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		DE6D447F19B623D600159316 /* Build configuration list for PBXNativeTarget "FECWF iOS8 Tests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				DE6D448019B623D600159316 /* Debug */,
-				DE6D448119B623D600159316 /* Release */,
-				DE6D448219B623D600159316 /* ReleaseWithAsserts */,
-				DE6D448319B623D600159316 /* ReleaseWithAssertsUnitTests */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 		DEE915951722DE520085F570 /* Build configuration list for PBXProject "FastEasyConcurrentWebFetches" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -661,6 +627,28 @@
 				DEE915D11722DE520085F570 /* Release */,
 				DEE915EC1722DF480085F570 /* ReleaseWithAsserts */,
 				DE956F431729C0500026179D /* ReleaseWithAssertsUnitTests */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		DEF18A841CCFAB61008DC1C6 /* Build configuration list for PBXNativeTarget "FECWF For iOS9" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DEF18A851CCFAB61008DC1C6 /* Debug */,
+				DEF18A861CCFAB61008DC1C6 /* Release */,
+				DEF18A871CCFAB61008DC1C6 /* ReleaseWithAsserts */,
+				DEF18A881CCFAB61008DC1C6 /* ReleaseWithAssertsUnitTests */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		DEF18A951CCFAB72008DC1C6 /* Build configuration list for PBXNativeTarget "FECWF iOS9 Tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DEF18A961CCFAB72008DC1C6 /* Debug */,
+				DEF18A971CCFAB72008DC1C6 /* Release */,
+				DEF18A981CCFAB72008DC1C6 /* ReleaseWithAsserts */,
+				DEF18A991CCFAB72008DC1C6 /* ReleaseWithAssertsUnitTests */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
