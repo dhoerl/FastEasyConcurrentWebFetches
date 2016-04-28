@@ -133,7 +133,7 @@
 				__typeof__(self) strongSelf = weakSelf;
 				strongSelf.htmlStatus = 400;
 				NSString *msg = [NSString stringWithFormat:@"Network Error %tu",  strongSelf.htmlStatus];
-				NSError *err = = [NSError errorWithDomain:@"com.dfh.orsd" code:strongSelf.htmlStatus userInfo:@{NSLocalizedDescriptionKey : msg}];
+				NSError *err = [NSError errorWithDomain:@"com.dfh.orsd" code:strongSelf.htmlStatus userInfo:@{NSLocalizedDescriptionKey : msg}];
 				[(FECWF_SESSION_DELEGATE *)strongSelf.urlSession.delegate URLSession:self.urlSession task:self.task didCompleteWithError:err];
 			} );
 		return YES;

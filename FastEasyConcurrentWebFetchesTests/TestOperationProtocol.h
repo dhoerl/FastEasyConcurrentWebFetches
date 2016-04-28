@@ -6,6 +6,8 @@
 //  Copyright (c) 2013 dhoerl. All rights reserved.
 //
 
+@import Foundation;
+
 typedef enum { atSetup, atStart, atFinish, atExit, atEnd } registrationStage;
 
 @protocol TestOperationProtocol <NSObject>

@@ -34,6 +34,7 @@
 #define FECWF_OPERATIONSRUNNER OperationsRunner
 #endif
 
+NS_ASSUME_NONNULL_BEGIN
 
 @protocol FECWF_OPSRUNNER_PROTOCOL <NSObject>
 
@@ -51,3 +52,5 @@
 - (FECWF_SESSION_DELEGATE *)urlSessionDelegate;
 
 @end
+
+NS_ASSUME_NONNULL_END

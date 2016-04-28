@@ -22,17 +22,28 @@
 		DEF18A801CCFAB61008DC1C6 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DEE915B31722DE520085F570 /* Default-568h@2x.png */; };
 		DEF18A811CCFAB61008DC1C6 /* LICENSE.md in Resources */ = {isa = PBXBuildFile; fileRef = DEE915F41722EF380085F570 /* LICENSE.md */; };
 		DEF18A821CCFAB61008DC1C6 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = DEE915F51722EF380085F570 /* README.md */; };
-		DEF18A831CCFAB61008DC1C6 /* ViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DEEFF6E417D67278001D7C6B /* ViewController.xib */; };
-		DEF18A8D1CCFAB72008DC1C6 /* FECWF_Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = DEE915CE1722DE520085F570 /* FECWF_Tests.m */; };
-		DEF18A8E1CCFAB72008DC1C6 /* TestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = DE956F4F1729E2700026179D /* TestOperation.m */; };
-		DEF18A901CCFAB72008DC1C6 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DEE9159D1722DE520085F570 /* UIKit.framework */; };
-		DEF18A911CCFAB72008DC1C6 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DEE9159F1722DE520085F570 /* Foundation.framework */; };
-		DEF18A931CCFAB72008DC1C6 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = DEE915CA1722DE520085F570 /* InfoPlist.strings */; };
 		DEF18ABE1CCFBBD7008DC1C6 /* OperationsRunner.m in Sources */ = {isa = PBXBuildFile; fileRef = DEF18AB41CCFBBD7008DC1C6 /* OperationsRunner.m */; };
 		DEF18ABF1CCFBBD7008DC1C6 /* ORSessionDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = DEF18AB71CCFBBD7008DC1C6 /* ORSessionDelegate.m */; };
 		DEF18AC11CCFBBD7008DC1C6 /* URfetcher.m in Sources */ = {isa = PBXBuildFile; fileRef = DEF18ABB1CCFBBD7008DC1C6 /* URfetcher.m */; };
 		DEF18AC21CCFBBD7008DC1C6 /* WebFetcher.m in Sources */ = {isa = PBXBuildFile; fileRef = DEF18ABD1CCFBBD7008DC1C6 /* WebFetcher.m */; };
+		DEF18B0B1CD1654F008DC1C6 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = DEF18B071CD1654F008DC1C6 /* InfoPlist.strings */; };
+		DEF18B0F1CD1659D008DC1C6 /* ViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DEF18B0D1CD1659D008DC1C6 /* ViewController.xib */; };
+		DEF18B711CD24D5E008DC1C6 /* FECWF_Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = DEE915CE1722DE520085F570 /* FECWF_Tests.m */; };
+		DEF18B721CD24D62008DC1C6 /* TestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = DE956F4F1729E2700026179D /* TestOperation.m */; };
+		DEF18B741CD25232008DC1C6 /* ORSessionDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = DEF18AB71CCFBBD7008DC1C6 /* ORSessionDelegate.m */; };
+		DEF18B751CD25240008DC1C6 /* WebFetcher.m in Sources */ = {isa = PBXBuildFile; fileRef = DEF18ABD1CCFBBD7008DC1C6 /* WebFetcher.m */; };
+		DEF18B761CD25AEA008DC1C6 /* OperationsRunner.m in Sources */ = {isa = PBXBuildFile; fileRef = DEF18AB41CCFBBD7008DC1C6 /* OperationsRunner.m */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		DEF18B5C1CD24CDE008DC1C6 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DEE915921722DE520085F570 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = DEF18A6C1CCFAB61008DC1C6;
+			remoteInfo = "FECWF For iOS9";
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		DE3BE70E17D67344006345BC /* MyViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MyViewController.xib; sourceTree = "<group>"; };
@@ -64,9 +75,7 @@
 		DEE915DA1722DEB20085F570 /* MyViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = MyViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		DEE915F41722EF380085F570 /* LICENSE.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE.md; sourceTree = SOURCE_ROOT; };
 		DEE915F51722EF380085F570 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; lineEnding = 0; path = README.md; sourceTree = SOURCE_ROOT; };
-		DEEFF6E517D67278001D7C6B /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/ViewController7.xib; sourceTree = "<group>"; };
-		DEF18A891CCFAB61008DC1C6 /* FECWF For iOS9.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "FECWF For iOS9.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		DEF18A9A1CCFAB72008DC1C6 /* FECWF iOS9 Tests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "FECWF iOS9 Tests.octest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		DEF18A891CCFAB61008DC1C6 /* FECWF For iOS9.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = "FECWF For iOS9.app"; path = FECWF.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DEF18AB31CCFBBD7008DC1C6 /* OperationsRunner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OperationsRunner.h; sourceTree = "<group>"; };
 		DEF18AB41CCFBBD7008DC1C6 /* OperationsRunner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OperationsRunner.m; sourceTree = "<group>"; };
 		DEF18AB51CCFBBD7008DC1C6 /* OperationsRunnerProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OperationsRunnerProtocol.h; sourceTree = "<group>"; };
@@ -78,6 +87,9 @@
 		DEF18ABB1CCFBBD7008DC1C6 /* URfetcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = URfetcher.m; sourceTree = "<group>"; };
 		DEF18ABC1CCFBBD7008DC1C6 /* WebFetcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebFetcher.h; sourceTree = "<group>"; };
 		DEF18ABD1CCFBBD7008DC1C6 /* WebFetcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebFetcher.m; sourceTree = "<group>"; };
+		DEF18B081CD1654F008DC1C6 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = InfoPlist.strings; sourceTree = "<group>"; };
+		DEF18B0E1CD1659D008DC1C6 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = ViewController.xib; sourceTree = "<group>"; };
+		DEF18B571CD24CDE008DC1C6 /* FECWF Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "FECWF Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -91,12 +103,10 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		DEF18A8F1CCFAB72008DC1C6 /* Frameworks */ = {
+		DEF18B541CD24CDE008DC1C6 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DEF18A901CCFAB72008DC1C6 /* UIKit.framework in Frameworks */,
-				DEF18A911CCFAB72008DC1C6 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -117,7 +127,7 @@
 			isa = PBXGroup;
 			children = (
 				DEF18A891CCFAB61008DC1C6 /* FECWF For iOS9.app */,
-				DEF18A9A1CCFAB72008DC1C6 /* FECWF iOS9 Tests.octest */,
+				DEF18B571CD24CDE008DC1C6 /* FECWF Tests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -145,7 +155,7 @@
 				DEE915AD1722DE520085F570 /* AppDelegate.m */,
 				DEE915B51722DE520085F570 /* ViewController.h */,
 				DEE915B61722DE520085F570 /* ViewController.m */,
-				DEEFF6E417D67278001D7C6B /* ViewController.xib */,
+				DEF18B0D1CD1659D008DC1C6 /* ViewController.xib */,
 				DEE915A41722DE520085F570 /* Supporting Files */,
 			);
 			path = FastEasyConcurrentWebFetches;
@@ -154,6 +164,7 @@
 		DEE915A41722DE520085F570 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				DEF18B061CD1654F008DC1C6 /* en.lproj */,
 				DED5400017D9273C005698F0 /* Tracker.h */,
 				DED5400117D9273C005698F0 /* Tracker.m */,
 				DEE915A51722DE520085F570 /* FastEasyConcurrentWebFetches-Info.plist */,
@@ -208,12 +219,20 @@
 			path = WhatYouNeed;
 			sourceTree = SOURCE_ROOT;
 		};
+		DEF18B061CD1654F008DC1C6 /* en.lproj */ = {
+			isa = PBXGroup;
+			children = (
+				DEF18B071CD1654F008DC1C6 /* InfoPlist.strings */,
+			);
+			path = en.lproj;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		DEF18A6C1CCFAB61008DC1C6 /* FECWF For iOS9 */ = {
+		DEF18A6C1CCFAB61008DC1C6 /* FECWF */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = DEF18A841CCFAB61008DC1C6 /* Build configuration list for PBXNativeTarget "FECWF For iOS9" */;
+			buildConfigurationList = DEF18A841CCFAB61008DC1C6 /* Build configuration list for PBXNativeTarget "FECWF" */;
 			buildPhases = (
 				DEF18A6D1CCFAB61008DC1C6 /* Sources */,
 				DEF18A771CCFAB61008DC1C6 /* Frameworks */,
@@ -223,28 +242,28 @@
 			);
 			dependencies = (
 			);
-			name = "FECWF For iOS9";
+			name = FECWF;
 			productName = FastEasyConcurrentWebFetches;
 			productReference = DEF18A891CCFAB61008DC1C6 /* FECWF For iOS9.app */;
 			productType = "com.apple.product-type.application";
 		};
-		DEF18A8B1CCFAB72008DC1C6 /* FECWF iOS9 Tests */ = {
+		DEF18B561CD24CDE008DC1C6 /* FECWF Tests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = DEF18A951CCFAB72008DC1C6 /* Build configuration list for PBXNativeTarget "FECWF iOS9 Tests" */;
+			buildConfigurationList = DEF18B5E1CD24CDF008DC1C6 /* Build configuration list for PBXNativeTarget "FECWF Tests" */;
 			buildPhases = (
-				DEF18A8C1CCFAB72008DC1C6 /* Sources */,
-				DEF18A8F1CCFAB72008DC1C6 /* Frameworks */,
-				DEF18A921CCFAB72008DC1C6 /* Resources */,
-				DEF18A941CCFAB72008DC1C6 /* ShellScript */,
+				DEF18B531CD24CDE008DC1C6 /* Sources */,
+				DEF18B541CD24CDE008DC1C6 /* Frameworks */,
+				DEF18B551CD24CDE008DC1C6 /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				DEF18B5D1CD24CDE008DC1C6 /* PBXTargetDependency */,
 			);
-			name = "FECWF iOS9 Tests";
-			productName = FastEasyConcurrentWebFetchesTests;
-			productReference = DEF18A9A1CCFAB72008DC1C6 /* FECWF iOS9 Tests.octest */;
-			productType = "com.apple.product-type.bundle.ocunit-test";
+			name = "FECWF Tests";
+			productName = "FECWF For iOS9Tests";
+			productReference = DEF18B571CD24CDE008DC1C6 /* FECWF Tests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
 
@@ -254,6 +273,12 @@
 			attributes = {
 				LastUpgradeCheck = 0720;
 				ORGANIZATIONNAME = dhoerl;
+				TargetAttributes = {
+					DEF18B561CD24CDE008DC1C6 = {
+						CreatedOnToolsVersion = 7.3;
+						TestTargetID = DEF18A6C1CCFAB61008DC1C6;
+					};
+				};
 			};
 			buildConfigurationList = DEE915951722DE520085F570 /* Build configuration list for PBXProject "FastEasyConcurrentWebFetches" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -267,8 +292,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				DEF18A6C1CCFAB61008DC1C6 /* FECWF For iOS9 */,
-				DEF18A8B1CCFAB72008DC1C6 /* FECWF iOS9 Tests */,
+				DEF18A6C1CCFAB61008DC1C6 /* FECWF */,
+				DEF18B561CD24CDE008DC1C6 /* FECWF Tests */,
 			);
 		};
 /* End PBXProject section */
@@ -278,6 +303,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DEF18B0F1CD1659D008DC1C6 /* ViewController.xib in Resources */,
 				DEF18A7C1CCFAB61008DC1C6 /* InfoPlist.strings in Resources */,
 				DEF18A7D1CCFAB61008DC1C6 /* MyViewController.xib in Resources */,
 				DEF18A7E1CCFAB61008DC1C6 /* Default.png in Resources */,
@@ -285,35 +311,18 @@
 				DEF18A801CCFAB61008DC1C6 /* Default-568h@2x.png in Resources */,
 				DEF18A811CCFAB61008DC1C6 /* LICENSE.md in Resources */,
 				DEF18A821CCFAB61008DC1C6 /* README.md in Resources */,
-				DEF18A831CCFAB61008DC1C6 /* ViewController.xib in Resources */,
+				DEF18B0B1CD1654F008DC1C6 /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		DEF18A921CCFAB72008DC1C6 /* Resources */ = {
+		DEF18B551CD24CDE008DC1C6 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DEF18A931CCFAB72008DC1C6 /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		DEF18A941CCFAB72008DC1C6 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		DEF18A6D1CCFAB61008DC1C6 /* Sources */ = {
@@ -332,16 +341,27 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		DEF18A8C1CCFAB72008DC1C6 /* Sources */ = {
+		DEF18B531CD24CDE008DC1C6 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DEF18A8D1CCFAB72008DC1C6 /* FECWF_Tests.m in Sources */,
-				DEF18A8E1CCFAB72008DC1C6 /* TestOperation.m in Sources */,
+				DEF18B741CD25232008DC1C6 /* ORSessionDelegate.m in Sources */,
+				DEF18B751CD25240008DC1C6 /* WebFetcher.m in Sources */,
+				DEF18B711CD24D5E008DC1C6 /* FECWF_Tests.m in Sources */,
+				DEF18B721CD24D62008DC1C6 /* TestOperation.m in Sources */,
+				DEF18B761CD25AEA008DC1C6 /* OperationsRunner.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		DEF18B5D1CD24CDE008DC1C6 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = DEF18A6C1CCFAB61008DC1C6 /* FECWF */;
+			targetProxy = DEF18B5C1CD24CDE008DC1C6 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		DEE915A61722DE520085F570 /* InfoPlist.strings */ = {
@@ -360,12 +380,21 @@
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
-		DEEFF6E417D67278001D7C6B /* ViewController.xib */ = {
+		DEF18B071CD1654F008DC1C6 /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
-				DEEFF6E517D67278001D7C6B /* en */,
+				DEF18B081CD1654F008DC1C6 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		DEF18B0D1CD1659D008DC1C6 /* ViewController.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				DEF18B0E1CD1659D008DC1C6 /* en */,
 			);
 			name = ViewController.xib;
+			path = en.lproj;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -394,7 +423,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -426,7 +455,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 			};
@@ -455,7 +484,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -483,7 +512,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -535,85 +564,132 @@
 				GCC_PREFIX_HEADER = "";
 				INFOPLIST_FILE = "FastEasyConcurrentWebFetches/FastEasyConcurrentWebFetches-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				OTHER_CFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = "company.dfh.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
 			name = ReleaseWithAssertsUnitTests;
 		};
-		DEF18A961CCFAB72008DC1C6 /* Debug */ = {
+		DEF18B5F1CD24CDF008DC1C6 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/FECWF For iOS7.app/FECWF For iOS7";
-				FRAMEWORK_SEARCH_PATHS = (
-					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
-					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
-				);
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "FastEasyConcurrentWebFetches/FastEasyConcurrentWebFetches-Prefix.pch";
-				INFOPLIST_FILE = "FECWF iOS8 Tests copy-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.dhoerl.operations-runner.${PRODUCT_NAME:rfc1034identifier}";
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				INFOPLIST_FILE = "FastEasyConcurrentWebFetchesTests/FastEasyConcurrentWebFetchesTests-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.dhoerl.FECWF Tests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUNDLE_LOADER)";
-				WRAPPER_EXTENSION = octest;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FECWF.app/FECWF";
 			};
 			name = Debug;
 		};
-		DEF18A971CCFAB72008DC1C6 /* Release */ = {
+		DEF18B601CD24CDF008DC1C6 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/FECWF For iOS7.app/FECWF For iOS7";
-				FRAMEWORK_SEARCH_PATHS = (
-					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
-					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
-				);
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "FastEasyConcurrentWebFetches/FastEasyConcurrentWebFetches-Prefix.pch";
-				INFOPLIST_FILE = "FECWF iOS8 Tests copy-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.dhoerl.operations-runner.${PRODUCT_NAME:rfc1034identifier}";
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				INFOPLIST_FILE = "FastEasyConcurrentWebFetchesTests/FastEasyConcurrentWebFetchesTests-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.dhoerl.FECWF Tests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUNDLE_LOADER)";
-				WRAPPER_EXTENSION = octest;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FECWF.app/FECWF";
 			};
 			name = Release;
 		};
-		DEF18A981CCFAB72008DC1C6 /* ReleaseWithAsserts */ = {
+		DEF18B611CD24CDF008DC1C6 /* ReleaseWithAsserts */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/FECWF For iOS7.app/FECWF For iOS7";
-				FRAMEWORK_SEARCH_PATHS = (
-					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
-					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
-				);
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "FastEasyConcurrentWebFetches/FastEasyConcurrentWebFetches-Prefix.pch";
-				INFOPLIST_FILE = "FECWF iOS8 Tests copy-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.dhoerl.operations-runner.${PRODUCT_NAME:rfc1034identifier}";
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				INFOPLIST_FILE = "FastEasyConcurrentWebFetchesTests/FastEasyConcurrentWebFetchesTests-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.dhoerl.FECWF Tests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUNDLE_LOADER)";
-				WRAPPER_EXTENSION = octest;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FECWF.app/FECWF";
 			};
 			name = ReleaseWithAsserts;
 		};
-		DEF18A991CCFAB72008DC1C6 /* ReleaseWithAssertsUnitTests */ = {
+		DEF18B621CD24CDF008DC1C6 /* ReleaseWithAssertsUnitTests */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/FECWF For iOS7.app/FECWF For iOS7";
-				FRAMEWORK_SEARCH_PATHS = (
-					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
-					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
-				);
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "FastEasyConcurrentWebFetches/FastEasyConcurrentWebFetches-Prefix.pch";
-				INFOPLIST_FILE = "FECWF iOS8 Tests copy-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.dhoerl.operations-runner.${PRODUCT_NAME:rfc1034identifier}";
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				INFOPLIST_FILE = "FastEasyConcurrentWebFetchesTests/FastEasyConcurrentWebFetchesTests-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.dhoerl.FECWF Tests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUNDLE_LOADER)";
-				WRAPPER_EXTENSION = octest;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FECWF.app/FECWF";
 			};
 			name = ReleaseWithAssertsUnitTests;
 		};
@@ -631,7 +707,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		DEF18A841CCFAB61008DC1C6 /* Build configuration list for PBXNativeTarget "FECWF For iOS9" */ = {
+		DEF18A841CCFAB61008DC1C6 /* Build configuration list for PBXNativeTarget "FECWF" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				DEF18A851CCFAB61008DC1C6 /* Debug */,
@@ -642,13 +718,13 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		DEF18A951CCFAB72008DC1C6 /* Build configuration list for PBXNativeTarget "FECWF iOS9 Tests" */ = {
+		DEF18B5E1CD24CDF008DC1C6 /* Build configuration list for PBXNativeTarget "FECWF Tests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				DEF18A961CCFAB72008DC1C6 /* Debug */,
-				DEF18A971CCFAB72008DC1C6 /* Release */,
-				DEF18A981CCFAB72008DC1C6 /* ReleaseWithAsserts */,
-				DEF18A991CCFAB72008DC1C6 /* ReleaseWithAssertsUnitTests */,
+				DEF18B5F1CD24CDF008DC1C6 /* Debug */,
+				DEF18B601CD24CDF008DC1C6 /* Release */,
+				DEF18B611CD24CDF008DC1C6 /* ReleaseWithAsserts */,
+				DEF18B621CD24CDF008DC1C6 /* ReleaseWithAssertsUnitTests */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

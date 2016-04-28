@@ -193,11 +193,10 @@ assert(config.HTTPShouldSetCookies);
 	qos_class_t val;
 	switch(lastPriority) {
 	case 0:	val = QOS_CLASS_USER_INTERACTIVE;	break;
-// QOS_CLASS_USER_INITIATED
-	default:
-	case 1:	val = QOS_CLASS_DEFAULT;			break;
-	case 2:	val = QOS_CLASS_UTILITY;			break;
-	case 3:	val = QOS_CLASS_BACKGROUND;			break;
+	case 1:	val = QOS_CLASS_USER_INITIATED;	break;
+	case 2:	val = QOS_CLASS_DEFAULT;			break;
+	case 3:	val = QOS_CLASS_UTILITY;			break;
+	case 4:	val = QOS_CLASS_BACKGROUND;			break;
 	}
 	opRunner.priority = val;
 }

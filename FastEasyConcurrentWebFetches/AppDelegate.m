@@ -26,11 +26,7 @@
 #import "ViewController.h"
 #import "Tracker.h"
 
-#if __IPHONE_OS_VERSION_MIN_REQUIRED >= 70000
-#define MY_NIB @"ViewController7"
-#else
 #define MY_NIB @"ViewController"
-#endif
 
 @implementation AppDelegate
 

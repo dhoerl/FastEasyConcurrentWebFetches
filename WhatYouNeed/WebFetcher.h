@@ -28,9 +28,11 @@
 #endif
 
 // Unit Testing
-#if defined(UNIT_TESTING) && !defined(FORCE_MODE)
+#if defined(UNIT_TESTING) // && !defined(FORCE_MODE)
 typedef enum { forcingOff=0, failAtSetup, failAtStartup, forceSuccess, forceFailure, forceRetry } forceMode;
 #endif
+
+NS_ASSUME_NONNULL_BEGIN
 
 @class FECWF_WEBFETCHER;
 typedef void(^finishBlock)(FECWF_WEBFETCHER *op, BOOL succeeded);
@@ -44,17 +46,17 @@ typedef void(^finishBlock)(FECWF_WEBFETCHER *op, BOOL succeeded);
 @property (atomic, assign, readonly) BOOL isCancelled;
 @property (atomic, assign, readonly) BOOL isExecuting;
 @property (atomic, assign, readonly) BOOL isFinished;
-@property (atomic, weak) NSURLSessionTask *task;
-@property (nonatomic, strong) NSData *webData;					// actually a dispatch_data_t
+@property (atomic, weak, nullable) NSURLSessionTask *task;
+@property (nonatomic, strong, nullable) NSData *webData;		// actually a dispatch_data_t
 @property (nonatomic, assign) NSUInteger htmlStatus;
 @property (nonatomic, assign) NSUInteger totalReceiveSize;
 @property (nonatomic, assign) NSUInteger currentReceiveSize;
-@property (nonatomic, strong) finishBlock finalBlock;
-@property (nonatomic, strong) id obj;							// Any object the user wants to store for the duration of this
+@property (nonatomic, strong, nullable) finishBlock finalBlock;	// convenience for user
+@property (nonatomic, strong, nullable) id obj;					// Any object the user wants to store for the duration of this
 
 // Subclasses can set
-@property (nonatomic, strong) NSError *error;
-@property (nonatomic, copy) NSString *errorMessage;				// MUST be non-nil to indicate an error
+@property (nonatomic, strong, nullable) NSError *error;
+@property (nonatomic, copy, nullable) NSString *errorMessage;	// MUST be non-nil to indicate an error
 
 #ifdef VERIFY_DEALLOC
 @property (nonatomic, strong) dispatch_block_t deallocBlock;
@@ -77,3 +79,5 @@ typedef void(^finishBlock)(FECWF_WEBFETCHER *op, BOOL succeeded);
 - (void)cancel;								// for subclasses, called on operation's thread
 
 @end
+
+NS_ASSUME_NONNULL_END

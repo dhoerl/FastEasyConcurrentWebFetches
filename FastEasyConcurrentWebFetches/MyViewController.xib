@@ -112,8 +112,8 @@
                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <slider opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="1" minValue="1" maxValue="100" translatesAutoresizingMaskIntoConstraints="NO" id="22">
-                    <rect key="frame" x="18" y="213" width="215" height="34"/>
+                <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="1" minValue="1" maxValue="1000" translatesAutoresizingMaskIntoConstraints="NO" id="22">
+                    <rect key="frame" x="18" y="213" width="215" height="31"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="211" id="hTB-xm-ZlL"/>
                     </constraints>
@@ -122,7 +122,7 @@
                     </connections>
                 </slider>
                 <slider opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="4" minValue="1" maxValue="8" translatesAutoresizingMaskIntoConstraints="NO" id="32">
-                    <rect key="frame" x="18" y="304" width="215" height="34"/>
+                    <rect key="frame" x="18" y="304" width="215" height="31"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="211" id="rkm-dT-wfz"/>
                     </constraints>
@@ -145,22 +145,23 @@
                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" misplaced="YES" text="Queue Priority:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="35">
+                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" misplaced="YES" text="Queue QoS:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="35">
                     <rect key="frame" x="20" y="353" width="115" height="21"/>
                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <segmentedControl opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="40">
-                    <rect key="frame" x="20" y="382" width="280" height="29"/>
+                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" apportionsSegmentWidthsByContent="YES" segmentControlStyle="bar" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="40">
+                    <rect key="frame" x="20" y="376" width="280" height="29"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="280" id="0EE-Xt-8dn"/>
                     </constraints>
                     <segments>
-                        <segment title="High"/>
-                        <segment title="Normal"/>
-                        <segment title="Low"/>
-                        <segment title="Background" width="86"/>
+                        <segment title="Inter Act"/>
+                        <segment title="User Init"/>
+                        <segment title="Default"/>
+                        <segment title="Util"/>
+                        <segment title="Back"/>
                     </segments>
                     <connections>
                         <action selector="priorityAction:" destination="-1" eventType="valueChanged" id="45"/>

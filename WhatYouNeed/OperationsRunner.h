@@ -30,22 +30,24 @@
 @class  FECWF_SESSION_DELEGATE;
 
 // DEFAULTS
-#define DEFAULT_MAX_OPS					4						// Apple suggests a number like 4 for iOS, would not exceed 10, as each is a NSThread
-#define DEFAULT_PRIORITY QOS_CLASS_DEFAULT						// both dispatch queues use this
+#define DEFAULT_MAX_OPS					4								// Apple suggests a number like 4 for iOS, would not exceed 10, as each is a NSThread
+#define DEFAULT_PRIORITY QOS_CLASS_DEFAULT								// both dispatch queues use this
 #define DEFAULT_MILLI_SEC_CANCEL_DELAY	100
 
 // how do you want the return message delivered
 typedef enum { msgDelOnMainThread=0, msgDelOnAnyThread, msgOnSpecificThread, msgOnSpecificQueue } msgType;
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface FECWF_OPERATIONSRUNNER : NSObject
-@property (nonatomic, assign) msgType msgDelOn;					// how to message delegate, defaults to MainThread
-@property (nonatomic, weak) NSThread *delegateThread;			// where to message delegate, sets msgDelOn->msgOnSpecificThread
-@property (nonatomic, assign) dispatch_queue_t delegateQueue;	// where to message delegate, sets msgDelOn->msgOnSpecificQueue
-@property (nonatomic, assign) dispatch_group_t delegateGroup;	// if set, use dispatch_group_async()
-@property (nonatomic, assign) BOOL noDebugMsgs;					// suppress debug messages
-@property (nonatomic, assign) qos_class_t priority;				// targets the internal GCD queue doleing out the operations
-@property (nonatomic, assign) NSUInteger maxOps;				// set the NSOperationQueue's maxConcurrentOperationCount
-@property (nonatomic, assign) NSUInteger mSecCancelDelay;		// set the NSOperationQueue's maxConcurrentOperationCount
+@property (nonatomic, assign) msgType msgDelOn;							// how to message delegate, defaults to MainThread
+@property (nonatomic, weak, nullable) NSThread *delegateThread;			// where to message delegate, sets msgDelOn->msgOnSpecificThread
+@property (nonatomic, assign, nullable) dispatch_queue_t delegateQueue;	// where to message delegate, sets msgDelOn->msgOnSpecificQueue
+@property (nonatomic, assign, nullable) dispatch_group_t delegateGroup;	// if set, use dispatch_group_async()
+@property (nonatomic, assign) BOOL noDebugMsgs;							// suppress debug messages
+@property (nonatomic, assign) qos_class_t priority;						// targets the internal GCD queue doleing out the operations
+@property (nonatomic, assign) NSUInteger maxOps;						// set the NSOperationQueue's maxConcurrentOperationCount
+@property (nonatomic, assign) NSUInteger mSecCancelDelay;				// set the NSOperationQueue's maxConcurrentOperationCount
 
 // Optionally share one session between every instance of OperationsRunner (if you create this all future operations will use it
 + (void)createSharedSessionWithConfiguration:(NSURLSessionConfiguration *)config delegate:(id <NSURLSessionDataDelegate>) delegate;
@@ -58,7 +60,7 @@ typedef enum { msgDelOnMainThread=0, msgDelOnAnyThread, msgOnSpecificThread, msg
 
 - (void)runOperation:(FECWF_WEBFETCHER *)op withMsg:(NSString *)msg;	// to submit an operation
 - (BOOL)runOperations:(NSOrderedSet *)operations;	// Set of FECWF_WEBFETCHER objects with their runMessage set (or not)
-- (NSUInteger)operationsCount;						// returns the total number of outstanding operations, use wisely, some finished ops already queued count until delivered
+- (NSUInteger)operationsCount;						// returns the approximate number of outstanding operations (finished ops already queued count until delivered)
 - (BOOL)cancelOperations;							// stop all work, will not get any more delegate calls after it returns, returns YES if everything torn down properly
 
 // Uncommon in user code
@@ -66,6 +68,8 @@ typedef enum { msgDelOnMainThread=0, msgDelOnAnyThread, msgOnSpecificThread, msg
 - (BOOL)disposeOperations;							// dealloc the OperationsRunner (only needed for special cases where you really want to get rid of all helper objects)
 
 @end
+
+NS_ASSUME_NONNULL_END
 
 #if 0 
 

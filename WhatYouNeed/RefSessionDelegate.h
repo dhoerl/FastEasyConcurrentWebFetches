@@ -22,7 +22,7 @@
 //
 
 // Needed by subclasses
-//#import "WebFetcher8.h"
+//#import "WebFetcher.h"
 
 #import "OperationsRunner.h"
 

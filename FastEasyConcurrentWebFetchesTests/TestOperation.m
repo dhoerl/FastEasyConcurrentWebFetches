@@ -21,14 +21,6 @@
 
 @implementation TestOperation
 
-#if __IPHONE_OS_VERSION_MIN_REQUIRED < 60000
-- (void)main
-{
-	[super main];
-
-	[self.delegate register:self atStage:atExit];
-}
-#endif
 
 - (id)setup
 {
@@ -57,7 +49,6 @@
 	if(!ret2 && ret) {
 		[self finish];
 	}
-#if __IPHONE_OS_VERSION_MIN_REQUIRED >= 60000
 	{
 		finishBlock b = self.finalBlock;
 		__weak __typeof__(self) weakSelf = self;
@@ -69,7 +60,6 @@
 								if(b) b(op, succeeded);
 							};
 	}
-#endif
 
 	return ret2;
 }
