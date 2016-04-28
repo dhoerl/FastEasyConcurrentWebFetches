@@ -13,7 +13,7 @@ This code, migrated from NSOperation-WebFetches-MadeEasy, was the basis of the L
 
 UPDATES:
 
-  4.0.0 (4/20/2016): iOS8 and Swift
+  4.2.0 (4/20/2016): iOS8 and Swift
 	- Swift annotations (project used in a number of Swift apps in the past year)
 	- Switched to using QOS for dispatch queues
     - All the "WhatYouNeed" folders with versioned content now gone - just one left with NSURLSession support
